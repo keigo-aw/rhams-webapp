@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="styles.css" />
+<style>
+html, body { height: 100%; }
+body { margin: 0; overflow: hidden; }
+[data-radius="soft"] .btn, [data-radius="soft"] .input, [data-radius="soft"] .tag, [data-radius="soft"] .seg { border-radius: 2px; }
+[data-radius="rounded"] .btn, [data-radius="rounded"] .input, [data-radius="rounded"] .tag, [data-radius="rounded"] .seg { border-radius: 4px; }
+[data-radius="pill"] .btn, [data-radius="pill"] .input, [data-radius="pill"] .tag, [data-radius="pill"] .seg { border-radius: 999px; }
+.num { font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+.table { width: 100%; }
+.table th { vertical-align: bottom; }
+.table th, .table td { padding-left: 4px; padding-right: 4px; }
+.table th:first-child, .table td:first-child { padding-left: 0; }
+.table th:last-child, .table td:last-child { padding-right: 0; }
+.table th u { display: block; font-size: 10px; font-weight: 400; text-transform: none; letter-spacing: 0; opacity: 0.6; text-decoration: none; }
+.k { font-family: var(--font-heading); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: color-mix(in srgb, var(--color-text) 55%, transparent); margin: 0; }
+</style>
+</helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#4f80d9"></rect><g fill="none" stroke="#f2f2f3" stroke-width="2"><circle cx="50" cy="50" r="10"></circle><circle cx="50" cy="50" r="20"></circle><circle cx="50" cy="50" r="30"></circle></g><circle cx="50" cy="50" r="3.5" fill="#f2f2f3"></circle></svg></template>
+<div data-radius="{{ radiusKey }}" style="display:grid;grid-template-rows:auto auto 1fr;height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+  <header style="display:flex;align-items:center;gap:16px;padding:0 20px;height:56px;background:var(--color-surface);border-bottom:1px solid var(--color-divider);flex:none">
+    <div style="display:flex;align-items:center;gap:10px;margin-right:auto">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.5" aria-hidden="true"><path d="M3 20h18"></path><path d="M6 20V9l6-5 6 5v11"></path><path d="M12 20v-6"></path></svg>
+      <span style="font-family:var(--font-heading);font-weight:600;font-size:19px;letter-spacing:0.01em">RHAMS</span>
+      <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent);border-left:1px solid var(--color-divider);padding-left:10px">Radiated Hazard Assessment &amp; Measurement Suite</span>
+    </div>
+    <span class="tag tag-outline">v2.4.0</span>
+    <span class="tag tag-accent">Plan confirmed</span>
+  </header>
+
+  <div style="display:flex;align-items:center;gap:0;height:38px;padding:0 20px;border-bottom:1px solid var(--color-divider);font-size:12px;flex:none;overflow:hidden">
+    <sc-for list="{{ runMeta }}" as="m" hint-placeholder-count="5">
+      <span style="display:flex;align-items:baseline;gap:6px;padding-right:22px;margin-right:22px;border-right:1px solid var(--color-divider);white-space:nowrap">
+        <span style="font-family:var(--font-heading);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 50%, transparent)">{{ m.k }}</span>
+        <span class="num">{{ m.v }}</span>
+      </span>
+    </sc-for>
+  </div>
+
+  <div style="display:grid;grid-template-columns:224px minmax(0,1fr) 348px;min-height:0">
+
+    <nav style="display:flex;flex-direction:column;gap:1px;padding:14px 10px;border-right:1px solid var(--color-divider);overflow-y:auto">
+      <p class="k" style="padding:0 10px 8px">Workflow</p>
+      <sc-for list="{{ nav }}" as="it" hint-placeholder-count="6">
+        <button type="button" onClick="{{ it.go }}" style="position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 10px;border:0;background:transparent;color:inherit;font:inherit;font-size:14px;cursor:pointer">
+          <sc-if value="{{ it.active }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;inset:0;background:color-mix(in srgb, var(--color-accent) 14%, transparent);border-left:2px solid var(--color-accent)"></span>
+          </sc-if>
+          <span class="num" style="position:relative;font-size:11px;width:16px;color:color-mix(in srgb, var(--color-text) 45%, transparent)">{{ it.n }}</span>
+          <span style="position:relative">{{ it.label }}</span>
+        </button>
+      </sc-for>
+      <div style="margin-top:auto;padding:12px 10px 0;border-top:1px solid var(--color-divider);font-size:11px;color:color-mix(in srgb, var(--color-text) 55%, transparent);line-height:1.5">
+        <div>Local store: <span class="num">{{ storeSize }}</span></div>
+        <div>Last write <span class="num">{{ lastWrite }}</span></div>
+      </div>
+    </nav>
+
+    <main style="display:flex;align-items:flex-start;justify-content:center;padding:20px;min-width:0;overflow:auto">
+
+      <sc-if value="{{ isMap }}" hint-placeholder-val="{{ true }}">
+        <figure class="blueprint" style="width:784px;flex:none;padding:0;background:var(--color-surface)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <svg viewBox="-40 -30 880 858" width="784" height="764" style="display:block;flex:none" role="img" aria-label="Measurement floor plan">
+            <sc-for list="{{ grid }}" as="g" hint-placeholder-count="9">
+              <line x1="{{ g.x1 }}" y1="{{ g.y1 }}" x2="{{ g.x2 }}" y2="{{ g.y2 }}" stroke="var(--color-divider)" stroke-width="1"></line>
+            </sc-for>
+            {{ axisEls }}
+            <rect x="0" y="0" width="800" height="800" fill="none" stroke="color-mix(in srgb, currentColor 35%, transparent)" stroke-width="1"></rect>
+
+            {{ ringEls }}
+
+            <g transform="translate(400,400)">
+              <rect x="-75" y="-40" width="150" height="80" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+              <rect x="-14" y="-30" width="58" height="60" fill="none" stroke="color-mix(in srgb, currentColor 45%, transparent)" stroke-width="1"></rect>
+              <line x1="-75" y1="-40" x2="-14" y2="-30" stroke="color-mix(in srgb, currentColor 25%, transparent)"></line>
+              <line x1="-75" y1="40" x2="-14" y2="30" stroke="color-mix(in srgb, currentColor 25%, transparent)"></line>
+              <circle r="3" fill="var(--color-accent)"></circle>
+              <text y="-52" text-anchor="middle" font-size="15" font-family="var(--font-heading)" letter-spacing="0.1em" fill="color-mix(in srgb, currentColor 78%, transparent)">DEVICE UNDER TEST</text>
+              <text y="60" text-anchor="middle" font-size="14" fill="color-mix(in srgb, currentColor 72%, transparent)" class="num">20.0, 20.0 m</text>
+            </g>
+
+            <polyline points="{{ pathPts }}" fill="none" stroke="var(--color-accent)" stroke-width="1.5" stroke-dasharray="7 5"></polyline>
+
+            {{ markerEls }}
+          </svg>
+          <sc-if value="{{ showLimitNote }}" hint-placeholder-val="{{ false }}">
+            <figcaption style="display:flex;align-items:center;gap:10px;padding:0 14px 12px;font-size:12px;color:color-mix(in srgb, var(--color-text) 60%, transparent)">
+              <svg width="34" height="10" viewBox="0 0 34 10" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="var(--color-accent)"></circle><circle cx="17" cy="5" r="4" fill="none" stroke="color-mix(in srgb, var(--color-text) 45%, transparent)" stroke-width="1.5"></circle><circle cx="29" cy="5" r="4" fill="var(--color-danger)"></circle></svg>
+              <span>{{ mapLimitNote }}</span>
+            </figcaption>
+          </sc-if>
+        </figure>
+      </sc-if>
+
+      <sc-if value="{{ isAnalysis }}" hint-placeholder-val="{{ false }}">
+        <div style="width:660px;flex:none;display:flex;flex-direction:column;gap:20px">
+          <figure class="blueprint" style="padding:16px 18px;background:var(--color-surface)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <figcaption class="k" style="margin:0 0 10px">Field strength by measurement point — {{ unitLabel }}</figcaption>
+            <svg viewBox="0 0 660 300" width="660" height="300" style="display:block;flex:none;max-width:none" role="img" aria-label="Field strength chart">
+              {{ tickEls }}
+              {{ barEls }}
+              <line x1="56" y1="{{ limitY }}" x2="640" y2="{{ limitY }}" stroke="var(--color-accent)" stroke-width="1.5" stroke-dasharray="6 4"></line>
+              {{ limitLabelEl }}
+              <line x1="56" y1="266" x2="640" y2="266" stroke="color-mix(in srgb, currentColor 35%, transparent)"></line>
+            </svg>
+          </figure>
+          <div>
+            <p class="k" style="margin:0 0 8px">Readings</p>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Point</th><th>Result</th><th>X<u>m</u></th><th>Y<u>m</u></th><th>E-field<u>V/m</u></th><th>Power<u>W/m²</u></th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+                  <tr>
+                    <td class="num">{{ r.n }}</td>
+                    <td>
+                      <sc-if value="{{ r.pass }}" hint-placeholder-val="{{ true }}">
+                        <span class="tag tag-accent">Pass</span>
+                      </sc-if>
+                      <sc-if value="{{ r.fail }}" hint-placeholder-val="{{ false }}">
+                        <span class="tag" style="color:var(--color-danger);border:1px solid var(--color-danger);background:color-mix(in srgb, var(--color-danger) 12%, transparent)">Exceed</span>
+                      </sc-if>
+                    </td>
+                    <td class="num">{{ r.x }}</td>
+                    <td class="num">{{ r.y }}</td>
+                    <td class="num">{{ r.e }}</td>
+                    <td class="num">{{ r.s }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isExport }}" hint-placeholder-val="{{ false }}">
+        <div class="blueprint" style="width:100%;max-width:560px;padding:26px 28px;background:var(--color-surface)">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <p class="k" style="margin:0 0 4px">Data management</p>
+          <h3 style="margin:0 0 8px">Export &amp; import</h3>
+          <p style="font-size:14px;max-width:46ch;color:color-mix(in srgb, var(--color-text) 75%, transparent)">Back up every waypoint plan and survey record held in this browser to a single JSON file, or restore a previously exported file when moving to another workstation.</p>
+
+          <p class="k" style="margin:20px 0 8px">Currently stored</p>
+          <table class="table">
+            <tbody>
+              <sc-for list="{{ stored }}" as="s" hint-placeholder-count="3">
+                <tr>
+                  <td>{{ s.k }}</td>
+                  <td class="num" style="text-align:right;width:1%;white-space:nowrap">{{ s.v }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px">
+            <div>
+              <p class="k" style="margin:0 0 6px">Export</p>
+              <p style="font-size:13px;margin:0 0 10px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">One JSON file containing everything above.</p>
+              <button type="button" class="btn btn-primary btn-block" style="margin:0;min-height:44px;text-align:center">Export all data</button>
+            </div>
+            <div>
+              <p class="k" style="margin:0 0 6px">Import</p>
+              <p style="font-size:13px;margin:0 0 10px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">Replaces all data currently stored in this browser.</p>
+              <button type="button" class="btn btn-secondary btn-block" style="margin:0;min-height:44px;text-align:center">Import backup</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+
+    <aside style="border-left:1px solid var(--color-divider);padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;min-height:0">
+      <div>
+        <p class="k" style="margin:0 0 2px">Step {{ stepN }} of 6</p>
+        <h4 style="margin:0">{{ title }}</h4>
+        <p style="font-size:13px;margin:6px 0 0;color:color-mix(in srgb, var(--color-text) 65%, transparent);line-height:1.5">{{ blurb }}</p>
+      </div>
+
+      <sc-if value="{{ isPath }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--color-divider)">
+          <div class="field" style="max-width:120px">
+            <label for="wpcount">Waypoints</label>
+            <input id="wpcount" class="input num" type="number" min="10" max="25" value="10" />
+          </div>
+          <p style="font-size:11px;margin:0;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Minimum 10, maximum 25. Click the plan to add a point.</p>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn btn-primary" style="flex:1">Regenerate path</button>
+            <button type="button" class="btn btn-secondary" style="flex:1">Edit again</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSurvey }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:16px;border-bottom:1px solid var(--color-divider)">
+          <div class="field">
+            <label for="ah">Antenna height</label>
+            <select id="ah" class="input" disabled><option>1.8 m</option><option>0.5 m</option></select>
+          </div>
+          <div class="field">
+            <label for="pt">Probe type</label>
+            <select id="pt" class="input" disabled><option>Probe B — 300 MHz to 30 GHz</option><option>Probe A — 30 MHz to 300 MHz</option></select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="field"><label for="f1">Start (MHz)</label><input id="f1" class="input num" type="number" value="300" disabled /></div>
+            <div class="field"><label for="f2">End (MHz)</label><input id="f2" class="input num" type="number" placeholder="optional" disabled /></div>
+          </div>
+          <button type="button" class="btn btn-primary btn-block">Replay survey</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAnalysis }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:16px;border-bottom:1px solid var(--color-divider)">
+          <div class="field">
+            <label for="rec">Survey record</label>
+            <select id="rec" class="input"><option>1 Sep 2026, 16:42 — 10 pts</option><option>1 Sep 2026, 16:40 — 10 pts</option></select>
+          </div>
+          <div class="field">
+            <label for="haz">Hazard category</label>
+            <select id="haz" class="input"><option>Custom (manual limit)</option><option>HERP — personnel</option><option>HERO — ordnance</option><option>HERF — fuel</option></select>
+          </div>
+          <div class="field">
+            <label for="lim">Pass / fail limit (V/m)</label>
+            <input id="lim" class="input num" type="number" step="0.5" min="0" value="{{ limit }}" onChange="{{ setLimit }}" />
+          </div>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn btn-secondary" style="flex:1">Export CSV</button>
+            <button type="button" class="btn btn-secondary" style="flex:1">Copy chart</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ hasList }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;min-height:0">
+          <p class="k" style="margin:0 0 6px">{{ listTitle }}</p>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+            <sc-for list="{{ list }}" as="r" hint-placeholder-count="10">
+              <li style="position:relative;display:flex;align-items:center;gap:10px;padding:7px 8px;font-size:13px;border-bottom:1px solid color-mix(in srgb, var(--color-text) 8%, transparent)">
+                <sc-if value="{{ r.selected }}" hint-placeholder-val="{{ false }}">
+                  <span style="position:absolute;inset:0;background:color-mix(in srgb, var(--color-accent) 12%, transparent)"></span>
+                </sc-if>
+                <span class="num" style="position:relative;width:20px;color:color-mix(in srgb, var(--color-text) 50%, transparent)">{{ r.n }}</span>
+                <span class="num" style="position:relative;flex:1;font-size:12px">{{ r.coords }}</span>
+                <span class="num" style="position:relative;font-size:12px;color:{{ r.valueColor }}">{{ r.value }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <p class="k" style="margin:0">Saved surveys</p>
+          <sc-for list="{{ history }}" as="h" hint-placeholder-count="2">
+            <div class="blueprint" style="padding:10px 12px;display:flex;flex-direction:column;gap:4px">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <div style="display:flex;justify-content:space-between;gap:8px;font-size:13px">
+                <span style="font-family:var(--font-heading);font-size:15px">{{ h.date }}</span>
+                <span class="num" style="color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ h.count }}</span>
+              </div>
+              <div class="num" style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ h.config }}</div>
+              <div class="num" style="display:flex;gap:14px;font-size:13px">
+                <span>Avg {{ h.avg }}</span><span>Peak {{ h.peak }}</span>
+              </div>
+            </div>
+          </sc-for>
+          <button type="button" class="btn btn-secondary btn-block">Clear all history</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isExport }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <p class="k" style="margin:0 0 6px">Storage</p>
+            <table class="table">
+              <tbody>
+                <sc-for list="{{ storage }}" as="s" hint-placeholder-count="4">
+                  <tr>
+                    <td>{{ s.k }}</td>
+                    <td class="num" style="text-align:right;width:1%;white-space:nowrap;color:color-mix(in srgb, var(--color-text) 60%, transparent)">{{ s.v }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <p class="k" style="margin:0 0 6px">Recent exports</p>
+            <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+              <sc-for list="{{ exports }}" as="e" hint-placeholder-count="3">
+                <li style="display:flex;justify-content:space-between;gap:8px;padding:7px 0;font-size:13px;border-bottom:1px solid color-mix(in srgb, var(--color-text) 8%, transparent)">
+                  <span class="num">{{ e.file }}</span>
+                  <span class="num" style="color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ e.when }}</span>
+                </li>
+              </sc-for>
+            </ul>
+          </div>
+          <div class="blueprint" style="padding:12px">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <p class="k" style="margin:0 0 4px;color:var(--color-danger)">Destructive</p>
+            <p style="font-size:12px;margin:0 0 10px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 65%, transparent)">Clears every plan and survey record held in this browser. Export first — this cannot be undone.</p>
+            <button type="button" class="btn btn-secondary btn-block" style="margin:0;border-color:var(--color-danger);color:var(--color-danger)">Reset workspace</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPoints }}" hint-placeholder-val="{{ false }}">
+        <p style="font-size:12px;margin:0;color:color-mix(in srgb, var(--color-text) 55%, transparent);line-height:1.5">{{ pointsSummary }}</p>
+      </sc-if>
+    </aside>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;cornerRadius&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Square (on-system)&quot;,&quot;Soft — 2px&quot;,&quot;Rounded — 4px&quot;,&quot;Pill&quot;],&quot;default&quot;:&quot;Square (on-system)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Style&quot;}}">
+const WP = [[14.2,21.6],[15.8,25.4],[19.8,26.0],[23.4,25.0],[26.0,22.2],[25.8,18.3],[23.9,15.0],[20.2,14.0],[16.4,14.7],[14.2,17.9]];
+const READ = {2:6.08,4:1.81,6:1.90,8:7.78,10:8.00};
+const PD = {2:0.0981,4:0.0087,6:0.0096,8:0.1606,10:0.1698};
+const SCREENS = [
+  {id:'path', label:'Path planning', title:'Robot waypoint review', blurb:'Confirm the traverse the robot will follow around the device under test.'},
+  {id:'points', label:'Measurement points', title:'Measurement points', blurb:'Select which waypoints the probe stops at and records a reading.'},
+  {id:'survey', label:'Signal survey', title:'Signal strength survey', blurb:'Live capture along the confirmed path at the configured probe settings.'},
+  {id:'history', label:'Survey history', title:'Survey history', blurb:'Previously completed runs stored on this workstation.'},
+  {id:'analysis', label:'Analysis', title:'Analysis', blurb:'Compare recorded field strength against the applicable exposure limit.'},
+  {id:'export', label:'Export / import', title:'Export & import', blurb:'Move plans and survey records between workstations.'}
+];
+
+class Component extends DCLogic {
+  state = { screen: 'path', limit: 7.5 };
+
+  renderVals() {
+    const screen = this.state.screen;
+    const limit = Number(this.state.limit) || 0;
+    const idx = SCREENS.findIndex(s => s.id === screen);
+    const s = SCREENS[idx] || SCREENS[0];
+    const measured = n => READ[n] !== undefined;
+    const col = n => READ[n] > limit ? 'var(--color-danger)' : 'var(--color-accent-700)';
+
+    // SVG label text cannot come from a template hole (it would be wrapped in an
+    // HTML span, which renders no glyphs in the SVG namespace), so every <text>
+    // carrying a value is built here instead.
+    const h = React.createElement;
+    const FAINT = 'color-mix(in srgb, currentColor 72%, transparent)';   // 4.5:1 on the figure ground
+    const HAIRLINE = 'color-mix(in srgb, currentColor 45%, transparent)'; // strokes only, never text
+
+    // The SVGs render at a fixed size (see the figure's width), so user units are
+    // near device px and label sizes need no scale compensation.
+    const label = (k, x, y, t, o) => {
+      const opts = Object.assign({ fontSize: 15 }, o);
+      return h('text', Object.assign({}, opts, {
+        key: k, x, y, fill: opts.fill || FAINT,
+        style: { fontVariantNumeric: 'tabular-nums' }
+      }), t);
+    };
+    const clabel = label;
+
+    const grid = [];
+    const axisEls = [];
+    for (let i = 0; i <= 8; i++) {
+      const p = i * 100;
+      grid.push({x1:p,y1:0,x2:p,y2:800}, {x1:0,y1:p,x2:800,y2:p});
+      axisEls.push(label('ax'+i, p, -10, String(i*5), { textAnchor: 'middle' }));
+      axisEls.push(label('ay'+i, -10, p+5, String(i*5), { textAnchor: 'end' }));
+    }
+
+    // range rings at 5/10/15 m from the DUT — field falls off with distance
+    const ringEls = h('g', { transform: 'translate(400,400)' },
+      [5,10,15].map(m => h('g', { key: 'r'+m }, [
+        h('circle', { key:'c', r: m*20, fill:'none', stroke:'color-mix(in srgb, currentColor 22%, transparent)', strokeWidth:1, strokeDasharray:'2 6' }),
+        label('l', m*20 - 6, 20, m + ' m', { fontSize: 14, fill: FAINT, textAnchor: 'end' })
+      ])),
+      h('line', { key:'hx', x1:-360, y1:0, x2:360, y2:0, stroke:'color-mix(in srgb, currentColor 18%, transparent)', strokeWidth:1 }),
+      h('line', { key:'vy', x1:0, y1:-360, x2:0, y2:360, stroke:'color-mix(in srgb, currentColor 18%, transparent)', strokeWidth:1 })
+    );
+
+    // magnitude ring: radius scales with reading so hot points read at a glance
+    const magR = v => 12 + (v / 8.0) * 26;
+
+    const markerEls = WP.map(([x,y],i) => {
+      const n = i + 1;
+      const on = measured(n);
+      const filled = (screen === 'points' || screen === 'survey' || screen === 'history') && on;
+      const hasValue = on && (screen === 'survey' || screen === 'history');
+      const over = on && READ[n] > limit;
+      const r = hasValue ? magR(READ[n]) : 0;
+      const c = col(n);
+      const kids = [];
+      if (hasValue) kids.push(h('circle', { key:'mag', r, strokeWidth: over ? 2 : 1, stroke: c,
+        fill: over ? 'color-mix(in srgb, var(--color-danger) 14%, transparent)'
+                   : 'color-mix(in srgb, var(--color-accent) 12%, transparent)' }));
+      kids.push(filled
+        ? h('circle', { key:'dot', r:6, fill:c, stroke:c, strokeWidth:1.5 })
+        : h('circle', { key:'dot', r:6, fill:'var(--color-bg)', stroke:HAIRLINE, strokeWidth:1.5 }));
+      // Place labels along the radius from the DUT: reading outward, number
+      // inward. A fixed vertical offset collided with the DUT caption and with
+      // neighbouring markers where the traverse doubles back on itself.
+      const dx = x*20 - 400, dy = y*20 - 400, len = Math.hypot(dx, dy) || 1;
+      const ux = dx/len, uy = dy/len;
+      const bias = v => v > 0.3 ? 11 : v < -0.3 ? -3 : 5;
+      if (hasValue) {
+        kids.push(label('n', ux*(r+16), uy*(r+16) + bias(uy), String(n), { textAnchor:'middle', fill:'currentColor' }));
+        kids.push(label('v', ux*(r+38), uy*(r+38) + bias(uy), READ[n].toFixed(1), { textAnchor:'middle', fontSize:14, fill:c }));
+      } else {
+        kids.push(label('n', 0, -15, String(n), { textAnchor:'middle', fill:'currentColor' }));
+      }
+      return h('g', { key:'w'+n, transform:`translate(${x*20}, ${y*20})` }, kids);
+    });
+
+    // list panel content
+    let list = [], listTitle = '';
+    if (screen === 'path' || screen === 'points' || screen === 'survey') {
+      listTitle = screen === 'survey' ? 'Readings' : 'Waypoints';
+      list = WP.map(([x,y],i) => {
+        const n = i + 1;
+        return {
+          n, coords: `${x.toFixed(1)}, ${y.toFixed(1)}`,
+          selected: screen !== 'path' && measured(n),
+          value: screen === 'survey' ? (measured(n) ? READ[n].toFixed(2) + ' V/m' : 'not measured')
+               : screen === 'points' ? (measured(n) ? 'measure' : 'transit')
+               : `${(i===0?0:Math.hypot(x-WP[i-1][0], y-WP[i-1][1])).toFixed(1)} m`,
+          valueColor: screen === 'survey' && measured(n) ? col(n) : 'color-mix(in srgb, currentColor 55%, transparent)'
+        };
+      });
+    }
+
+    const measuredNs = Object.keys(READ).map(Number);
+    const maxV = 10.5, plotTop = 28, plotBot = 266;
+    const yFor = v => plotBot - (v / maxV) * (plotBot - plotTop);
+    const tickEls = [0, 2.5, 5, 7.5, 10].map(v => h('g', { key:'t'+v }, [
+      h('line', { key:'g', x1:56, y1:yFor(v), x2:640, y2:yFor(v), stroke:'var(--color-divider)', strokeWidth:1 }),
+      clabel('l', 46, yFor(v)+5, v.toFixed(1), { textAnchor:'end', fontSize:14, fill:FAINT })
+    ]));
+
+    const bw = 64, gap = (640 - 56 - measuredNs.length * bw) / (measuredNs.length + 1);
+    const barEls = measuredNs.map((n, i) => {
+      const x = 56 + gap + i * (bw + gap), y = yFor(READ[n]), cx = x + bw / 2;
+      const over = READ[n] > limit;
+      return h('g', { key:'b'+n }, [
+        h('rect', { key:'r', x, y, width: bw, height: plotBot - y,
+                    fill: over ? 'var(--color-danger)' : 'var(--color-accent)' }),
+        clabel('v', cx, y - 9, READ[n].toFixed(2), { textAnchor:'middle', fontSize:14, fill:'currentColor' }),
+        clabel('n', cx, 288, String(n), { textAnchor:'middle', fontSize:14, fill:FAINT })
+      ]);
+    });
+
+    const limitLabelEl = clabel('lim', 60, yFor(limit) - 8, 'Limit ' + limit.toFixed(2) + ' V/m',
+      { textAnchor:'start', fontSize:14, fill:'var(--color-accent-700)' });
+
+    const rows = measuredNs.map(n => {
+      const pass = READ[n] <= limit;
+      return { n, x: WP[n-1][0].toFixed(2), y: WP[n-1][1].toFixed(2), e: READ[n].toFixed(2),
+               s: PD[n].toFixed(4), margin: (limit - READ[n]).toFixed(2),
+               pass, fail: !pass };
+
+    });
+
+    const RADII = { 'Square (on-system)': 'square', 'Soft — 2px': 'soft', 'Rounded — 4px': 'rounded', 'Pill': 'pill' };
+    return {
+      radiusKey: RADII[this.props.cornerRadius] ?? 'square',
+      nav: SCREENS.map((it, i) => ({ n: String(i+1).padStart(2,'0'), label: it.label, active: it.id === screen,
+             go: () => this.setState({ screen: it.id }) })),
+      runMeta: [
+        {k:'Project', v:'RF-2609-114'}, {k:'DUT', v:'Transponder A2'},
+        {k:'Chamber', v:'Bay 3 — semi-anechoic'}, {k:'Probe cal', v:'valid to 12 Mar 2027'},
+        {k:'Operator', v:'K. Almeida'}
+      ],
+      storeSize: '48 KB', lastWrite: '16:42',
+      stepN: idx + 1, title: s.title, blurb: s.blurb,
+      isMap: ['path','points','survey','history'].includes(screen),
+      isPath: screen === 'path', isPoints: screen === 'points', isSurvey: screen === 'survey',
+      isHistory: screen === 'history', isAnalysis: screen === 'analysis', isExport: screen === 'export',
+      hasList: list.length > 0, list, listTitle,
+      pathPts: WP.concat([WP[0]]).map(([x,y]) => `${x*20},${y*20}`).join(' '),
+      grid, axisEls, markerEls, ringEls,
+      showLimitNote: screen === 'survey' || screen === 'history',
+      mapLimitNote: `Ring radius scales with field strength. Red exceeds the ${limit.toFixed(1)} V/m limit.`,
+      pointsSummary: `5 of 10 waypoints flagged for measurement. The robot passes through the remaining 5 without stopping.`,
+      history: [
+        {date:'1 Sep 2026, 16:42', count:'10 pts', config:'1.8 m · Probe B', avg:'5.11 V/m', peak:'8.00 V/m'},
+        {date:'1 Sep 2026, 16:40', count:'10 pts', config:'1.8 m · Probe B', avg:'5.52 V/m', peak:'9.20 V/m'}
+      ],
+      stored: [
+        {k:'Current plan', v:'present'}, {k:'Confirmed plan history', v:'1 record'}, {k:'Survey history', v:'2 records'}
+      ],
+      storage: [
+        {k:'Waypoint plans', v:'6 KB'}, {k:'Survey records', v:'34 KB'},
+        {k:'Probe configuration', v:'2 KB'}, {k:'Browser quota used', v:'48 KB of 5 MB'}
+      ],
+      exports: [
+        {file:'rhams-2026-09-01.json', when:'16:44'},
+        {file:'rhams-2026-08-28.json', when:'28 Aug'},
+        {file:'rhams-2026-08-14.json', when:'14 Aug'}
+      ],
+      unitLabel: 'V/m', tickEls, barEls, limitLabelEl, rows,
+      limit, limitY: yFor(limit),
+      setLimit: e => this.setState({ limit: e.target.value })
+    };
+  }
+}
+
+</script>
+</body>
+</html>
