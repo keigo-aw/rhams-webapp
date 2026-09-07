@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { SurveyRecord } from '../types/domain';
 import { loadSurveyHistory } from '../persistence/surveyHistory';
 import { convertFromVPerM, vPerMToWPerM2, wPerM2ToVPerM, type ReadingUnit } from '../utils/units';
-import { DEFAULT_LIMIT_V_PER_M, findStandard, standardsForCategory, type HazardCategory } from './standards';
+import { findStandard, standardsForCategory, type HazardCategory } from './standards';
 
-const DEFAULT_THRESHOLD_V_PER_M = DEFAULT_LIMIT_V_PER_M;
+const DEFAULT_THRESHOLD_V_PER_M = 10;
 
 export function useAnalysis() {
   const [records, setRecords] = useState<SurveyRecord[]>([]);

@@ -1,8 +1,5 @@
 export type HazardCategory = 'HERP' | 'HERO' | 'HERF';
 
-/** Default pass/fail limit shown before a hazard-category standard is selected. */
-export const DEFAULT_LIMIT_V_PER_M = 10;
-
 export interface StandardOption {
   id: string;
   label: string;

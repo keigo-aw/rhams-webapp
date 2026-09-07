@@ -1,0 +1,51 @@
+import type { SurveyRecord } from '../types/domain';
+import { signalColor, summarizeSignalStrength } from '../utils/signalColor';
+
+interface SurveyHistoryListProps {
+  records: SurveyRecord[];
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+  onClearAll: () => void;
+}
+
+export function SurveyHistoryList({ records, selectedId, onSelect, onClearAll }: SurveyHistoryListProps) {
+  return (
+    <aside className="side-panel">
+      <h1>Survey History</h1>
+      <div className="toolbar">
+        <div className="toolbar-actions">
+          <button type="button" disabled={records.length === 0} onClick={onClearAll}>
+            Clear All History
+          </button>
+        </div>
+      </div>
+      <ul className="waypoint-list">
+        {records.map((record) => {
+          const { avg, max } = summarizeSignalStrength(record.readings.map((r) => r.fieldStrengthVPerM));
+          const selected = record.id === selectedId;
+          return (
+            <li
+              key={record.id}
+              className={`waypoint-row history-row${selected ? ' selected' : ''}`}
+              onClick={() => onSelect(record.id)}
+            >
+              <span className="history-row-main">
+                <span className="history-row-date">
+                  {new Date(record.completedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                </span>
+                <span className="history-row-count">{record.waypoints.length} waypoints</span>
+              </span>
+              <span className="history-row-config">
+                {record.height} m · {record.probeType}
+              </span>
+              <span className="history-row-stats">
+                <span style={{ color: signalColor(avg) }}>Avg {avg.toFixed(1)} V/m</span>
+                <span style={{ color: signalColor(max) }}>Peak {max.toFixed(1)} V/m</span>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </aside>
+  );
+}

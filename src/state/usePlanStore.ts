@@ -15,9 +15,16 @@ function createDraftPlan(waypointCount?: number): Plan {
   };
 }
 
+function renumber(waypoints: Waypoint[]): Waypoint[] {
+  return waypoints.map((wp, index) => ({ ...wp, order: index }));
+}
+
 type Action =
+  | { type: 'MOVE_WAYPOINT'; id: string; x: number; y: number }
   | { type: 'ADD_WAYPOINT'; x: number; y: number }
   | { type: 'TOGGLE_MEASUREMENT_POINT'; id: string }
+  | { type: 'REORDER_WAYPOINT'; id: string; direction: 'up' | 'down' }
+  | { type: 'DELETE_WAYPOINT'; id: string }
   | { type: 'CONFIRM' }
   | { type: 'RESET_TO_DRAFT' }
   | { type: 'GENERATE_NEW'; waypointCount?: number }
@@ -25,6 +32,16 @@ type Action =
 
 function reducer(plan: Plan, action: Action): Plan {
   switch (action.type) {
+    case 'MOVE_WAYPOINT': {
+      if (plan.status !== 'draft') return plan;
+      const clamped = clampToBounds({ x: action.x, y: action.y });
+      return {
+        ...plan,
+        waypoints: plan.waypoints.map((wp) =>
+          wp.id === action.id ? { ...wp, ...clamped } : wp,
+        ),
+      };
+    }
     case 'ADD_WAYPOINT': {
       if (plan.status !== 'draft') return plan;
       const clamped = clampToBounds({ x: action.x, y: action.y });
@@ -44,6 +61,20 @@ function reducer(plan: Plan, action: Action): Plan {
           wp.id === action.id ? { ...wp, isMeasurementPoint: !wp.isMeasurementPoint } : wp,
         ),
       };
+    }
+    case 'REORDER_WAYPOINT': {
+      if (plan.status !== 'draft') return plan;
+      const index = plan.waypoints.findIndex((wp) => wp.id === action.id);
+      if (index === -1) return plan;
+      const swapWith = action.direction === 'up' ? index - 1 : index + 1;
+      if (swapWith < 0 || swapWith >= plan.waypoints.length) return plan;
+      const next = [...plan.waypoints];
+      [next[index], next[swapWith]] = [next[swapWith], next[index]];
+      return { ...plan, waypoints: renumber(next) };
+    }
+    case 'DELETE_WAYPOINT': {
+      if (plan.status !== 'draft') return plan;
+      return { ...plan, waypoints: renumber(plan.waypoints.filter((wp) => wp.id !== action.id)) };
     }
     case 'CONFIRM': {
       if (plan.waypoints.length < 2) return plan;
@@ -90,12 +121,24 @@ export function usePlanStore() {
     }
   }, [plan]);
 
+  const moveWaypoint = useCallback((id: string, x: number, y: number) => {
+    dispatch({ type: 'MOVE_WAYPOINT', id, x, y });
+  }, []);
+
   const addWaypoint = useCallback((x: number, y: number) => {
     dispatch({ type: 'ADD_WAYPOINT', x, y });
   }, []);
 
   const toggleMeasurementPoint = useCallback((id: string) => {
     dispatch({ type: 'TOGGLE_MEASUREMENT_POINT', id });
+  }, []);
+
+  const reorderWaypoint = useCallback((id: string, direction: 'up' | 'down') => {
+    dispatch({ type: 'REORDER_WAYPOINT', id, direction });
+  }, []);
+
+  const deleteWaypoint = useCallback((id: string) => {
+    dispatch({ type: 'DELETE_WAYPOINT', id });
   }, []);
 
   const confirmPlan = useCallback(() => {
@@ -113,8 +156,11 @@ export function usePlanStore() {
   return {
     plan,
     isLoading,
+    moveWaypoint,
     addWaypoint,
     toggleMeasurementPoint,
+    reorderWaypoint,
+    deleteWaypoint,
     confirmPlan,
     resetToDraft,
     generateNewMockPath,

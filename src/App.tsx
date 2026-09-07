@@ -1,55 +1,70 @@
 import { useState } from 'react';
-import { AppShell } from './shell/AppShell';
-import type { Screen } from './shell/types';
+import './App.css';
 import { PlanningScreen } from './planning/PlanningScreen';
 import { MeasurementScreen } from './measurement/MeasurementScreen';
 import { SignalSurveyScreen } from './survey/SignalSurveyScreen';
 import { HistoryScreen } from './history/HistoryScreen';
 import { AnalysisScreen } from './analysis/AnalysisScreen';
 import { BackupScreen } from './backup/BackupScreen';
+import { TopBar } from './layout/TopBar';
+import { Sidebar } from './layout/Sidebar';
+import type { Screen } from './layout/types';
 import { usePlanStore } from './state/usePlanStore';
 
 function App() {
-  const { plan, isLoading, addWaypoint, toggleMeasurementPoint, confirmPlan, resetToDraft, generateNewMockPath } =
-    usePlanStore();
-  const [screen, setScreen] = useState<Screen>('path');
+  const {
+    plan,
+    isLoading,
+    moveWaypoint,
+    addWaypoint,
+    toggleMeasurementPoint,
+    reorderWaypoint,
+    deleteWaypoint,
+    confirmPlan,
+    resetToDraft,
+    generateNewMockPath,
+  } = usePlanStore();
+  const [screen, setScreen] = useState<Screen>('plan');
 
   const surveyEnabled = plan.status === 'confirmed';
-  const activeScreen = (screen === 'points' || screen === 'survey') && !surveyEnabled ? 'path' : screen;
+  const activeScreen = (screen === 'survey' || screen === 'measurement') && !surveyEnabled ? 'plan' : screen;
 
   if (isLoading) {
     return (
-      <div style={{ display: 'grid', placeItems: 'center', height: '100vh', background: 'var(--color-bg)', color: 'var(--color-text)' }}>
-        <p>Loading…</p>
+      <div className="app-shell app-loading">
+        <p className="empty-state">Loading…</p>
       </div>
     );
   }
 
   return (
-    <AppShell
-      screen={activeScreen}
-      onScreenChange={setScreen}
-      surveyEnabled={surveyEnabled}
-      planStatus={plan.status}
-      center={
-        <>
-          {activeScreen === 'path' && (
+    <div className="app-shell">
+      <TopBar planStatus={plan.status} />
+      <div className="app-body">
+        <Sidebar active={activeScreen} surveyEnabled={surveyEnabled} onChange={setScreen} />
+        <div className="app-content">
+          {activeScreen === 'plan' && (
             <PlanningScreen
               plan={plan}
+              moveWaypoint={moveWaypoint}
               addWaypoint={addWaypoint}
+              reorderWaypoint={reorderWaypoint}
+              deleteWaypoint={deleteWaypoint}
               confirmPlan={confirmPlan}
               resetToDraft={resetToDraft}
               generateNewMockPath={generateNewMockPath}
             />
           )}
-          {activeScreen === 'points' && <MeasurementScreen plan={plan} toggleMeasurementPoint={toggleMeasurementPoint} />}
+          {activeScreen === 'measurement' && (
+            <MeasurementScreen plan={plan} toggleMeasurementPoint={toggleMeasurementPoint} />
+          )}
           {activeScreen === 'survey' && <SignalSurveyScreen plan={plan} />}
           {activeScreen === 'history' && <HistoryScreen />}
           {activeScreen === 'analysis' && <AnalysisScreen />}
-          {activeScreen === 'export' && <BackupScreen />}
-        </>
-      }
-    />
+          {activeScreen === 'backup' && <BackupScreen />}
+        </div>
+      </div>
+    </div>
   );
 }
 
