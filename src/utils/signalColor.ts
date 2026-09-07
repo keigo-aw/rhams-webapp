@@ -1,10 +1,15 @@
+import type { Theme } from '../state/useTheme';
+
 const COLOR_SCALE_MAX_V_PER_M = 20;
 const STRONG_THRESHOLD_V_PER_M = 10;
 const MEDIUM_THRESHOLD_V_PER_M = 3;
 
-export function signalColor(fieldStrengthVPerM: number): string {
+/** The same hue at 45% lightness reads well on the dark canvas but fails contrast (as low as
+ * 1.8:1 for yellow/green hues) on the light one — pull it down to 28% for the light theme. */
+export function signalColor(fieldStrengthVPerM: number, theme: Theme = 'dark'): string {
   const hue = Math.min(Math.max(fieldStrengthVPerM, 0), COLOR_SCALE_MAX_V_PER_M) * (120 / COLOR_SCALE_MAX_V_PER_M);
-  return `hsl(${hue}, 70%, 45%)`;
+  const lightness = theme === 'light' ? 28 : 45;
+  return `hsl(${hue}, 70%, ${lightness}%)`;
 }
 
 export function signalLabel(fieldStrengthVPerM: number): string {

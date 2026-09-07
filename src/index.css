@@ -1,44 +1,85 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  /* Mission Control — dark ops console palette, ported from design_stitch */
+  --bg: #0c141f;
+  --surface-lowest: #070e1a;
+  --surface-low: #151c28;
+  --surface: #19202c;
+  --surface-high: #232a37;
+
+  --text: #b9cacb;
+  --text-h: #dce2f4;
+  --border: #3b494b;
+  --outline: #849495;
+
+  --accent: #00f0ff;
+  --accent-bg: rgba(0, 240, 255, 0.12);
+  --accent-border: rgba(0, 240, 255, 0.4);
+
+  --secondary: #d0bcff;
+  --secondary-bg: rgba(208, 188, 255, 0.12);
+
+  --success: #65f2b5;
+  --success-bg: rgba(101, 242, 181, 0.12);
+
+  --danger: #ffb4ab;
+  --danger-bg: rgba(255, 180, 171, 0.12);
+
+  --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+
+  color-scheme: dark;
   color: var(--text);
   background: var(--bg);
+  font: 14px/145% var(--sans);
+  letter-spacing: 0.01em;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-  }
+:root[data-theme='light'] {
+  /* Same "Mission Control" system, shifted for readability in bright ambient light — every
+     hue keeps its role but moves to a darker/more-saturated shade so it holds contrast on white
+     instead of relying on the dark theme's light-toned "container" shades. */
+  --bg: #eef2f5;
+  --surface-lowest: #ffffff;
+  --surface-low: #f6f8f9;
+  --surface: #edf1f3;
+  --surface-high: #dde4e8;
+
+  --text: #55636b;
+  --text-h: #16212b;
+  --border: #d0d9de;
+  --outline: #66767e;
+
+  --accent: #006980;
+  --accent-bg: rgba(0, 105, 128, 0.1);
+  --accent-border: rgba(0, 105, 128, 0.35);
+
+  --secondary: #6b4fd1;
+  --secondary-bg: rgba(107, 79, 209, 0.1);
+
+  --success: #0f8a4f;
+  --success-bg: rgba(15, 138, 79, 0.1);
+
+  --danger: #c62828;
+  --danger-bg: rgba(198, 40, 40, 0.1);
+
+  color-scheme: light;
 }
 
 html, body, #root { height: 100%; }
 body { margin: 0; }
-h1, h2 { font-family: var(--heading); font-weight: 500; color: var(--text-h); }
-h1 { font-size: 22px; margin: 0 0 16px; }
+h1, h2 { font-family: var(--heading); font-weight: 600; color: var(--text-h); }
+h1 { font-size: 20px; margin: 0 0 16px; }
 p { margin: 0; }
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+  font-size: 18px;
+  line-height: 1;
+  vertical-align: middle;
+  user-select: none;
+}

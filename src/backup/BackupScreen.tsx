@@ -88,7 +88,7 @@ export function BackupScreen() {
             <h2>Export</h2>
             <p className="backup-help">Downloads one JSON file containing everything above.</p>
             <div className="toolbar-actions">
-              <button type="button" onClick={handleExport} disabled={isExporting}>
+              <button type="button" className="btn-primary" onClick={handleExport} disabled={isExporting}>
                 {isExporting ? 'Exporting…' : 'Export All Data'}
               </button>
             </div>

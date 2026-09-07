@@ -27,6 +27,7 @@ export function GridCanvas({
   onSelectWaypoint,
 }: GridCanvasProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const suppressNextClickRef = useRef(false);
   const sorted = [...plan.waypoints].sort((a, b) => a.order - b.order);
   const isDraft = plan.status === 'draft';
 
@@ -38,10 +39,21 @@ export function GridCanvas({
   const robotPixelPosition = { x: animationState.position.x * PIXELS_PER_UNIT, y: animationState.position.y * PIXELS_PER_UNIT };
 
   const handleClick = (e: MouseEvent<SVGSVGElement>) => {
+    // A click that started on a waypoint marker (select or drag) must never also add a point —
+    // checking e.target here isn't reliable because pointer capture during a drag can retarget
+    // the synthetic click to the marker's <g> wrapper, which the marker's own class isn't on.
+    if (suppressNextClickRef.current) {
+      suppressNextClickRef.current = false;
+      return;
+    }
     if (!isDraft || !svgRef.current) return;
     if ((e.target as Element).closest('.waypoint-marker, .robot-marker')) return;
     const grid = clientPointToGrid(svgRef.current, e.clientX, e.clientY);
     onAddWaypoint(grid.x, grid.y);
+  };
+
+  const handleMarkerInteractionStart = () => {
+    suppressNextClickRef.current = true;
   };
 
   return (
@@ -66,6 +78,7 @@ export function GridCanvas({
           draggable={isDraft}
           onMove={onMoveWaypoint}
           onSelect={onSelectWaypoint}
+          onInteractionStart={handleMarkerInteractionStart}
         />
       ))}
       {animationState.isPlaying && <RobotMarker position={robotPixelPosition} />}

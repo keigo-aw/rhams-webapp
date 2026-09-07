@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-fixed":"#23005c","on-primary":"#00363a","on-tertiary-fixed-variant":"#005236","tertiary-fixed":"#6ffbbe","surface-bright":"#323947","surface-variant":"#2e3542","surface-dim":"#0c141f","on-tertiary-fixed":"#002113","on-secondary-container":"#c4abff","on-error-container":"#ffdad6","outline-variant":"#3b494b","surface-container-high":"#232a37","on-background":"#dce2f4","outline":"#849495","on-surface-variant":"#b9cacb","error-container":"#93000a","primary-fixed-dim":"#00dbe9","on-tertiary-container":"#006d4a","on-surface":"#dce2f4","background":"#0c141f","error":"#ffb4ab","inverse-primary":"#006970","on-tertiary":"#003824","secondary-fixed-dim":"#d0bcff","surface-container-highest":"#2e3542","inverse-on-surface":"#2a313d","inverse-surface":"#dce2f4","secondary-fixed":"#e9ddff","primary-container":"#00f0ff","tertiary":"#d8ffe7","on-secondary":"#3c0091","on-primary-fixed-variant":"#004f54","primary":"#dbfcff","secondary-container":"#571bc1","on-secondary-fixed-variant":"#5516be","surface-tint":"#00dbe9","surface":"#0c141f","on-primary-fixed":"#002022","on-error":"#690005","on-primary-container":"#006970","secondary":"#d0bcff","surface-container-lowest":"#070e1a","surface-container-low":"#151c28","tertiary-container":"#65f2b5","primary-fixed":"#7df4ff","tertiary-fixed-dim":"#4edea3","surface-container":"#19202c"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"unit-sm":"0.5rem","unit-xl":"1.5rem","unit-xs":"0.25rem","hud-inset":"1rem","panel-gutter":"0.5rem","unit-2xs":"0.125rem","unit-lg":"1rem","unit-md":"0.75rem","unit-2xl":"2rem"},"fontFamily":{"display-lg":["Inter"],"headline-sm":["Inter"],"data-mono-sm":["JetBrains Mono"],"display-lg-mobile":["Inter"],"data-mono-lg":["JetBrains Mono"],"body-sm":["Inter"],"label-caps":["JetBrains Mono"],"headline-md":["Inter"],"data-mono-md":["JetBrains Mono"],"body-md":["Inter"]},"fontSize":{"display-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"600"}],"data-mono-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"display-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"700"}],"data-mono-lg":["16px",{"lineHeight":"20px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"label-caps":["10px",{"lineHeight":"12px","letterSpacing":"0.08em","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"data-mono-md":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md"><div class="h-16 w-full px-hud-inset flex items-center justify-between gap-panel-gutter"><div class="flex items-center gap-unit-md shrink-0"><img alt="NovaBot Autonomous Waypoint Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VRLhe49OZcLD3Ph2-qkmAPYhTpLX9wJT4OedCS5F4qlKetqhqrrKChwA1-yZ6dFqtHPc0PNrnx8jKl49ScDYJ8guJCPZDTuVlgAE5DfIdHVs9u1anZLEQZY_D97M6ewXF84RHAobbx_mK_GKZq0R3de0H_6k8U-u4WW85JQ3y4qcekut6CY7iLiZgKpLTtcJeCNSEsr0J2dDyJrA1UNxJxXR4aNkyHp7wGGhg058ryFqti-QTKqidtlR7Y"/><div class="flex flex-col"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Mission Control</span><span class="font-headline-sm text-headline-sm text-primary tracking-tight">NovaBot Studio <span class="text-on-surface-variant font-data-mono-sm text-data-mono-sm">// Waypoint &amp; Telemetry Ops</span></span></div></div><div class="hidden xl:flex items-center gap-unit-sm px-unit-md py-unit-xs bg-surface-container-low rounded"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Active Unit</span><div class="flex items-center gap-unit-xs bg-surface-container px-unit-sm py-unit-2xs rounded"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-data-mono-sm text-data-mono-sm text-tertiary-container font-semibold">Unit AMR-04 (Sector B-Inspection) [ONLINE]</span></div></div><div class="hidden 2xl:flex items-center gap-unit-md font-data-mono-sm text-data-mono-sm text-on-surface-variant"><div class="flex items-center gap-unit-2xs"><span class="material-symbols-outlined text-sm text-tertiary-container">wifi</span><span>14ms ping</span></div><div class="flex items-center gap-unit-2xs"><span class="material-symbols-outlined text-sm text-primary-fixed-dim">satellite_alt</span><span>99.8% RTK Fix</span></div></div><nav class="flex items-center gap-unit-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded shadow-sm"><a class="px-unit-md py-unit-xs rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" data-path="mission-planner" href="#">Mission Planner</a><a aria-current="page" class="px-unit-md py-unit-xs transition-colors bg-primary-container text-on-primary-container font-semibold rounded shadow-sm" data-path="live-telemetry-and-logs" href="#">Live Telemetry &amp; Logs</a><a class="px-unit-md py-unit-xs rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" data-path="fleet-manager" href="#">Fleet Manager</a><a class="px-unit-md py-unit-xs rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" data-path="analytics-and-replay" href="#">Analytics &amp; Replay</a></nav><div class="flex items-center gap-unit-sm shrink-0"><div class="hidden lg:flex items-center gap-unit-xs px-unit-sm py-unit-2xs bg-surface-container-low rounded font-data-mono-sm text-data-mono-sm text-primary-fixed-dim"><span class="material-symbols-outlined text-sm">schedule</span><span>14:38:09 UTC</span></div><button class="px-unit-md py-unit-xs bg-error-container text-on-error-container hover:bg-error hover:text-on-error rounded font-label-caps text-label-caps uppercase tracking-wider transition-colors flex items-center gap-unit-2xs" type="button"><span class="material-symbols-outlined text-sm">emergency</span>E-STOP</button><button class="p-unit-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors relative" type="button"><span class="material-symbols-outlined text-lg">notifications</span><span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-primary-container"></span></button><div class="flex items-center gap-unit-sm pl-unit-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3Qezm8fK_4E7ZB9-XxQ4R5zRKAaGAbyQGuMUyLScqWuiIgqhDYeyjhv0MNPppMVVLSQnxQk7hM8lrWqpRZKEW71Xwm3KH1qOkXHP6NOllmWAz2pn1PjO_M8sH-us1qNS8FJ8FXGEmn1Zgr5vws3sXEvpF72LMU22IGI-l7SDYw84NUt-OZlMdobqg3Mlg1WXLhP-_5-idwwIVTQKdoKAWfuNBtcnWOU7OHty3_rAx74vMnSAAkI3RuA"/><div class="hidden md:flex flex-col text-left"><span class="font-body-sm text-body-sm text-on-surface leading-none">Commander J. Vance</span><span class="font-label-caps text-label-caps text-primary leading-none mt-1">Lead Ops Engineer</span></div></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-lowest z-40 flex flex-col justify-between py-unit-md"><div class="flex flex-col gap-unit-sm px-unit-sm"><div class="px-unit-sm py-unit-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Fleet Topology</span></div><nav class="flex flex-col gap-unit-2xs" data-active-classes="bg-surface-container-high text-primary font-semibold rounded"><a class="flex items-center gap-unit-sm px-unit-sm py-unit-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="mission-planner" href="#"><span class="material-symbols-outlined text-sm">alt_route</span>Waypoint Path Editor</a><a aria-current="page" class="flex items-center gap-unit-sm px-unit-sm py-unit-xs transition-colors bg-surface-container-high text-primary font-semibold rounded" data-path="live-telemetry-and-logs" href="#"><span class="material-symbols-outlined text-sm">sensors</span>Sensor Matrix &amp; Lidar</a><a class="flex items-center gap-unit-sm px-unit-sm py-unit-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="fleet-manager" href="#"><span class="material-symbols-outlined text-sm">precision_manufacturing</span>AMR Node Tree</a><a class="flex items-center gap-unit-sm px-unit-sm py-unit-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="analytics-and-replay" href="#"><span class="material-symbols-outlined text-sm">history_toggle_off</span>Spatial Blackbox</a></nav></div><div class="px-unit-md py-unit-sm bg-surface-container-low mx-unit-sm rounded flex flex-col gap-unit-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Safety Interlock</span><div class="flex items-center justify-between"><span class="font-data-mono-sm text-data-mono-sm text-tertiary-container">ARMED / NOMINAL</span><span class="material-symbols-outlined text-tertiary-container text-sm">verified_user</span></div></div></aside><div class="pl-64"><main class="relative w-full pt-16 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Dynamic Operational HUD Sub-Header -->
+<section class="w-full bg-surface-container-lowest px-hud-inset py-unit-sm shadow-md flex flex-col xl:flex-row xl:items-center xl:justify-between gap-unit-md">
+<!-- Left: Identity & Telemetry Spine -->
+<div class="flex flex-wrap items-center gap-unit-lg">
+<div class="flex items-center gap-unit-sm pr-unit-md bg-surface-container-low px-unit-md py-unit-xs rounded">
+<div class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary-container"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Mission Tracking</span>
+<span class="font-data-mono-md text-data-mono-md text-primary font-semibold">AMR-04 // ROUTE #WP-809</span>
+</div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between gap-unit-md">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Waypoints</span>
+<span class="font-data-mono-sm text-data-mono-sm text-tertiary-container font-semibold">5 / 8 Reached (62.5%)</span>
+</div>
+<div class="w-36 h-1.5 bg-surface-container-high rounded-full overflow-hidden mt-1">
+<div class="bg-tertiary-container h-full rounded-full transition-all duration-500" style="width: 62.5%"></div>
+</div>
+</div>
+<div class="h-8 w-px bg-surface-container-high hidden 2xl:block"></div>
+<!-- Kinematic Coordinates Vector Strip -->
+<div class="flex items-center gap-unit-md bg-surface-container-low px-unit-md py-unit-xs rounded font-data-mono-sm text-data-mono-sm">
+<div><span class="text-on-surface-variant">X:</span> <span class="text-on-surface font-semibold">38.4m</span></div>
+<div><span class="text-on-surface-variant">Y:</span> <span class="text-on-surface font-semibold">-12.1m</span></div>
+<div><span class="text-on-surface-variant">Z:</span> <span class="text-on-surface font-semibold">0.0m</span></div>
+<div><span class="text-on-surface-variant">HDG:</span> <span class="text-primary-container font-semibold">142°</span></div>
+<div class="hidden sm:flex items-center gap-unit-2xs text-tertiary-container">
+<span class="material-symbols-outlined text-xs">speed</span>
+<span class="font-semibold">1.15 m/s</span>
+</div>
+</div>
+<!-- RTK & Subsystem Health -->
+<div class="flex items-center gap-unit-md">
+<div class="flex items-center gap-unit-xs px-unit-sm py-unit-2xs bg-surface-container rounded font-data-mono-sm text-data-mono-sm">
+<span class="material-symbols-outlined text-sm text-tertiary-container">satellite_alt</span>
+<span class="text-on-surface">RTK FIX <span class="text-tertiary-container font-semibold">±1.2cm</span></span>
+</div>
+<div class="flex items-center gap-unit-xs px-unit-sm py-unit-2xs bg-surface-container rounded font-data-mono-sm text-data-mono-sm">
+<span class="material-symbols-outlined text-sm text-tertiary-container">battery_charging_full</span>
+<span class="text-on-surface">78% <span class="text-on-surface-variant">(3h 42m)</span></span>
+</div>
+<div class="hidden lg:flex items-center gap-unit-xs px-unit-sm py-unit-2xs bg-surface-container rounded font-data-mono-sm text-data-mono-sm">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">device_thermostat</span>
+<span class="text-on-surface">34.2°C <span class="text-on-surface-variant">Core</span></span>
+</div>
+</div>
+</div>
+<!-- Right: High-Priority Mission Interventions -->
+<div class="flex items-center gap-unit-sm shrink-0">
+<button class="px-unit-md py-unit-xs bg-surface-container hover:bg-surface-container-high text-on-surface rounded font-label-caps text-label-caps uppercase tracking-wider transition-colors flex items-center gap-unit-xs" type="button">
+<span class="material-symbols-outlined text-sm">pause</span>
+<span>Pause Mission</span>
+</button>
+<button class="px-unit-md py-unit-xs bg-surface-container hover:bg-surface-container-high text-primary-container rounded font-label-caps text-label-caps uppercase tracking-wider transition-colors flex items-center gap-unit-xs" type="button">
+<span class="material-symbols-outlined text-sm">u_turn_left</span>
+<span>Return RTL</span>
+</button>
+<button class="px-unit-md py-unit-xs bg-surface-container-high hover:bg-surface-bright text-on-surface-variant hover:text-on-surface rounded font-label-caps text-label-caps uppercase tracking-wider transition-colors flex items-center gap-unit-xs" type="button">
+<span class="material-symbols-outlined text-sm">download</span>
+<span class="hidden md:inline">Export CSV</span>
+</button>
+</div>
+</section>
+<!-- Metric Cluster Bento Grid -->
+<section class="px-hud-inset py-unit-md grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-panel-gutter">
+<!-- Group 1: Environmental Atmospheric Composition -->
+<div class="bg-surface-container-low p-unit-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-sm text-primary-container">air</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Gas &amp; Air Composition</span>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm px-unit-xs py-unit-2xs rounded bg-surface-container text-tertiary-container">PPM SAFE</span>
+</div>
+<div class="grid grid-cols-2 gap-unit-sm">
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">VOC INDEX</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-primary font-bold">82</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">ppb</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary-container mt-1 flex items-center gap-unit-2xs">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span> Optimal Baseline
+          </span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">CARBON DIOXIDE</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-on-surface font-bold">412</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">ppm</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Atmospheric Avg</span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">METHANE (CH4)</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-tertiary-container font-bold">0.01</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">ppm</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary-container mt-1">Negligible Trace</span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">OXYGEN (O2)</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-primary font-bold">20.9%</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">vol</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary-container mt-1">Nominal Gradient</span>
+</div>
+</div>
+</div>
+<!-- Group 2: Meteorological & Radiological Field -->
+<div class="bg-surface-container-low p-unit-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-sm text-primary-fixed-dim">thermostat</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Atmospheric &amp; Radiation</span>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm px-unit-xs py-unit-2xs rounded bg-surface-container text-primary-container">SENSOR POD #A</span>
+</div>
+<div class="grid grid-cols-2 gap-unit-sm">
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">AMBIENT TEMP</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-on-surface font-bold">22.4</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">°C</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">ΔT: +0.2°/h</span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">HUMIDITY</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-on-surface font-bold">46%</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">RH</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Condensation Safe</span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">BAROMETRIC PRES.</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-on-surface font-bold">1013.2</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">hPa</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Stable Pressure</span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">DOSIMETER</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-tertiary-container font-bold">0.12</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">μSv/h</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary-container mt-1">Background Normal</span>
+</div>
+</div>
+</div>
+<!-- Group 3: Kinematics & Powertrain Dynamics -->
+<div class="bg-surface-container-low p-unit-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-sm text-secondary">tune</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Chassis &amp; Kinematics</span>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm px-unit-xs py-unit-2xs rounded bg-surface-container text-tertiary-container">TRACTION NOMINAL</span>
+</div>
+<div class="grid grid-cols-2 gap-unit-sm">
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">IMU ROLL / PITCH</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-primary font-bold">-0.4°</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">/ +1.2°</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary-container mt-1">Level Incline</span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">WHEEL SLIP</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-on-surface font-bold">0.8%</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">ratio</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary-container mt-1">Gripped Grip-Max</span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">MOTOR TORQUE</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-on-surface font-bold">14.2</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Nm</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Peak Allowable: 35Nm</span>
+</div>
+<div class="bg-surface-container p-unit-sm rounded flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">DRIVE CURRENT</span>
+<div class="flex items-baseline gap-unit-xs mt-1">
+<span class="font-data-mono-lg text-data-mono-lg text-primary font-bold">4.8</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">A</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary-container mt-1">Draw Efficient</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Central Visualizer Canvas Split -->
+<section class="px-hud-inset grid grid-cols-1 lg:grid-cols-12 gap-panel-gutter">
+<!-- Left Visualizer: Waypoint Breadcrumb Execution & Spatial Sensor Overlay -->
+<div class="lg:col-span-6 bg-surface-container-low rounded p-unit-md flex flex-col shadow-sm">
+<div class="flex items-center justify-between mb-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-sm text-primary-container">route</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Spatial Execution &amp; Waypoint Nodes</span>
+</div>
+<div class="flex items-center gap-unit-xs font-data-mono-sm text-data-mono-sm">
+<span class="px-unit-xs py-unit-2xs bg-surface-container text-tertiary-container rounded">COMPLETED: 4</span>
+<span class="px-unit-xs py-unit-2xs bg-primary text-on-primary font-semibold rounded">ACTIVE: WP-05</span>
+<span class="px-unit-xs py-unit-2xs bg-surface-container text-on-surface-variant rounded">PENDING: 3</span>
+</div>
+</div>
+<!-- Tactical 2D Vector Map Canvas Area -->
+<div class="relative w-full h-[420px] bg-surface-container-lowest rounded overflow-hidden flex items-center justify-center p-unit-sm select-none">
+<!-- Structural Coordinate Grid Overlay -->
+<svg class="absolute inset-0 w-full h-full opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="tactical-grid" patternunits="userSpaceOnUse" width="40">
+<path class="text-on-surface-variant" d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#tactical-grid)" height="100%" width="100%"></rect>
+</svg>
+<!-- Spatial Waypoint Path SVG -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="xMidYMid meet" viewbox="0 0 700 420">
+<!-- Executed Path Spline -->
+<path class="text-tertiary-container" d="M 70 330 L 160 270 L 290 285 L 360 170 L 480 190" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<!-- Upcoming Trajectory (Dashed) -->
+<path class="text-on-surface-variant opacity-60" d="M 480 190 L 560 110 L 630 190 L 610 320" fill="none" stroke="currentColor" stroke-dasharray="6,6" stroke-width="2"></path>
+<!-- Waypoint 01 (Completed) -->
+<g transform="translate(70, 330)">
+<circle class="text-tertiary-container" fill="currentColor" r="8"></circle>
+<path class="text-surface-container-lowest" d="M-3 -0.5 L-1 2 L3 -2" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+</g>
+<!-- Waypoint 02 (Completed) -->
+<g transform="translate(160, 270)">
+<circle class="text-tertiary-container" fill="currentColor" r="8"></circle>
+<path class="text-surface-container-lowest" d="M-3 -0.5 L-1 2 L3 -2" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+</g>
+<!-- Waypoint 03 (Completed) -->
+<g transform="translate(290, 285)">
+<circle class="text-tertiary-container" fill="currentColor" r="8"></circle>
+<path class="text-surface-container-lowest" d="M-3 -0.5 L-1 2 L3 -2" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+</g>
+<!-- Waypoint 04 (Completed) -->
+<g transform="translate(360, 170)">
+<circle class="text-tertiary-container" fill="currentColor" r="8"></circle>
+<path class="text-surface-container-lowest" d="M-3 -0.5 L-1 2 L3 -2" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+</g>
+<!-- Waypoint 05 (Active Node with Ping Halo) -->
+<g transform="translate(480, 190)">
+<circle class="text-primary-container opacity-25 animate-ping" fill="currentColor" r="18"></circle>
+<circle class="text-surface-container-low" fill="currentColor" r="12"></circle>
+<circle class="text-primary-container" fill="currentColor" r="7"></circle>
+<!-- Heading Vector Indicator Needle -->
+<line class="text-primary" stroke="currentColor" stroke-width="2" x1="0" x2="16" y1="0" y2="10"></line>
+</g>
+<!-- Waypoint 06 (Upcoming) -->
+<g transform="translate(560, 110)">
+<circle class="text-on-surface-variant" fill="none" r="6" stroke="currentColor" stroke-width="2"></circle>
+</g>
+<!-- Waypoint 07 (Upcoming) -->
+<g transform="translate(630, 190)">
+<circle class="text-on-surface-variant" fill="none" r="6" stroke="currentColor" stroke-width="2"></circle>
+</g>
+<!-- Waypoint 08 (Destination Base) -->
+<g transform="translate(610, 320)">
+<circle class="text-secondary" fill="none" r="7" stroke="currentColor" stroke-width="2"></circle>
+<circle class="text-secondary" fill="currentColor" r="2"></circle>
+</g>
+</svg>
+<!-- Dynamic Micro-HUD Badges Overlaid at Waypoints -->
+<!-- WP-01 Label -->
+<div class="absolute left-8 bottom-10 bg-surface-container-low/90 backdrop-blur-sm p-unit-xs rounded shadow-sm flex flex-col font-data-mono-sm text-[10px]">
+<span class="text-tertiary-container font-bold">WP-01 [PASS]</span>
+<span class="text-on-surface-variant">21.8°C // 65ppb</span>
+</div>
+<!-- WP-02 Label -->
+<div class="absolute left-32 bottom-28 bg-surface-container-low/90 backdrop-blur-sm p-unit-xs rounded shadow-sm flex flex-col font-data-mono-sm text-[10px]">
+<span class="text-tertiary-container font-bold">WP-02 [PASS]</span>
+<span class="text-on-surface-variant">22.1°C // 70ppb</span>
+</div>
+<!-- WP-03 Label -->
+<div class="absolute left-52 bottom-20 bg-surface-container-low/90 backdrop-blur-sm p-unit-xs rounded shadow-sm flex flex-col font-data-mono-sm text-[10px]">
+<span class="text-tertiary-container font-bold">WP-03 [PASS]</span>
+<span class="text-on-surface-variant">22.5°C // 74ppb</span>
+</div>
+<!-- WP-04 Label -->
+<div class="absolute left-64 top-24 bg-surface-container-low/90 backdrop-blur-sm p-unit-xs rounded shadow-sm flex flex-col font-data-mono-sm text-[10px]">
+<span class="text-tertiary-container font-bold">WP-04 [PASS]</span>
+<span class="text-on-surface-variant">23.0°C // 98ppb</span>
+</div>
+<!-- WP-05 Active Live Inspection Node Badge -->
+<div class="absolute right-36 top-28 bg-surface-container-high/95 backdrop-blur-md px-unit-sm py-unit-xs rounded shadow-xl flex flex-col font-data-mono-sm text-data-mono-sm z-10">
+<div class="flex items-center justify-between gap-unit-sm">
+<span class="text-primary-container font-bold">NODE WP-05</span>
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+</div>
+<span class="text-on-surface font-semibold text-xs">Scanning LiDAR Arc</span>
+<div class="flex items-center gap-unit-xs text-on-surface-variant text-[10px] mt-1">
+<span>T: 22.4°C</span>
+<span>•</span>
+<span>VOC: 82ppb</span>
+<span>•</span>
+<span>Dist: 1.4m</span>
+</div>
+</div>
+<!-- Visual Map Controls (HUD Pinned) -->
+<div class="absolute bottom-unit-sm right-unit-sm flex flex-col gap-unit-2xs bg-surface-container-low/90 backdrop-blur-sm p-unit-2xs rounded">
+<button class="p-unit-xs hover:bg-surface-container-high rounded text-on-surface" title="Recenter Position" type="button">
+<span class="material-symbols-outlined text-sm">filter_center_focus</span>
+</button>
+<button class="p-unit-xs hover:bg-surface-container-high rounded text-on-surface" title="Toggle Pointcloud Layers" type="button">
+<span class="material-symbols-outlined text-sm">layers</span>
+</button>
+<button class="p-unit-xs hover:bg-surface-container-high rounded text-on-surface" title="Spatial Zoom Extents" type="button">
+<span class="material-symbols-outlined text-sm">aspect_ratio</span>
+</button>
+</div>
+<div class="absolute top-unit-sm left-unit-sm font-data-mono-sm text-[10px] text-on-surface-variant bg-surface-container-low/80 backdrop-blur-sm px-unit-xs py-unit-2xs rounded">
+          WORLD POSE REF: ENU LOCAL // SECTOR B-04
+        </div>
+</div>
+<!-- Path Metadata Footer -->
+<div class="flex items-center justify-between mt-unit-sm font-data-mono-sm text-data-mono-sm text-on-surface-variant pt-unit-xs">
+<div class="flex items-center gap-unit-sm">
+<span>PATH REMAINING: <strong class="text-on-surface font-semibold">142.8m</strong></span>
+<span>EST. COMPLETION: <strong class="text-on-surface font-semibold">08m 45s</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs text-tertiary-container">
+<span class="material-symbols-outlined text-xs">check_circle</span>
+<span>Kinematic Trajectory Locked</span>
+</div>
+</div>
+</div>
+<!-- Right Visualizer: Multi-Stream Environmental & LiDAR Proximity Trends -->
+<div class="lg:col-span-6 bg-surface-container-low rounded p-unit-md flex flex-col shadow-sm">
+<div class="flex flex-wrap items-center justify-between gap-unit-sm mb-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-sm text-primary-fixed-dim">analytics</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Temporal Telemetry &amp; Proximity</span>
+</div>
+<!-- Legend Strip -->
+<div class="flex items-center gap-unit-md font-data-mono-sm text-[11px]">
+<div class="flex items-center gap-unit-2xs">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="text-on-surface">Ambient Temp (°C)</span>
+</div>
+<div class="flex items-center gap-unit-2xs">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="text-on-surface">VOC Gas (ppb)</span>
+</div>
+<div class="flex items-center gap-unit-2xs">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-container"></span>
+<span class="text-on-surface">LiDAR Clear (m)</span>
+</div>
+</div>
+</div>
+<!-- Multi-stream Interactive SVG Graph -->
+<div class="relative w-full h-[420px] bg-surface-container-lowest rounded p-unit-sm flex flex-col justify-between overflow-hidden">
+<!-- SVG Dual Axis Trajectory Area -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 600 360">
+<defs>
+<!-- Cyan Temp Gradient Fill -->
+<lineargradient id="temp-grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#00f0ff" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#00f0ff" stop-opacity="0.0"></stop>
+</lineargradient>
+<!-- Secondary Gas Fill -->
+<lineargradient id="gas-grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#d0bcff" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#d0bcff" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Horizontal Reference Threshold Grid -->
+<line class="text-surface-container-high" stroke="currentColor" stroke-dasharray="3,3" stroke-width="0.5" x1="40" x2="580" y1="60" y2="60"></line>
+<line class="text-surface-container-high" stroke="currentColor" stroke-dasharray="3,3" stroke-width="0.5" x1="40" x2="580" y1="130" y2="130"></line>
+<line class="text-surface-container-high" stroke="currentColor" stroke-dasharray="3,3" stroke-width="0.5" x1="40" x2="580" y1="200" y2="200"></line>
+<line class="text-surface-container-high" stroke="currentColor" stroke-dasharray="3,3" stroke-width="0.5" x1="40" x2="580" y1="270" y2="270"></line>
+<!-- Stream 2: VOC Gas (ppb) Curve & Fill -->
+<path d="M 40 240 Q 120 230 180 220 T 300 210 T 400 180 T 490 140 T 580 150 L 580 320 L 40 320 Z" fill="url(#gas-grad)"></path>
+<path class="text-secondary" d="M 40 240 Q 120 230 180 220 T 300 210 T 400 180 T 490 140 T 580 150" fill="none" stroke="currentColor" stroke-width="2"></path>
+<!-- Stream 1: Temperature (°C) Curve & Fill -->
+<path d="M 40 280 C 110 270, 180 260, 260 250 C 340 240, 420 215, 500 200 C 540 195, 560 190, 580 185 L 580 320 L 40 320 Z" fill="url(#temp-grad)"></path>
+<path class="text-primary-container" d="M 40 280 C 110 270, 180 260, 260 250 C 340 240, 420 215, 500 200 C 540 195, 560 190, 580 185" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<!-- Stream 3: LiDAR Obstacle Proximity Clear Zone (Stepped Green Line) -->
+<path class="text-tertiary-container" d="M 40 110 L 140 105 L 200 90 L 260 90 L 320 120 L 370 70 L 440 70 L 480 95 L 530 95 L 580 80" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+<!-- Active Crosshair Line at t=14:38 -->
+<line class="text-primary-container" stroke="currentColor" stroke-dasharray="2,2" stroke-width="1" x1="500" x2="500" y1="30" y2="320"></line>
+<circle class="text-primary-container" cx="500" cy="200" fill="currentColor" r="4"></circle>
+<circle class="text-secondary" cx="500" cy="140" fill="currentColor" r="4"></circle>
+<circle class="text-tertiary-container" cx="500" cy="95" fill="currentColor" r="4"></circle>
+<!-- Vertical Axis Ticks -->
+<text class="font-data-mono-sm text-[9px] fill-on-surface-variant" text-anchor="end" x="35" y="65">120 ppb</text>
+<text class="font-data-mono-sm text-[9px] fill-on-surface-variant" text-anchor="end" x="35" y="135">90 ppb</text>
+<text class="font-data-mono-sm text-[9px] fill-on-surface-variant" text-anchor="end" x="35" y="205">25°C</text>
+<text class="font-data-mono-sm text-[9px] fill-on-surface-variant" text-anchor="end" x="35" y="275">20°C</text>
+<text class="font-data-mono-sm text-[9px] fill-tertiary-container" text-anchor="start" x="585" y="75">5.0m Prox</text>
+<text class="font-data-mono-sm text-[9px] fill-tertiary-container" text-anchor="start" x="585" y="115">2.5m Prox</text>
+</svg>
+<!-- Dynamic Floating Tooltip at Cursor Intersect -->
+<div class="absolute right-24 top-12 bg-surface-container-high/95 backdrop-blur-md p-unit-xs rounded shadow-lg font-data-mono-sm text-data-mono-sm border-l-2 border-primary-container pointer-events-none">
+<div class="text-[10px] text-on-surface-variant">OFFSET T-01m 12s [ACTIVE NODE]</div>
+<div class="flex items-center gap-unit-md mt-1">
+<span class="text-primary-container font-semibold">T: 22.4°C</span>
+<span class="text-secondary font-semibold">VOC: 82 ppb</span>
+<span class="text-tertiary-container font-semibold">LiDAR: 3.2m</span>
+</div>
+</div>
+<!-- Graph Timeline Base Coordinates -->
+<div class="w-full flex justify-between px-6 pt-1 font-data-mono-sm text-[10px] text-on-surface-variant">
+<span>-15 min (T0: WP-01)</span>
+<span>-10 min (WP-02)</span>
+<span>-5 min (WP-04)</span>
+<span class="text-primary-container font-bold">14:38 UTC [CURRENT WP-05]</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-unit-sm font-data-mono-sm text-data-mono-sm text-on-surface-variant pt-unit-xs">
+<div class="flex items-center gap-unit-sm">
+<span>SAMPLING FREQ: <strong class="text-on-surface">100 Hz</strong></span>
+<span>LIDAR BUFFER: <strong class="text-on-surface">36,000 pts/s</strong></span>
+</div>
+<span class="text-tertiary-container flex items-center gap-unit-2xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+          Telemetry Streams Synchronized
+        </span>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Measured Telemetry Log Table per Waypoint -->
+<section class="px-hud-inset py-unit-md">
+<div class="bg-surface-container-low rounded p-unit-md shadow-sm">
+<div class="flex flex-wrap items-center justify-between gap-unit-sm mb-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-sm text-primary-container">table_rows</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Measured Telemetry Log per Waypoint</span>
+</div>
+<div class="flex items-center gap-unit-xs font-data-mono-sm text-data-mono-sm text-on-surface-variant">
+<span class="px-unit-sm py-unit-2xs bg-surface-container rounded">STREAM AUDIT: PASS 100%</span>
+<span class="px-unit-sm py-unit-2xs bg-surface-container rounded">TOTAL SAMPLES: 14,280</span>
+</div>
+</div>
+<!-- High-Density Telemetry Matrix -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-data-mono-sm text-data-mono-sm">
+<thead>
+<tr class="bg-surface-container-high/60 text-on-surface-variant uppercase text-[10px] tracking-wider">
+<th class="py-unit-xs px-unit-sm">Waypoint ID</th>
+<th class="py-unit-xs px-unit-sm">Timestamp UTC</th>
+<th class="py-unit-xs px-unit-sm">Position (X, Y)</th>
+<th class="py-unit-xs px-unit-sm">Dwell Duration</th>
+<th class="py-unit-xs px-unit-sm">Thermal Peak</th>
+<th class="py-unit-xs px-unit-sm">VOC (ppb)</th>
+<th class="py-unit-xs px-unit-sm">Acoustic Vib.</th>
+<th class="py-unit-xs px-unit-sm">Inspection Status</th>
+<th class="py-unit-xs px-unit-sm">Diagnostics / Flags</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/40">
+<!-- WP-01 -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-unit-xs px-unit-sm font-semibold text-tertiary-container">WP-01</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">14:24:12.04</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">04.2m, +02.1m</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">18.4s</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">21.8°C</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">65</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">42.1 dB</td>
+<td class="py-unit-xs px-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="px-unit-xs py-unit-2xs bg-tertiary-container/10 text-tertiary-container rounded font-semibold text-[10px]">PASS</span>
+<img class="w-8 h-5 object-cover rounded bg-surface-container" data-alt="High-resolution industrial thermal robotic camera view showing normal machinery temperature reading with uniform deep purple heat spread and cool ambient tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCQzVlnrboK2edpYOQuzidLjc-EjJYIf6bEHMrbAVWuSJohZhomMJRaAVyXColdXo8s1CT9O7TPsInwqRX97wtxRAgXfQPKdzYn2Jg7OFhjYm2IVYUPvE8y0U4e_JpxygW1rQtCY75TrIgibeo15l50ghj8x_h2vp5Q_AbL5zZGh1Cai4wcCJFygnZwXkt9XCsoG2Mvy_Jn7KzSzwJ-SErvpcaHBsXI0KD_FepgPHoUMlpui_3bBHpgg"/>
+</div>
+</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">Perimeter Gate A Nominal</td>
+</tr>
+<!-- WP-02 -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-unit-xs px-unit-sm font-semibold text-tertiary-container">WP-02</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">14:28:45.89</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">12.5m, -04.8m</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">24.1s</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">22.1°C</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">70</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">44.8 dB</td>
+<td class="py-unit-xs px-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="px-unit-xs py-unit-2xs bg-tertiary-container/10 text-tertiary-container rounded font-semibold text-[10px]">PASS</span>
+<img class="w-8 h-5 object-cover rounded bg-surface-container" data-alt="Robotic visual inspection frame capturing steel industrial conveyor track aligned precisely under ambient overhead factory lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRJ9NbNsg8IlMUslUOECv2ytpbgNB1W47HlyqrObY1uxW816mI7b7uNKyAxZSLH68trq45ywLA8SAJ4f03xgYjWpMIqNEqJyJxC5JXa_b5P68U-IzPZ2rLkoo8PqqnsXmcr_fw0ITVjMKlHXwzbV51IfAmcYif-MZ4ZPjiA4SZSFkWWw3-wvfMfqHD77XIz8OMAdC6DpiqIdORosTTZ1DntoZFYdbc3p2M78S-btkLyK54_9px_QNSnA"/>
+</div>
+</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">Conveyor Line Check Cleared</td>
+</tr>
+<!-- WP-03 -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-unit-xs px-unit-sm font-semibold text-tertiary-container">WP-03</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">14:31:02.12</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">21.0m, -08.4m</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">15.0s</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">22.5°C</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">74</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">43.0 dB</td>
+<td class="py-unit-xs px-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="px-unit-xs py-unit-2xs bg-tertiary-container/10 text-tertiary-container rounded font-semibold text-[10px]">PASS</span>
+<img class="w-8 h-5 object-cover rounded bg-surface-container" data-alt="High contrast autonomous robot front sensor camera shot of empty facility hallway with clean epoxy floor reflecting neon directional markers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9eawwbyBNrmAkPDm5xo0Yc8B57ec7aGF3ffxtkLX6G3whvvBG_wvUgHW12KpPcct3fWLuZdj1WcO8ZBzkJE6vrWTUcyrHmyvkwmU-d7-uZJcHSV-oxn-miERrk3Wprs79kQnOqa5qQGG1-dYb-4eIsTPKTXky_HouUCDkyC1iVbFikLX2wM1Jnjwqno6V1c0CzVkC8zS72Fpg869DISNXmvL1JugfUe755y8tofjOJdfdJ5FH05yaZA"/>
+</div>
+</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">Corridor J-3 Verified Empty</td>
+</tr>
+<!-- WP-04 (Noticeable Anomaly Handled) -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-unit-xs px-unit-sm font-semibold text-tertiary-container">WP-04</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">14:34:50.40</td>
+<td class="py-unit-xs px-unit-sm text-on-surface">28.9m, -14.2m</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">32.8s</td>
+<td class="py-unit-xs px-unit-sm text-primary-container font-semibold">27.6°C</td>
+<td class="py-unit-xs px-unit-sm text-secondary font-semibold">98</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">52.4 dB</td>
+<td class="py-unit-xs px-unit-sm">
+<div class="flex items-center gap-unit-xs">
+<span class="px-unit-xs py-unit-2xs bg-secondary-container text-on-secondary-container rounded font-semibold text-[10px]">MINOR ANOMALY</span>
+<img class="w-8 h-5 object-cover rounded bg-surface-container" data-alt="Autonomous mobile robot thermal camera snapshot displaying warm exhaust duct heat plume in glowing amber against cooler metal walls." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDS3z4k-Ssg-rDnOP7NGyneJ7xwouXPPkXO6nh-LU_hQiVgU7oXfmtTVvf5CM6eOT0CwyCZ11nWWWMKxkst3b4RxHpgTnY0mKQhr6i4pVX4ARRdbSNVRDJFDiRtZBPiZmJ6hwdHWzun062MLUZOsA399Vi-XV7sYCwJ9Tg-TFQHhVIiBMfgyrkGiJeP7oYYHXry3edHcsr0QlzDki6LJGWAZ88y5EsN2enpusGClWBfygDHtuVKu8vGMQ"/>
+</div>
+</td>
+<td class="py-unit-xs px-unit-sm text-secondary">Venting Valve Thermal Drift (Logged)</td>
+</tr>
+<!-- WP-05 (In Progress) -->
+<tr class="bg-primary-container/5 hover:bg-primary-container/10 transition-colors">
+<td class="py-unit-xs px-unit-sm font-bold text-primary flex items-center gap-unit-2xs">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-ping"></span>
+                WP-05
+              </td>
+<td class="py-unit-xs px-unit-sm text-primary font-semibold">14:38:09.11</td>
+<td class="py-unit-xs px-unit-sm text-primary font-semibold">38.4m, -12.1m</td>
+<td class="py-unit-xs px-unit-sm text-primary">09.2s (ACTIVE)</td>
+<td class="py-unit-xs px-unit-sm text-on-surface font-semibold">22.4°C</td>
+<td class="py-unit-xs px-unit-sm text-on-surface font-semibold">82</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">41.7 dB</td>
+<td class="py-unit-xs px-unit-sm">
+<span class="px-unit-xs py-unit-2xs bg-primary text-on-primary rounded font-semibold text-[10px]">ACQUIRING</span>
+</td>
+<td class="py-unit-xs px-unit-sm text-primary">Target LiDAR Array Sweep [74%]</td>
+</tr>
+<!-- WP-06 (Queued) -->
+<tr class="opacity-50 hover:opacity-80 transition-opacity">
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">WP-06</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--:--:--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">45.0m, -08.0m</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm">
+<span class="px-unit-xs py-unit-2xs bg-surface-container text-on-surface-variant rounded text-[10px]">QUEUED</span>
+</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">Pending Route Clearance</td>
+</tr>
+<!-- WP-07 (Queued) -->
+<tr class="opacity-50 hover:opacity-80 transition-opacity">
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">WP-07</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--:--:--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">52.3m, -02.0m</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm">
+<span class="px-unit-xs py-unit-2xs bg-surface-container text-on-surface-variant rounded text-[10px]">QUEUED</span>
+</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">Storage Sector Charging Dock Approach</td>
+</tr>
+<!-- WP-08 (Destination Base) -->
+<tr class="opacity-50 hover:opacity-80 transition-opacity">
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">WP-08</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--:--:--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">61.0m, +00.0m</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">--</td>
+<td class="py-unit-xs px-unit-sm">
+<span class="px-unit-xs py-unit-2xs bg-surface-container text-on-surface-variant rounded text-[10px]">FINAL RTL</span>
+</td>
+<td class="py-unit-xs px-unit-sm text-on-surface-variant">Docking Station B-2 Interlock</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Realtime Push Script for Micro-Interactions -->
+<script>
+    // Telemetry tick simulator for dynamic feel
+    (function() {
+      let tick = 0;
+      setInterval(() => {
+        tick++;
+        const currentCoordEl = document.querySelector('span.text-primary.font-semibold');
+        if (tick % 5 === 0 && currentCoordEl) {
+          // Subtle pulse trigger
+          currentCoordEl.style.opacity = '0.7';
+          setTimeout(() => { currentCoordEl.style.opacity = '1'; }, 180);
+        }
+      }, 1000);
+    })();
+  </script>
+</div></main></div></body></html>

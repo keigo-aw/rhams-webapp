@@ -38,7 +38,7 @@ export function AnalysisScreen() {
   const handleCopyPng = async () => {
     if (!svgRef.current) return;
     try {
-      await copySvgAsPng(svgRef.current, resolveCssVar('--code-bg', '#f4f3ec'));
+      await copySvgAsPng(svgRef.current, resolveCssVar('--surface-low', '#151c28'));
       setCopyStatus('Chart copied to clipboard.');
     } catch {
       setCopyStatus('Could not copy chart — your browser may not support clipboard images.');

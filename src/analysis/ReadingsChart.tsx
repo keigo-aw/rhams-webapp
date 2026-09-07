@@ -15,12 +15,12 @@ import {
   yFor,
 } from './chartScale';
 
-const BG = '#f4f3ec';
-const GRID = '#e5e4e7';
-const AXIS_TEXT = '#6b6375';
-const ACCENT = '#aa3bff';
-const PASS = '#0ca30c';
-const FAIL = '#d03b3b';
+const BG = '#151c28';
+const GRID = '#3b494b';
+const AXIS_TEXT = '#b9cacb';
+const ACCENT = '#00f0ff';
+const PASS = '#65f2b5';
+const FAIL = '#ffb4ab';
 const BAR_RADIUS = 4;
 
 interface ReadingsChartDatum {

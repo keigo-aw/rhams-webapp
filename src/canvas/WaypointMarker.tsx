@@ -9,9 +9,10 @@ interface WaypointMarkerProps {
   draggable: boolean;
   onMove: (id: string, x: number, y: number) => void;
   onSelect: (id: string) => void;
+  onInteractionStart?: () => void;
 }
 
-export function WaypointMarker({ waypoint, n, selected, draggable, onMove, onSelect }: WaypointMarkerProps) {
+export function WaypointMarker({ waypoint, n, selected, draggable, onMove, onSelect, onInteractionStart }: WaypointMarkerProps) {
   const { handlePointerDown, handlePointerMove, handlePointerUp } = useDragWaypoint({
     disabled: !draggable,
     onMove: (x, y) => onMove(waypoint.id, x, y),
@@ -23,6 +24,7 @@ export function WaypointMarker({ waypoint, n, selected, draggable, onMove, onSel
     <g
       transform={`translate(${waypoint.x * PIXELS_PER_UNIT}, ${waypoint.y * PIXELS_PER_UNIT})`}
       onPointerDown={(e) => {
+        onInteractionStart?.();
         onSelect(waypoint.id);
         handlePointerDown(e);
       }}

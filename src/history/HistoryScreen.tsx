@@ -2,6 +2,7 @@ import type { ProbeType, RobotAnimationState, SurveyHeight } from '../types/doma
 import { SignalCanvas } from '../survey/SignalCanvas';
 import { probeTypeRangeLabel } from '../survey/surveyConfig';
 import { signalColor, signalLabel, summarizeSignalStrength } from '../utils/signalColor';
+import { useCurrentTheme } from '../state/ThemeContext';
 import { SurveyHistoryList } from './SurveyHistoryList';
 import { useSurveyHistory } from './useSurveyHistory';
 
@@ -60,17 +61,18 @@ interface SurveyStatsProps {
 }
 
 function SurveyStats({ readings, height, probeType }: SurveyStatsProps) {
+  const theme = useCurrentTheme();
   const { avg, min, max } = summarizeSignalStrength(readings);
   return (
     <div className="history-stats">
       <span>
-        Avg <strong style={{ color: signalColor(avg) }}>{avg.toFixed(1)} V/m</strong> ({signalLabel(avg)})
+        Avg <strong style={{ color: signalColor(avg, theme) }}>{avg.toFixed(1)} V/m</strong> ({signalLabel(avg)})
       </span>
       <span>
-        Min <strong style={{ color: signalColor(min) }}>{min.toFixed(1)} V/m</strong>
+        Min <strong style={{ color: signalColor(min, theme) }}>{min.toFixed(1)} V/m</strong>
       </span>
       <span>
-        Max <strong style={{ color: signalColor(max) }}>{max.toFixed(1)} V/m</strong>
+        Max <strong style={{ color: signalColor(max, theme) }}>{max.toFixed(1)} V/m</strong>
       </span>
       <span>{readings.length} readings</span>
       <span>

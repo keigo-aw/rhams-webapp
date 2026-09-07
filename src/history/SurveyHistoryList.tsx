@@ -1,5 +1,6 @@
 import type { SurveyRecord } from '../types/domain';
 import { signalColor, summarizeSignalStrength } from '../utils/signalColor';
+import { useCurrentTheme } from '../state/ThemeContext';
 
 interface SurveyHistoryListProps {
   records: SurveyRecord[];
@@ -9,12 +10,13 @@ interface SurveyHistoryListProps {
 }
 
 export function SurveyHistoryList({ records, selectedId, onSelect, onClearAll }: SurveyHistoryListProps) {
+  const theme = useCurrentTheme();
   return (
     <aside className="side-panel">
       <h1>Survey History</h1>
       <div className="toolbar">
         <div className="toolbar-actions">
-          <button type="button" disabled={records.length === 0} onClick={onClearAll}>
+          <button type="button" className="btn-danger" disabled={records.length === 0} onClick={onClearAll}>
             Clear All History
           </button>
         </div>
@@ -39,8 +41,8 @@ export function SurveyHistoryList({ records, selectedId, onSelect, onClearAll }:
                 {record.height} m · {record.probeType}
               </span>
               <span className="history-row-stats">
-                <span style={{ color: signalColor(avg) }}>Avg {avg.toFixed(1)} V/m</span>
-                <span style={{ color: signalColor(max) }}>Peak {max.toFixed(1)} V/m</span>
+                <span style={{ color: signalColor(avg, theme) }}>Avg {avg.toFixed(1)} V/m</span>
+                <span style={{ color: signalColor(max, theme) }}>Peak {max.toFixed(1)} V/m</span>
               </span>
             </li>
           );

@@ -1,6 +1,7 @@
 import type { ProbeType, SignalReading, SurveyHeight, Waypoint } from '../types/domain';
 import { HEIGHT_OPTIONS, PROBE_TYPE_OPTIONS } from './surveyConfig';
 import { signalColor } from '../utils/signalColor';
+import { useCurrentTheme } from '../state/ThemeContext';
 
 interface SignalSidePanelProps {
   waypoints: Waypoint[];
@@ -37,6 +38,7 @@ export function SignalSidePanel({
   onFrequencyEndMHzChange,
   configLocked,
 }: SignalSidePanelProps) {
+  const theme = useCurrentTheme();
   const readingByWaypointId = new Map(readings.map((r) => [r.waypointId, r]));
   const buttonLabel = isPlaying ? 'Robot Moving…' : isComplete ? 'Replay Survey' : 'Start Survey';
 
@@ -92,7 +94,7 @@ export function SignalSidePanel({
           </div>
         </div>
         <div className="toolbar-actions">
-          <button type="button" disabled={isPlaying} onClick={onStart}>
+          <button type="button" className="btn-primary" disabled={isPlaying} onClick={onStart}>
             {buttonLabel}
           </button>
         </div>
@@ -109,7 +111,7 @@ export function SignalSidePanel({
                   x: {wp.x.toFixed(1)}, y: {wp.y.toFixed(1)}
                 </span>
                 {reading ? (
-                  <span className="signal-reading" style={{ color: signalColor(reading.fieldStrengthVPerM) }}>
+                  <span className="signal-reading" style={{ color: signalColor(reading.fieldStrengthVPerM, theme) }}>
                     {reading.fieldStrengthVPerM.toFixed(1)} V/m
                   </span>
                 ) : (

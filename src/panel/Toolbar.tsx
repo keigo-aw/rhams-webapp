@@ -36,11 +36,11 @@ export function Toolbar({ status, isPlaying, waypointCount, onWaypointCountChang
           Generate New Mock Path
         </button>
         {isConfirmed ? (
-          <button type="button" disabled={isPlaying} onClick={onResetToDraft}>
+          <button type="button" className="btn-primary" disabled={isPlaying} onClick={onResetToDraft}>
             Edit Again
           </button>
         ) : (
-          <button type="button" onClick={onConfirm}>
+          <button type="button" className="btn-primary" onClick={onConfirm}>
             Confirm
           </button>
         )}

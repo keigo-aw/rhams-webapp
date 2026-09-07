@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-fixed":"#23005c","on-primary":"#00363a","on-tertiary-fixed-variant":"#005236","tertiary-fixed":"#6ffbbe","surface-bright":"#323947","surface-variant":"#2e3542","surface-dim":"#0c141f","on-tertiary-fixed":"#002113","on-secondary-container":"#c4abff","on-error-container":"#ffdad6","outline-variant":"#3b494b","surface-container-high":"#232a37","on-background":"#dce2f4","outline":"#849495","on-surface-variant":"#b9cacb","error-container":"#93000a","primary-fixed-dim":"#00dbe9","on-tertiary-container":"#006d4a","on-surface":"#dce2f4","background":"#0c141f","error":"#ffb4ab","inverse-primary":"#006970","on-tertiary":"#003824","secondary-fixed-dim":"#d0bcff","surface-container-highest":"#2e3542","inverse-on-surface":"#2a313d","inverse-surface":"#dce2f4","secondary-fixed":"#e9ddff","primary-container":"#00f0ff","tertiary":"#d8ffe7","on-secondary":"#3c0091","on-primary-fixed-variant":"#004f54","primary":"#dbfcff","secondary-container":"#571bc1","on-secondary-fixed-variant":"#5516be","surface-tint":"#00dbe9","surface":"#0c141f","on-primary-fixed":"#002022","on-error":"#690005","on-primary-container":"#006970","secondary":"#d0bcff","surface-container-lowest":"#070e1a","surface-container-low":"#151c28","tertiary-container":"#65f2b5","primary-fixed":"#7df4ff","tertiary-fixed-dim":"#4edea3","surface-container":"#19202c"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"unit-sm":"0.5rem","unit-xl":"1.5rem","unit-xs":"0.25rem","hud-inset":"1rem","panel-gutter":"0.5rem","unit-2xs":"0.125rem","unit-lg":"1rem","unit-md":"0.75rem","unit-2xl":"2rem"},"fontFamily":{"display-lg":["Inter"],"headline-sm":["Inter"],"data-mono-sm":["JetBrains Mono"],"display-lg-mobile":["Inter"],"data-mono-lg":["JetBrains Mono"],"body-sm":["Inter"],"label-caps":["JetBrains Mono"],"headline-md":["Inter"],"data-mono-md":["JetBrains Mono"],"body-md":["Inter"]},"fontSize":{"display-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"600"}],"data-mono-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"display-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"700"}],"data-mono-lg":["16px",{"lineHeight":"20px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"label-caps":["10px",{"lineHeight":"12px","letterSpacing":"0.08em","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"data-mono-md":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md"><div class="h-16 w-full px-hud-inset flex items-center justify-between gap-panel-gutter"><div class="flex items-center gap-unit-md shrink-0"><img alt="NovaBot Autonomous Waypoint Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VRLhe49OZcLD3Ph2-qkmAPYhTpLX9wJT4OedCS5F4qlKetqhqrrKChwA1-yZ6dFqtHPc0PNrnx8jKl49ScDYJ8guJCPZDTuVlgAE5DfIdHVs9u1anZLEQZY_D97M6ewXF84RHAobbx_mK_GKZq0R3de0H_6k8U-u4WW85JQ3y4qcekut6CY7iLiZgKpLTtcJeCNSEsr0J2dDyJrA1UNxJxXR4aNkyHp7wGGhg058ryFqti-QTKqidtlR7Y"/><div class="flex flex-col"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Mission Control</span><span class="font-headline-sm text-headline-sm text-primary tracking-tight">NovaBot Studio <span class="text-on-surface-variant font-data-mono-sm text-data-mono-sm">// Waypoint &amp; Telemetry Ops</span></span></div></div><div class="hidden xl:flex items-center gap-unit-sm px-unit-md py-unit-xs bg-surface-container-low rounded"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Active Unit</span><div class="flex items-center gap-unit-xs bg-surface-container px-unit-sm py-unit-2xs rounded"><span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span><span class="font-data-mono-sm text-data-mono-sm text-tertiary-container font-semibold">Unit AMR-04 (Sector B-Inspection) [ONLINE]</span></div></div><div class="hidden 2xl:flex items-center gap-unit-md font-data-mono-sm text-data-mono-sm text-on-surface-variant"><div class="flex items-center gap-unit-2xs"><span class="material-symbols-outlined text-sm text-tertiary-container">wifi</span><span>14ms ping</span></div><div class="flex items-center gap-unit-2xs"><span class="material-symbols-outlined text-sm text-primary-fixed-dim">satellite_alt</span><span>99.8% RTK Fix</span></div></div><nav class="flex items-center gap-unit-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded shadow-sm"><a aria-current="page" class="px-unit-md py-unit-xs transition-colors bg-primary-container text-on-primary-container font-semibold rounded shadow-sm" data-path="mission-planner" href="#">Mission Planner</a><a class="px-unit-md py-unit-xs rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" data-path="live-telemetry-and-logs" href="#">Live Telemetry &amp; Logs</a><a class="px-unit-md py-unit-xs rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" data-path="fleet-manager" href="#">Fleet Manager</a><a class="px-unit-md py-unit-xs rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-body-sm text-body-sm" data-path="analytics-and-replay" href="#">Analytics &amp; Replay</a></nav><div class="flex items-center gap-unit-sm shrink-0"><div class="hidden lg:flex items-center gap-unit-xs px-unit-sm py-unit-2xs bg-surface-container-low rounded font-data-mono-sm text-data-mono-sm text-primary-fixed-dim"><span class="material-symbols-outlined text-sm">schedule</span><span>14:38:09 UTC</span></div><button class="px-unit-md py-unit-xs bg-error-container text-on-error-container hover:bg-error hover:text-on-error rounded font-label-caps text-label-caps uppercase tracking-wider transition-colors flex items-center gap-unit-2xs" type="button"><span class="material-symbols-outlined text-sm">emergency</span>E-STOP</button><button class="p-unit-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors relative" type="button"><span class="material-symbols-outlined text-lg">notifications</span><span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-primary-container"></span></button><div class="flex items-center gap-unit-sm pl-unit-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3Qezm8fK_4E7ZB9-XxQ4R5zRKAaGAbyQGuMUyLScqWuiIgqhDYeyjhv0MNPppMVVLSQnxQk7hM8lrWqpRZKEW71Xwm3KH1qOkXHP6NOllmWAz2pn1PjO_M8sH-us1qNS8FJ8FXGEmn1Zgr5vws3sXEvpF72LMU22IGI-l7SDYw84NUt-OZlMdobqg3Mlg1WXLhP-_5-idwwIVTQKdoKAWfuNBtcnWOU7OHty3_rAx74vMnSAAkI3RuA"/><div class="hidden md:flex flex-col text-left"><span class="font-body-sm text-body-sm text-on-surface leading-none">Commander J. Vance</span><span class="font-label-caps text-label-caps text-primary leading-none mt-1">Lead Ops Engineer</span></div></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-lowest z-40 flex flex-col justify-between py-unit-md"><div class="flex flex-col gap-unit-sm px-unit-sm"><div class="px-unit-sm py-unit-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Fleet Topology</span></div><nav class="flex flex-col gap-unit-2xs" data-active-classes="bg-surface-container-high text-primary font-semibold rounded"><a aria-current="page" class="flex items-center gap-unit-sm px-unit-sm py-unit-xs transition-colors bg-surface-container-high text-primary font-semibold rounded" data-path="mission-planner" href="#"><span class="material-symbols-outlined text-sm">alt_route</span>Waypoint Path Editor</a><a class="flex items-center gap-unit-sm px-unit-sm py-unit-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="live-telemetry-and-logs" href="#"><span class="material-symbols-outlined text-sm">sensors</span>Sensor Matrix &amp; Lidar</a><a class="flex items-center gap-unit-sm px-unit-sm py-unit-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="fleet-manager" href="#"><span class="material-symbols-outlined text-sm">precision_manufacturing</span>AMR Node Tree</a><a class="flex items-center gap-unit-sm px-unit-sm py-unit-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="analytics-and-replay" href="#"><span class="material-symbols-outlined text-sm">history_toggle_off</span>Spatial Blackbox</a></nav></div><div class="px-unit-md py-unit-sm bg-surface-container-low mx-unit-sm rounded flex flex-col gap-unit-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Safety Interlock</span><div class="flex items-center justify-between"><span class="font-data-mono-sm text-data-mono-sm text-tertiary-container">ARMED / NOMINAL</span><span class="material-symbols-outlined text-tertiary-container text-sm">verified_user</span></div></div></aside><div class="pl-64"><main class="relative w-full pt-16 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Content Top HUD / Tactical Mission Strip -->
+<div class="w-full bg-surface-container-low px-hud-inset py-unit-sm flex flex-col xl:flex-row xl:items-center justify-between gap-panel-gutter shadow-sm">
+<div class="flex flex-wrap items-center gap-unit-md">
+<div class="flex items-center gap-unit-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container shadow-[0_0_8px_currentColor] text-primary-container"></span>
+<div class="flex flex-col">
+<div class="flex items-center gap-unit-xs">
+<span class="font-data-mono-sm text-data-mono-sm text-primary uppercase font-bold tracking-wider">Mission #WP-809</span>
+<span class="bg-surface-container-high text-primary-container font-label-caps text-label-caps px-unit-xs py-0.5 rounded">SIM_READY</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Facility Perimeter &amp; Radiation Audit</span>
+</div>
+</div>
+<div class="h-8 w-px bg-surface-variant hidden md:block"></div>
+<!-- Quick Telemetry Stats -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-unit-sm items-center">
+<div class="flex flex-col bg-surface-container px-unit-sm py-unit-xs rounded">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Path Distance</span>
+<div class="flex items-baseline gap-unit-2xs">
+<span class="font-data-mono-lg text-data-mono-lg text-on-surface">482.4</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">m</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container px-unit-sm py-unit-xs rounded">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Est. Duration</span>
+<div class="flex items-baseline gap-unit-2xs">
+<span class="font-data-mono-lg text-data-mono-lg text-tertiary-container">14m 20s</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container px-unit-sm py-unit-xs rounded">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Waypoints</span>
+<div class="flex items-baseline gap-unit-2xs">
+<span class="font-data-mono-lg text-data-mono-lg text-primary">8</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Nodes</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container px-unit-sm py-unit-xs rounded">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Est. Battery</span>
+<div class="flex items-baseline gap-unit-2xs">
+<span class="font-data-mono-lg text-data-mono-lg text-tertiary-container">-18.2</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="flex flex-wrap items-center gap-unit-xs">
+<button class="flex items-center gap-unit-xs px-unit-md py-unit-xs bg-surface-container-high hover:bg-surface-bright text-primary rounded font-label-caps text-label-caps uppercase transition-colors" id="btnAddWp" type="button">
+<span class="material-symbols-outlined text-sm">add_location_alt</span>
+<span>Add Node [W]</span>
+</button>
+<button class="flex items-center gap-unit-xs px-unit-md py-unit-xs bg-surface-container-high hover:bg-surface-bright text-on-surface rounded font-label-caps text-label-caps uppercase transition-colors" type="button">
+<span class="material-symbols-outlined text-sm">magic_button</span>
+<span>Auto-Optimize</span>
+</button>
+<button class="flex items-center gap-unit-xs px-unit-md py-unit-xs bg-surface-container-high hover:bg-surface-bright text-on-surface rounded font-label-caps text-label-caps uppercase transition-colors" id="btnSimulate" type="button">
+<span class="material-symbols-outlined text-sm text-tertiary-container">play_arrow</span>
+<span>Simulate</span>
+</button>
+<button class="flex items-center gap-unit-xs px-unit-md py-unit-xs bg-primary-container hover:bg-white text-on-primary-container font-semibold rounded font-label-caps text-label-caps uppercase transition-all shadow-[0_0_12px_rgba(0,240,255,0.4)]" type="button">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+<span>Deploy AMR-04</span>
+</button>
+</div>
+</div>
+<!-- Workspace Canvas: 3-column Split with Map Core -->
+<div class="w-full flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-[calc(100vh-8rem)]">
+<!-- Left Drawer: Waypoint Sequencer Table (3 cols) -->
+<div class="lg:col-span-3 bg-surface-container-lowest flex flex-col justify-between overflow-hidden">
+<!-- Panel Header -->
+<div class="p-unit-sm bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-primary-container text-sm">format_list_numbered</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Sequence Buffer</span>
+</div>
+<div class="flex items-center gap-unit-2xs text-on-surface-variant font-data-mono-sm text-data-mono-sm">
+<span>8 Items</span>
+<button class="hover:text-primary p-0.5" type="button"><span class="material-symbols-outlined text-xs">tune</span></button>
+</div>
+</div>
+<!-- Sequencer Table Container -->
+<div class="flex-1 overflow-y-auto divide-y divide-surface-container-high/40 text-on-surface">
+<!-- Waypoint Row 1 -->
+<div class="p-unit-xs hover:bg-surface-container-high/60 transition-colors cursor-pointer group flex items-start gap-unit-xs">
+<div class="flex items-center gap-1 shrink-0 pt-1">
+<span class="material-symbols-outlined text-xs text-on-surface-variant opacity-40 group-hover:opacity-100">drag_indicator</span>
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center font-data-mono-sm text-data-mono-sm text-primary">01</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold truncate text-on-surface">AMR Dock Alpha</span>
+<span class="font-data-mono-sm text-data-mono-sm text-tertiary-container">START</span>
+</div>
+<div class="grid grid-cols-3 gap-1 mt-0.5 text-on-surface-variant font-data-mono-sm text-data-mono-sm">
+<span>X: <strong class="text-on-surface">0.0m</strong></span>
+<span>Y: <strong class="text-on-surface">0.0m</strong></span>
+<span>θ: <strong class="text-on-surface">0°</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs mt-1">
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">0.5 m/s</span>
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Pass-thru</span>
+</div>
+</div>
+</div>
+<!-- Waypoint Row 2 -->
+<div class="p-unit-xs hover:bg-surface-container-high/60 transition-colors cursor-pointer group flex items-start gap-unit-xs">
+<div class="flex items-center gap-1 shrink-0 pt-1">
+<span class="material-symbols-outlined text-xs text-on-surface-variant opacity-40 group-hover:opacity-100">drag_indicator</span>
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center font-data-mono-sm text-data-mono-sm text-primary">02</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold truncate text-on-surface">Corridor Junction B1</span>
+<span class="font-data-mono-sm text-data-mono-sm text-on-surface-variant">42m</span>
+</div>
+<div class="grid grid-cols-3 gap-1 mt-0.5 text-on-surface-variant font-data-mono-sm text-data-mono-sm">
+<span>X: <strong class="text-on-surface">24.5m</strong></span>
+<span>Y: <strong class="text-on-surface">12.0m</strong></span>
+<span>θ: <strong class="text-on-surface">45°</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs mt-1">
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">1.6 m/s</span>
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Pass-thru</span>
+</div>
+</div>
+</div>
+<!-- Waypoint Row 3 (Trigger Node) -->
+<div class="p-unit-xs hover:bg-surface-container-high/60 transition-colors cursor-pointer group flex items-start gap-unit-xs bg-primary/5">
+<div class="flex items-center gap-1 shrink-0 pt-1">
+<span class="material-symbols-outlined text-xs text-on-surface-variant opacity-40 group-hover:opacity-100">drag_indicator</span>
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-data-mono-sm text-data-mono-sm font-bold">03</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold truncate text-primary-container">Zone B Air Lock</span>
+<span class="material-symbols-outlined text-xs text-primary-container">radar</span>
+</div>
+<div class="grid grid-cols-3 gap-1 mt-0.5 text-on-surface-variant font-data-mono-sm text-data-mono-sm">
+<span>X: <strong class="text-on-surface">48.2m</strong></span>
+<span>Y: <strong class="text-on-surface">36.5m</strong></span>
+<span>θ: <strong class="text-on-surface">90°</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs mt-1">
+<span class="bg-primary-container/20 text-primary-container font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Dwell 8s</span>
+<span class="bg-surface-container text-primary font-label-caps text-label-caps px-unit-xs py-0.5 rounded">360° LiDAR Sweep</span>
+</div>
+</div>
+</div>
+<!-- Waypoint Row 4 (ACTIVE / SELECTED) -->
+<div class="p-unit-xs bg-surface-container-high/90 transition-colors cursor-pointer group flex items-start gap-unit-xs">
+<div class="flex items-center gap-1 shrink-0 pt-1">
+<span class="material-symbols-outlined text-xs text-primary">radio_button_checked</span>
+<span class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center font-data-mono-sm text-data-mono-sm font-bold">04</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-bold truncate text-primary">Valve Station A2</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary">SELECTED</span>
+</div>
+<div class="grid grid-cols-3 gap-1 mt-0.5 text-on-surface font-data-mono-sm text-data-mono-sm">
+<span>X: <strong class="text-primary-container">42.5m</strong></span>
+<span>Y: <strong class="text-primary-container">-18.2m</strong></span>
+<span>θ: <strong class="text-primary-container">135°</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs mt-1">
+<span class="bg-primary/20 text-primary font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Dwell 12s</span>
+<span class="bg-surface-container text-secondary font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Pressure OCR</span>
+</div>
+</div>
+</div>
+<!-- Waypoint Row 5 (Thermal Trigger) -->
+<div class="p-unit-xs hover:bg-surface-container-high/60 transition-colors cursor-pointer group flex items-start gap-unit-xs">
+<div class="flex items-center gap-1 shrink-0 pt-1">
+<span class="material-symbols-outlined text-xs text-on-surface-variant opacity-40 group-hover:opacity-100">drag_indicator</span>
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center font-data-mono-sm text-data-mono-sm text-primary">05</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold truncate text-on-surface">Reactor Core Perimeter</span>
+<span class="material-symbols-outlined text-xs text-error">device_thermostat</span>
+</div>
+<div class="grid grid-cols-3 gap-1 mt-0.5 text-on-surface-variant font-data-mono-sm text-data-mono-sm">
+<span>X: <strong class="text-on-surface">75.0m</strong></span>
+<span>Y: <strong class="text-on-surface">-32.4m</strong></span>
+<span>θ: <strong class="text-on-surface">180°</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs mt-1">
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Dwell 15s</span>
+<span class="bg-error/20 text-error font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Thermal Scan</span>
+</div>
+</div>
+</div>
+<!-- Waypoint Row 6 -->
+<div class="p-unit-xs hover:bg-surface-container-high/60 transition-colors cursor-pointer group flex items-start gap-unit-xs">
+<div class="flex items-center gap-1 shrink-0 pt-1">
+<span class="material-symbols-outlined text-xs text-on-surface-variant opacity-40 group-hover:opacity-100">drag_indicator</span>
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center font-data-mono-sm text-data-mono-sm text-primary">06</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold truncate text-on-surface">Coolant Loop Turn 2</span>
+<span class="font-data-mono-sm text-data-mono-sm text-on-surface-variant">112m</span>
+</div>
+<div class="grid grid-cols-3 gap-1 mt-0.5 text-on-surface-variant font-data-mono-sm text-data-mono-sm">
+<span>X: <strong class="text-on-surface">92.1m</strong></span>
+<span>Y: <strong class="text-on-surface">10.4m</strong></span>
+<span>θ: <strong class="text-on-surface">225°</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs mt-1">
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">1.2 m/s</span>
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Pass-thru</span>
+</div>
+</div>
+</div>
+<!-- Waypoint Row 7 (Gas Trigger) -->
+<div class="p-unit-xs hover:bg-surface-container-high/60 transition-colors cursor-pointer group flex items-start gap-unit-xs">
+<div class="flex items-center gap-1 shrink-0 pt-1">
+<span class="material-symbols-outlined text-xs text-on-surface-variant opacity-40 group-hover:opacity-100">drag_indicator</span>
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center font-data-mono-sm text-data-mono-sm text-primary">07</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold truncate text-on-surface">Chemical Storage C</span>
+<span class="material-symbols-outlined text-xs text-tertiary-container">co2</span>
+</div>
+<div class="grid grid-cols-3 gap-1 mt-0.5 text-on-surface-variant font-data-mono-sm text-data-mono-sm">
+<span>X: <strong class="text-on-surface">115.0m</strong></span>
+<span>Y: <strong class="text-on-surface">42.0m</strong></span>
+<span>θ: <strong class="text-on-surface">270°</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs mt-1">
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Dwell 20s</span>
+<span class="bg-tertiary-container/20 text-tertiary-container font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Gas Sniffer</span>
+</div>
+</div>
+</div>
+<!-- Waypoint Row 8 (Terminal Node) -->
+<div class="p-unit-xs hover:bg-surface-container-high/60 transition-colors cursor-pointer group flex items-start gap-unit-xs">
+<div class="flex items-center gap-1 shrink-0 pt-1">
+<span class="material-symbols-outlined text-xs text-on-surface-variant opacity-40 group-hover:opacity-100">drag_indicator</span>
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center font-data-mono-sm text-data-mono-sm text-primary">08</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm font-semibold truncate text-on-surface">AMR Dock Beta (Recovery)</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary-container">FINAL</span>
+</div>
+<div class="grid grid-cols-3 gap-1 mt-0.5 text-on-surface-variant font-data-mono-sm text-data-mono-sm">
+<span>X: <strong class="text-on-surface">130.2m</strong></span>
+<span>Y: <strong class="text-on-surface">0.0m</strong></span>
+<span>θ: <strong class="text-on-surface">0°</strong></span>
+</div>
+<div class="flex items-center gap-unit-xs mt-1">
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Auto-Dock</span>
+<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps px-unit-xs py-0.5 rounded">Charge Link</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Left Bottom Batch Control -->
+<div class="p-unit-sm bg-surface-container-low flex items-center justify-between gap-unit-xs">
+<button class="flex-1 py-unit-xs bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded font-label-caps text-label-caps uppercase transition-colors text-center" type="button">
+          Invert Path
+        </button>
+<button class="flex-1 py-unit-xs bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded font-label-caps text-label-caps uppercase transition-colors text-center" type="button">
+          Batch Speed
+        </button>
+<button class="p-unit-xs bg-surface-container hover:bg-error-container text-error rounded transition-colors" title="Clear Buffer" type="button">
+<span class="material-symbols-outlined text-sm">delete_sweep</span>
+</button>
+</div>
+</div>
+<!-- Center: Interactive High-Tech 2D/3D Map Canvas (6 cols) -->
+<div class="lg:col-span-6 relative bg-surface-container-lowest flex flex-col overflow-hidden min-h-[520px]">
+<!-- Ambient Blueprint Canvas -->
+<div class="absolute inset-0 select-none overflow-hidden" id="mapViewport">
+<!-- SVG Tactical Floorplan Overlay -->
+<svg class="w-full h-full object-cover" fill="none" viewbox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+<!-- Engineering Grid Background -->
+<defs>
+<pattern height="20" id="gridSub" patternunits="userSpaceOnUse" width="20">
+<path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(219, 252, 255, 0.04)" stroke-width="0.75"></path>
+</pattern>
+<pattern height="100" id="gridMajor" patternunits="userSpaceOnUse" width="100">
+<rect fill="url(#gridSub)" height="100" width="100"></rect>
+<path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(0, 240, 255, 0.12)" stroke-width="1.2"></path>
+</pattern>
+<pattern height="10" id="hazardHatch" patterntransform="rotate(45 0 0)" patternunits="userSpaceOnUse" width="10">
+<line stroke="rgba(255, 75, 75, 0.35)" stroke-width="3" x1="0" x2="0" y1="0" y2="10"></line>
+</pattern>
+<filter height="140%" id="glowCyan" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="3"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+</defs>
+<rect fill="url(#gridMajor)" height="700" width="1000"></rect>
+<!-- Facility Boundary Architecture -->
+<path d="M 60 80 L 940 80 L 940 620 L 60 620 Z" fill="rgba(12, 20, 31, 0.6)" stroke="rgba(255, 255, 255, 0.18)" stroke-dasharray="8 4" stroke-width="2"></path>
+<!-- Zone Regions -->
+<!-- Zone A: Logistics Storage -->
+<rect fill="rgba(0, 240, 255, 0.02)" height="490" stroke="rgba(0, 240, 255, 0.15)" stroke-width="1" width="260" x="80" y="100"></rect>
+<text fill="rgba(219, 252, 255, 0.4)" font-family="JetBrains Mono" font-size="11" font-weight="700" x="95" y="130">ZONE_A // LOGISTICS STORAGE</text>
+<!-- Zone B: Reactor Hall (Radiation Warning Zone) -->
+<rect fill="rgba(255, 180, 171, 0.03)" height="490" stroke="rgba(255, 180, 171, 0.2)" stroke-width="1" width="340" x="360" y="100"></rect>
+<text fill="rgba(255, 180, 171, 0.5)" font-family="JetBrains Mono" font-size="11" font-weight="700" x="375" y="130">ZONE_B // REACTOR CONTAINMENT [RESTRICTED]</text>
+<!-- Hazard Exclusion Zone 1 (Hatched red polygon) -->
+<polygon fill="url(#hazardHatch)" points="460,200 580,200 620,320 420,320" stroke="rgba(255, 100, 100, 0.8)" stroke-width="1.5"></polygon>
+<text fill="rgba(255, 180, 171, 0.9)" font-family="JetBrains Mono" font-size="10" font-weight="700" x="465" y="270">NO-GO HAZARD: HIGH RAD</text>
+<!-- Zone C: Chemical & Logistics Dock -->
+<rect fill="rgba(101, 242, 181, 0.02)" height="490" stroke="rgba(101, 242, 181, 0.15)" stroke-width="1" width="200" x="720" y="100"></rect>
+<text fill="rgba(101, 242, 181, 0.4)" font-family="JetBrains Mono" font-size="11" font-weight="700" x="735" y="130">ZONE_C // CHEM RECOVERY</text>
+<!-- Obstacle Pillars & Structural Columns -->
+<rect fill="#232a37" height="30" width="30" x="200" y="240"></rect>
+<rect fill="#232a37" height="30" width="30" x="200" y="420"></rect>
+<rect fill="#232a37" height="30" width="30" x="790" y="240"></rect>
+<rect fill="#232a37" height="30" width="30" x="790" y="420"></rect>
+<!-- Sensor Trigger Radii -->
+<!-- WP-03 LiDAR sweep circle -->
+<circle cx="340" cy="220" fill="rgba(0, 240, 255, 0.07)" r="48" stroke="#00f0ff" stroke-dasharray="4 2" stroke-width="1"></circle>
+<circle cx="340" cy="220" fill="rgba(0, 240, 255, 0.1)" r="28"></circle>
+<!-- WP-05 Thermal Scan field -->
+<circle cx="630" cy="460" fill="rgba(255, 180, 171, 0.08)" r="54" stroke="#ffb4ab" stroke-dasharray="3 3" stroke-width="1"></circle>
+<!-- WP-07 Gas sniffing trigger field -->
+<circle cx="830" cy="330" fill="rgba(101, 242, 181, 0.09)" r="44" stroke="#65f2b5" stroke-dasharray="4 4" stroke-width="1"></circle>
+<!-- Path Spline (Waypoints Trajectory) -->
+<path d="M 140,510 L 220,360 L 340,220 L 410,430 L 630,460 L 670,260 L 830,330 L 870,510" fill="none" filter="url(#glowCyan)" id="robotTrajectory" stroke="#00f0ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Motion Direction Arrowheads along path -->
+<polygon fill="#00f0ff" points="178,440 182,430 188,442" transform="rotate(-30 180 435)"></polygon>
+<polygon fill="#00f0ff" points="278,295 282,285 288,297" transform="rotate(-40 280 290)"></polygon>
+<polygon fill="#00f0ff" points="518,442 522,438 526,448" transform="rotate(8 520 445)"></polygon>
+<!-- Waypoint Nodes Visual Markers -->
+<!-- WP-01 -->
+<circle cx="140" cy="510" fill="#151c28" r="8" stroke="#00f0ff" stroke-width="2"></circle>
+<text fill="#dbfcff" font-family="JetBrains Mono" font-size="10" font-weight="700" x="135" y="535">WP-01</text>
+<!-- WP-02 -->
+<circle cx="220" cy="360" fill="#151c28" r="8" stroke="#00f0ff" stroke-width="2"></circle>
+<text fill="#dbfcff" font-family="JetBrains Mono" font-size="10" font-weight="700" x="215" y="345">WP-02</text>
+<!-- WP-03 -->
+<circle cx="340" cy="220" fill="#006970" r="9" stroke="#00f0ff" stroke-width="2"></circle>
+<text fill="#00f0ff" font-family="JetBrains Mono" font-size="10" font-weight="700" x="330" y="200">WP-03 [LIDAR]</text>
+<!-- WP-04 (Selected Node with Pulse Marker) -->
+<circle cx="410" cy="430" fill="rgba(0, 240, 255, 0.2)" r="18" stroke="#00f0ff" stroke-width="1.5"></circle>
+<circle cx="410" cy="430" fill="#00f0ff" r="10"></circle>
+<circle cx="410" cy="430" fill="#0c141f" r="4"></circle>
+<!-- Heading Vector Indicator -->
+<line stroke="#ffffff" stroke-linecap="round" stroke-width="2.5" x1="410" x2="435" y1="430" y2="455"></line>
+<text fill="#ffffff" font-family="JetBrains Mono" font-size="11" font-weight="700" x="424" y="420">WP-04 (ACTIVE)</text>
+<!-- WP-05 -->
+<circle cx="630" cy="460" fill="#93000a" r="9" stroke="#ffb4ab" stroke-width="2"></circle>
+<text fill="#ffb4ab" font-family="JetBrains Mono" font-size="10" font-weight="700" x="615" y="495">WP-05 [THERM]</text>
+<!-- WP-06 -->
+<circle cx="670" cy="260" fill="#151c28" r="8" stroke="#00f0ff" stroke-width="2"></circle>
+<text fill="#dbfcff" font-family="JetBrains Mono" font-size="10" font-weight="700" x="665" y="245">WP-06</text>
+<!-- WP-07 -->
+<circle cx="830" cy="330" fill="#005236" r="9" stroke="#65f2b5" stroke-width="2"></circle>
+<text fill="#65f2b5" font-family="JetBrains Mono" font-size="10" font-weight="700" x="815" y="310">WP-07 [GAS]</text>
+<!-- WP-08 -->
+<circle cx="870" cy="510" fill="#151c28" r="9" stroke="#00f0ff" stroke-width="2"></circle>
+<text fill="#dbfcff" font-family="JetBrains Mono" font-size="10" font-weight="700" x="860" y="535">WP-08 [END]</text>
+<!-- Active AMR-04 Realtime Position Overlay -->
+<g transform="translate(268, 304)">
+<circle cx="0" cy="0" fill="none" r="22" stroke="#65f2b5" stroke-dasharray="3 3" stroke-width="1.5">
+<animatetransform attributename="transform" dur="8s" from="0" repeatcount="indefinite" to="360" type="rotate"></animatetransform>
+</circle>
+<circle cx="0" cy="0" fill="#19202c" r="14" stroke="#65f2b5" stroke-width="2"></circle>
+<!-- Heading notch -->
+<polygon fill="#65f2b5" points="0,-12 5,-4 -5,-4"></polygon>
+<!-- AMR Label -->
+<rect fill="#0c141f" height="15" rx="2" width="70" x="-35" y="18"></rect>
+<text fill="#65f2b5" font-family="JetBrains Mono" font-size="9" font-weight="700" x="-31" y="29">AMR-04: LIVE</text>
+</g>
+</svg>
+<!-- Dynamic Simulated Trajectory Dot -->
+<div class="absolute w-4 h-4 -ml-2 -mt-2 rounded-full bg-primary shadow-[0_0_10px_#00f0ff] hidden pointer-events-none z-10" id="simAgent"></div>
+</div>
+<!-- Tactical HUD Floating Toolstrip (Left of Map) -->
+<div class="absolute left-unit-md top-unit-md flex flex-col gap-unit-2xs bg-surface-container-low/90 backdrop-blur-md p-unit-2xs rounded shadow-md z-20">
+<button class="p-unit-xs hover:bg-surface-container-high text-primary rounded transition-colors" title="Select &amp; Drag" type="button">
+<span class="material-symbols-outlined text-base">near_me</span>
+</button>
+<button class="p-unit-xs hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded transition-colors" title="Add Waypoint Pin" type="button">
+<span class="material-symbols-outlined text-base">add_circle</span>
+</button>
+<button class="p-unit-xs hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded transition-colors" title="Spatial Measurement Tape" type="button">
+<span class="material-symbols-outlined text-base">straighten</span>
+</button>
+<div class="h-px bg-surface-variant my-0.5"></div>
+<button class="p-unit-xs hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded transition-colors" title="Snap to Grid (0.5m)" type="button">
+<span class="material-symbols-outlined text-base text-primary">grid_3x3</span>
+</button>
+<button class="p-unit-xs hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded transition-colors" title="Toggle 2D / 3D Isometric View" type="button">
+<span class="material-symbols-outlined text-base">3d_rotation</span>
+</button>
+<button class="p-unit-xs hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface rounded transition-colors" title="Recenter Viewport" type="button">
+<span class="material-symbols-outlined text-base">filter_center_focus</span>
+</button>
+</div>
+<!-- Layer Visibility Filter Switcher (Top Right of Map) -->
+<div class="absolute right-unit-md top-unit-md flex items-center gap-unit-2xs bg-surface-container-low/90 backdrop-blur-md px-unit-sm py-unit-xs rounded shadow-md z-20 font-label-caps text-label-caps">
+<label class="flex items-center gap-1 cursor-pointer text-primary">
+<input checked="" class="accent-primary w-3 h-3" type="checkbox"/>
+<span>LiDAR Map</span>
+</label>
+<span class="text-surface-variant">|</span>
+<label class="flex items-center gap-1 cursor-pointer text-on-surface-variant hover:text-on-surface">
+<input checked="" class="accent-primary w-3 h-3" type="checkbox"/>
+<span>Triggers</span>
+</label>
+<span class="text-surface-variant">|</span>
+<label class="flex items-center gap-1 cursor-pointer text-on-surface-variant hover:text-on-surface">
+<input checked="" class="accent-primary w-3 h-3" type="checkbox"/>
+<span>Hazards</span>
+</label>
+<span class="text-surface-variant">|</span>
+<label class="flex items-center gap-1 cursor-pointer text-on-surface-variant hover:text-on-surface">
+<input class="accent-primary w-3 h-3" type="checkbox"/>
+<span>Heatmap</span>
+</label>
+</div>
+<!-- Compass Heading Gauge (Bottom Right HUD) -->
+<div class="absolute right-unit-md bottom-unit-md flex items-center gap-unit-sm bg-surface-container-low/90 backdrop-blur-md px-unit-md py-unit-xs rounded shadow-md z-20">
+<div class="relative w-8 h-8 rounded-full border border-primary/30 flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<span class="absolute top-0 text-[8px] font-bold text-primary">N</span>
+<span class="absolute bottom-0 text-[8px] text-on-surface-variant">S</span>
+<span class="absolute right-0.5 text-[8px] text-on-surface-variant">E</span>
+<span class="absolute left-0.5 text-[8px] text-on-surface-variant">W</span>
+</div>
+<div class="flex flex-col font-data-mono-sm text-data-mono-sm">
+<span class="text-on-surface-variant text-[10px]">LOCAL ORIGIN</span>
+<span class="text-on-surface font-semibold">X: +42.50m Y: -18.20m</span>
+</div>
+</div>
+<!-- Bottom Trajectory Velocity Timeline Scrub Tray -->
+<div class="w-full bg-surface-container-lowest/95 backdrop-blur-md p-unit-xs mt-auto z-20 flex flex-col gap-unit-2xs">
+<div class="flex items-center justify-between font-label-caps text-label-caps px-unit-xs text-on-surface-variant">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-xs text-primary">speed</span>
+<span class="uppercase">Kinematic Velocity Profile (m/s)</span>
+</div>
+<div class="flex items-center gap-unit-sm">
+<span>Peak: 1.8 m/s</span>
+<span>Avg: 1.1 m/s</span>
+<span class="text-tertiary-container">Target Max Safe: 2.0 m/s</span>
+</div>
+</div>
+<!-- Inline Velocity Chart Vector -->
+<div class="w-full h-11 bg-surface-container-low rounded px-1 pt-1 flex items-end">
+<svg class="w-full h-full" fill="none" preserveaspectratio="none" viewbox="0 0 500 36">
+<path d="M 0,34 L 30,18 L 80,18 L 120,6 L 160,34 L 180,34 L 220,12 L 280,12 L 320,34 L 350,15 L 420,15 L 460,34 L 500,34" fill="none" stroke="#00f0ff" stroke-width="2"></path>
+<path d="M 0,34 L 30,18 L 80,18 L 120,6 L 160,34 L 180,34 L 220,12 L 280,12 L 320,34 L 350,15 L 420,15 L 460,34 L 500,34 L 500,36 L 0,36 Z" fill="rgba(0, 240, 255, 0.1)"></path>
+<!-- Current Scrub Head Pin -->
+<line stroke="#ffffff" stroke-dasharray="2 2" stroke-width="1.5" x1="200" x2="200" y1="0" y2="36"></line>
+</svg>
+</div>
+</div>
+</div>
+<!-- Right Inspector Panel: Waypoint Configuration & Validation (3 cols) -->
+<div class="lg:col-span-3 bg-surface-container-lowest flex flex-col justify-between overflow-y-auto">
+<div class="p-unit-sm bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-primary-container text-sm">tune</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Waypoint Inspector</span>
+</div>
+<span class="bg-primary/20 text-primary font-data-mono-sm text-data-mono-sm px-unit-xs py-0.5 rounded font-semibold">ID #04</span>
+</div>
+<!-- Node Parameters Form -->
+<div class="p-unit-sm flex flex-col gap-unit-md">
+<!-- Target Identifier -->
+<div class="flex flex-col gap-unit-2xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Node Name &amp; Role</label>
+<input class="bg-surface-container px-unit-sm py-unit-xs text-on-surface font-body-sm text-body-sm rounded outline-none focus:bg-surface-container-high focus:text-primary transition-colors" type="text" value="Valve Station A2"/>
+</div>
+<!-- Coordinates Spinners Grid -->
+<div class="flex flex-col gap-unit-2xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Spatial Coordinates (Metric SLAM)</span>
+<div class="grid grid-cols-3 gap-unit-xs">
+<div class="flex flex-col bg-surface-container p-unit-xs rounded">
+<span class="font-label-caps text-label-caps text-primary-fixed-dim">X-AXIS</span>
+<div class="flex items-center justify-between mt-1">
+<input class="w-full bg-transparent font-data-mono-sm text-data-mono-sm text-on-surface outline-none" type="text" value="42.50"/>
+<span class="font-label-caps text-label-caps text-on-surface-variant">m</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container p-unit-xs rounded">
+<span class="font-label-caps text-label-caps text-primary-fixed-dim">Y-AXIS</span>
+<div class="flex items-center justify-between mt-1">
+<input class="w-full bg-transparent font-data-mono-sm text-data-mono-sm text-on-surface outline-none" type="text" value="-18.20"/>
+<span class="font-label-caps text-label-caps text-on-surface-variant">m</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container p-unit-xs rounded">
+<span class="font-label-caps text-label-caps text-primary-fixed-dim">HEADING (θ)</span>
+<div class="flex items-center justify-between mt-1">
+<input class="w-full bg-transparent font-data-mono-sm text-data-mono-sm text-on-surface outline-none" type="text" value="135.0"/>
+<span class="font-label-caps text-label-caps text-on-surface-variant">deg</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Sensor Payload Trigger Selector -->
+<div class="flex flex-col gap-unit-2xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Payload Sensor Trigger</label>
+<select class="bg-surface-container px-unit-sm py-unit-xs text-on-surface font-body-sm text-body-sm rounded outline-none cursor-pointer">
+<option>Optical OCR &amp; Valve Inspection</option>
+<option>360° LiDAR High-Density Sweep</option>
+<option>Thermal Infrared Surface Matrix</option>
+<option>Volatile Organic Gas Sniffer</option>
+<option>None (Continuous Pass-Through)</option>
+</select>
+</div>
+<!-- Motion Dynamics -->
+<div class="grid grid-cols-2 gap-unit-sm">
+<div class="flex flex-col gap-unit-2xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Approach Speed</label>
+<div class="flex items-center bg-surface-container px-unit-sm py-unit-xs rounded">
+<input class="w-full bg-transparent font-data-mono-sm text-data-mono-sm text-on-surface outline-none" step="0.1" type="number" value="1.2"/>
+<span class="font-label-caps text-label-caps text-on-surface-variant">m/s</span>
+</div>
+</div>
+<div class="flex flex-col gap-unit-2xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Station Dwell</label>
+<div class="flex items-center bg-surface-container px-unit-sm py-unit-xs rounded">
+<input class="w-full bg-transparent font-data-mono-sm text-data-mono-sm text-on-surface outline-none" step="1" type="number" value="12"/>
+<span class="font-label-caps text-label-caps text-on-surface-variant">sec</span>
+</div>
+</div>
+</div>
+<!-- Tolerance Range Slider -->
+<div class="flex flex-col gap-unit-xs bg-surface-container p-unit-sm rounded">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Arrival Acceptance Radius</span>
+<span class="font-data-mono-sm text-data-mono-sm text-primary-container font-semibold">±0.15 m</span>
+</div>
+<input class="w-full accent-primary h-1 bg-surface-variant rounded cursor-pointer" max="1.0" min="0.05" step="0.05" type="range" value="0.15"/>
+<div class="flex items-center justify-between text-[9px] font-data-mono-sm text-on-surface-variant">
+<span>High Precision (0.05m)</span>
+<span>Relaxed (1.00m)</span>
+</div>
+</div>
+<!-- Obstacle Clearance Margin -->
+<div class="flex flex-col gap-unit-xs bg-surface-container p-unit-sm rounded">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Safety Clearance Bubble</span>
+<span class="font-data-mono-sm text-data-mono-sm text-tertiary-container font-semibold">0.80 m</span>
+</div>
+<input class="w-full accent-tertiary-container h-1 bg-surface-variant rounded cursor-pointer" max="2.0" min="0.3" step="0.1" type="range" value="0.8"/>
+<span class="text-[10px] text-on-surface-variant">Guaranteed corridor width clearance from Zone B structures.</span>
+</div>
+<!-- Kinematic Validation Feasibility Badge -->
+<div class="p-unit-sm bg-tertiary-container/10 rounded flex flex-col gap-unit-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-unit-xs">
+<span class="material-symbols-outlined text-tertiary-container text-base">verified</span>
+<span class="font-body-sm text-body-sm font-semibold text-tertiary-container">Kinematics Validated</span>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm text-tertiary-container font-bold">100% OK</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight">
+            Curvature radius 1.42m exceeds AMR-04 minimum turn diameter (0.90m). Acceleration load within wheel motor thermal envelop.
+          </p>
+</div>
+</div>
+<!-- Action Footer for Waypoint Inspector -->
+<div class="p-unit-sm bg-surface-container-low flex items-center justify-between gap-unit-xs">
+<button class="flex-1 py-unit-xs bg-surface-container hover:bg-surface-container-high text-error rounded font-label-caps text-label-caps uppercase transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-xs">delete</span>
+<span>Remove Node</span>
+</button>
+<button class="flex-1 py-unit-xs bg-primary hover:bg-primary-container text-on-primary hover:text-on-primary-container font-semibold rounded font-label-caps text-label-caps uppercase transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-xs">save</span>
+<span>Update Pose</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const btnSimulate = document.getElementById('btnSimulate');
+    const simAgent = document.getElementById('simAgent');
+    const trajectoryPath = document.getElementById('robotTrajectory');
+    let isSimulating = false;
+    let animFrame;
+
+    if (btnSimulate && simAgent && trajectoryPath) {
+      const pathLength = trajectoryPath.getTotalLength();
+
+      btnSimulate.addEventListener('click', function() {
+        if (isSimulating) {
+          cancelAnimationFrame(animFrame);
+          simAgent.classList.add('hidden');
+          isSimulating = false;
+          btnSimulate.querySelector('span:last-child').textContent = 'Simulate';
+          return;
+        }
+
+        isSimulating = true;
+        simAgent.classList.remove('hidden');
+        btnSimulate.querySelector('span:last-child').textContent = 'Stop Sim';
+
+        let start = null;
+        const duration = 6500; // 6.5s simulated run
+
+        function step(timestamp) {
+          if (!start) start = timestamp;
+          const progress = (timestamp - start) / duration;
+
+          if (progress < 1) {
+            const currentDist = progress * pathLength;
+            const pt = trajectoryPath.getPointAtLength(currentDist);
+            
+            // Map coordinates inside the SVG viewBox (1000x700)
+            const mapContainer = document.getElementById('mapViewport');
+            const rect = mapContainer.getBoundingClientRect();
+            const posX = (pt.x / 1000) * rect.width;
+            const posY = (pt.y / 700) * rect.height;
+
+            simAgent.style.transform = `translate(${posX}px, ${posY}px)`;
+            animFrame = requestAnimationFrame(step);
+          } else {
+            isSimulating = false;
+            simAgent.classList.add('hidden');
+            btnSimulate.querySelector('span:last-child').textContent = 'Simulate';
+          }
+        }
+        animFrame = requestAnimationFrame(step);
+      });
+    }
+  })();
+</script></main></div></body></html>

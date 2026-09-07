@@ -10,6 +10,8 @@ import { TopBar } from './layout/TopBar';
 import { Sidebar } from './layout/Sidebar';
 import type { Screen } from './layout/types';
 import { usePlanStore } from './state/usePlanStore';
+import { useTheme } from './state/useTheme';
+import { ThemeContext } from './state/ThemeContext';
 
 function App() {
   const {
@@ -25,6 +27,7 @@ function App() {
     generateNewMockPath,
   } = usePlanStore();
   const [screen, setScreen] = useState<Screen>('plan');
+  const { theme, toggleTheme } = useTheme();
 
   const surveyEnabled = plan.status === 'confirmed';
   const activeScreen = (screen === 'survey' || screen === 'measurement') && !surveyEnabled ? 'plan' : screen;
@@ -38,33 +41,35 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
-      <TopBar planStatus={plan.status} />
-      <div className="app-body">
-        <Sidebar active={activeScreen} surveyEnabled={surveyEnabled} onChange={setScreen} />
-        <div className="app-content">
-          {activeScreen === 'plan' && (
-            <PlanningScreen
-              plan={plan}
-              moveWaypoint={moveWaypoint}
-              addWaypoint={addWaypoint}
-              reorderWaypoint={reorderWaypoint}
-              deleteWaypoint={deleteWaypoint}
-              confirmPlan={confirmPlan}
-              resetToDraft={resetToDraft}
-              generateNewMockPath={generateNewMockPath}
-            />
-          )}
-          {activeScreen === 'measurement' && (
-            <MeasurementScreen plan={plan} toggleMeasurementPoint={toggleMeasurementPoint} />
-          )}
-          {activeScreen === 'survey' && <SignalSurveyScreen plan={plan} />}
-          {activeScreen === 'history' && <HistoryScreen />}
-          {activeScreen === 'analysis' && <AnalysisScreen />}
-          {activeScreen === 'backup' && <BackupScreen />}
+    <ThemeContext.Provider value={theme}>
+      <div className="app-shell">
+        <TopBar planStatus={plan.status} theme={theme} onToggleTheme={toggleTheme} />
+        <div className="app-body">
+          <Sidebar active={activeScreen} surveyEnabled={surveyEnabled} onChange={setScreen} />
+          <div className="app-content">
+            {activeScreen === 'plan' && (
+              <PlanningScreen
+                plan={plan}
+                moveWaypoint={moveWaypoint}
+                addWaypoint={addWaypoint}
+                reorderWaypoint={reorderWaypoint}
+                deleteWaypoint={deleteWaypoint}
+                confirmPlan={confirmPlan}
+                resetToDraft={resetToDraft}
+                generateNewMockPath={generateNewMockPath}
+              />
+            )}
+            {activeScreen === 'measurement' && (
+              <MeasurementScreen plan={plan} toggleMeasurementPoint={toggleMeasurementPoint} />
+            )}
+            {activeScreen === 'survey' && <SignalSurveyScreen plan={plan} />}
+            {activeScreen === 'history' && <HistoryScreen />}
+            {activeScreen === 'analysis' && <AnalysisScreen />}
+            {activeScreen === 'backup' && <BackupScreen />}
+          </div>
         </div>
       </div>
-    </div>
+    </ThemeContext.Provider>
   );
 }
 
