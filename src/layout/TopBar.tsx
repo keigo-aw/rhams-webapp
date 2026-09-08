@@ -3,6 +3,8 @@ import type { Theme } from '../state/useTheme';
 import { planStatusLabel } from '../utils/planStatus';
 import { BrandIcon, DarkModeIcon, LightModeIcon } from './icons';
 
+const APP_VERSION = 'v0.1.0';
+
 interface TopBarProps {
   planStatus: PlanStatus;
   theme: Theme;
@@ -18,7 +20,10 @@ export function TopBar({ planStatus, theme, onToggleTheme }: TopBarProps) {
         </span>
         <div className="brand-text">
           <span className="brand-name">RHAMS</span>
-          <span className="brand-tagline">Radiated Hazard Assessment &amp; Measurement Suite</span>
+          <span className="brand-subline">
+            <span className="brand-tagline">Radiated Hazard Assessment &amp; Measurement Suite</span>
+            <span className="brand-version">{APP_VERSION}</span>
+          </span>
         </div>
       </div>
       <div className="top-bar-actions">

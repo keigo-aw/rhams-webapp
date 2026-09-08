@@ -6,7 +6,10 @@
 .brand-mark { display: flex; flex-shrink: 0; color: var(--accent); }
 .brand-text { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
 .brand-name { font-family: var(--heading); font-weight: 700; font-size: 16px; letter-spacing: 0.02em; color: var(--text-h); }
-.brand-tagline { font-family: var(--mono); font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* The tagline is the only part allowed to shrink, so the version stays readable as the header narrows. */
+.brand-subline { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.brand-tagline { font-family: var(--mono); font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.brand-version { flex: none; font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--accent); border: 1px solid var(--accent-border); border-radius: 3px; padding: 1px 5px; }
 
 .top-bar-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .theme-toggle { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border-radius: 4px; border: 1px solid var(--border); background: var(--surface-low); color: var(--text); cursor: pointer; }
