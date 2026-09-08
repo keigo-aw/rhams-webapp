@@ -8,6 +8,7 @@ import { AnalysisScreen } from './analysis/AnalysisScreen';
 import { BackupScreen } from './backup/BackupScreen';
 import { TopBar } from './layout/TopBar';
 import { Sidebar } from './layout/Sidebar';
+import { ResizeHandle } from './layout/ResizeHandle';
 import type { Screen } from './layout/types';
 import { usePlanStore } from './state/usePlanStore';
 import { useTheme } from './state/useTheme';
@@ -46,6 +47,27 @@ function App() {
         <TopBar planStatus={plan.status} theme={theme} onToggleTheme={toggleTheme} />
         <div className="app-body">
           <Sidebar active={activeScreen} surveyEnabled={surveyEnabled} onChange={setScreen} />
+          <ResizeHandle
+            edge="start"
+            cssVar="--sidebar-width"
+            storageKey="rhams-sidebar-width"
+            min={160}
+            max={400}
+            defaultWidth={210}
+            label="Resize navigation panel"
+          />
+          {activeScreen !== 'backup' && (
+            <ResizeHandle
+              edge="end"
+              className="resize-handle-panel"
+              cssVar="--side-panel-width"
+              storageKey="rhams-side-panel-width"
+              min={240}
+              max={560}
+              defaultWidth={320}
+              label="Resize details panel"
+            />
+          )}
           <div className="app-content">
             {activeScreen === 'plan' && (
               <PlanningScreen

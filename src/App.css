@@ -16,9 +16,16 @@
 .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 .status-badge.status-confirmed { background: var(--success-bg); border-color: var(--success); color: var(--success); }
 
-.app-body { flex: 1; display: flex; min-height: 0; }
+.app-body { flex: 1; display: flex; min-height: 0; position: relative; }
 
-.sidebar { flex-shrink: 0; width: 210px; display: flex; flex-direction: column; gap: 2px; padding: 16px 12px; background: var(--surface-lowest); border-right: 1px solid var(--border); overflow-y: auto; box-sizing: border-box; }
+.resize-handle { flex: 0 0 auto; width: 5px; padding: 0; border: 0; background: transparent; cursor: col-resize; touch-action: none; user-select: none; z-index: 5; }
+.resize-handle:hover { background: var(--accent-bg); }
+.resize-handle:focus-visible { background: var(--accent-bg); outline: 1px solid var(--accent); outline-offset: -1px; }
+/* The right panel is rendered per screen, deep inside the content column, so its handle is
+   pinned to the panel's left edge instead of sitting next to it as a flex sibling. */
+.resize-handle-panel { position: absolute; top: 0; bottom: 0; right: var(--side-panel-width); }
+
+.sidebar { flex-shrink: 0; width: var(--sidebar-width); display: flex; flex-direction: column; gap: 2px; padding: 16px 12px; background: var(--surface-lowest); border-right: 1px solid var(--border); overflow-y: auto; box-sizing: border-box; }
 .sidebar-nav-item { display: flex; align-items: center; gap: 10px; font: inherit; font-size: 13px; text-align: left; padding: 10px 12px; border-radius: 4px; border: none; background: transparent; color: var(--text); cursor: pointer; }
 .sidebar-nav-item.active { background: var(--surface-high); color: var(--accent); font-weight: 600; }
 .sidebar-nav-item:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -63,7 +70,7 @@
 .signal-marker-dot { stroke: var(--bg); stroke-width: 1.5; opacity: 0.95; }
 .signal-marker-label { font-family: var(--mono); font-weight: 600; font-size: 10px; fill: var(--text-h); pointer-events: none; }
 
-.side-panel { width: 320px; flex-shrink: 0; background: var(--surface-lowest); border-left: 1px solid var(--border); padding: 20px; box-sizing: border-box; overflow-y: auto; text-align: left; }
+.side-panel { width: var(--side-panel-width); flex-shrink: 0; background: var(--surface-lowest); border-left: 1px solid var(--border); padding: 20px; box-sizing: border-box; overflow-y: auto; text-align: left; }
 
 .toolbar { display: flex; flex-direction: column; gap: 10px; padding: 12px; margin-bottom: 16px; background: var(--surface-low); border-radius: 4px; }
 .toolbar-actions { display: flex; flex-direction: row; gap: 8px; }

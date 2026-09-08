@@ -21,6 +21,10 @@
   --danger: #ffb4ab;
   --danger-bg: rgba(255, 180, 171, 0.12);
 
+  /* Panel widths — drag-adjustable, so they live as variables rather than fixed rules. */
+  --sidebar-width: 210px;
+  --side-panel-width: 320px;
+
   --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;

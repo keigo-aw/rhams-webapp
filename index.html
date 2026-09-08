@@ -16,9 +16,16 @@
     />
     <title>RHAMS Waypoint Planner</title>
     <script>
-      // Applied before first paint so the page never flashes the wrong theme.
+      // Applied before first paint so the page never flashes the wrong theme or panel widths.
       try {
         if (localStorage.getItem('rhams-theme') === 'light') document.documentElement.dataset.theme = 'light';
+        for (const [key, prop] of [
+          ['rhams-sidebar-width', '--sidebar-width'],
+          ['rhams-side-panel-width', '--side-panel-width'],
+        ]) {
+          const stored = Number(localStorage.getItem(key));
+          if (Number.isFinite(stored) && stored > 0) document.documentElement.style.setProperty(prop, stored + 'px');
+        }
       } catch {}
     </script>
   </head>
