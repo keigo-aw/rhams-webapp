@@ -1,4 +1,5 @@
 import type { Plan } from '../types/domain';
+import { MIN_CONFIRMABLE_WAYPOINTS } from '../state/usePlanStore';
 import { Toolbar } from './Toolbar';
 import { WaypointList } from './WaypointList';
 
@@ -35,6 +36,7 @@ export function SidePanel({
       <Toolbar
         status={plan.status}
         isPlaying={isPlaying}
+        canConfirm={plan.waypoints.length >= MIN_CONFIRMABLE_WAYPOINTS}
         waypointCount={waypointCount}
         onWaypointCountChange={onWaypointCountChange}
         onGenerateNew={onGenerateNew}

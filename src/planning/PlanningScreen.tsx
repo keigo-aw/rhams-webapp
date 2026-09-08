@@ -58,6 +58,7 @@ export function PlanningScreen({
           onMoveWaypoint={moveWaypoint}
           onAddWaypoint={addWaypoint}
           onSelectWaypoint={setSelectedWaypointId}
+          onDeleteWaypoint={deleteWaypoint}
         />
       </main>
       <SidePanel

@@ -6,6 +6,12 @@ import { generateId } from '../utils/id';
 import { loadCurrentPlan, saveCurrentPlan } from '../persistence/storage';
 import { savePlanToHistory } from '../persistence/planHistory';
 
+/** A plan needs at least a start and an end before it can be confirmed. */
+export const MIN_CONFIRMABLE_WAYPOINTS = 2;
+
+/** How long edits must settle before the plan is written to IndexedDB. */
+const PERSIST_DEBOUNCE_MS = 300;
+
 function createDraftPlan(waypointCount?: number): Plan {
   return {
     id: generateId(),
@@ -77,7 +83,7 @@ function reducer(plan: Plan, action: Action): Plan {
       return { ...plan, waypoints: renumber(plan.waypoints.filter((wp) => wp.id !== action.id)) };
     }
     case 'CONFIRM': {
-      if (plan.waypoints.length < 2) return plan;
+      if (plan.waypoints.length < MIN_CONFIRMABLE_WAYPOINTS) return plan;
       return { ...plan, status: 'confirmed', confirmedAt: Date.now() };
     }
     case 'RESET_TO_DRAFT': {
@@ -113,12 +119,18 @@ export function usePlanStore() {
     };
   }, []);
 
+  // Dragging a waypoint dispatches MOVE_WAYPOINT per pointermove, so persisting on every plan
+  // change wrote the whole plan to IndexedDB 100+ times per drag. The in-memory plan drives the
+  // UI; storage only needs to catch up once the edits settle.
   useEffect(() => {
     if (!hasHydratedRef.current) return;
-    saveCurrentPlan(plan).catch((err) => console.error('Failed to save current plan', err));
-    if (plan.status === 'confirmed') {
-      savePlanToHistory(plan).catch((err) => console.error('Failed to save plan history', err));
-    }
+    const timer = setTimeout(() => {
+      saveCurrentPlan(plan).catch((err) => console.error('Failed to save current plan', err));
+      if (plan.status === 'confirmed') {
+        savePlanToHistory(plan).catch((err) => console.error('Failed to save plan history', err));
+      }
+    }, PERSIST_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
   }, [plan]);
 
   const moveWaypoint = useCallback((id: string, x: number, y: number) => {

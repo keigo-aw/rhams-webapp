@@ -1,10 +1,12 @@
 import type { PlanStatus } from '../types/domain';
 import { WAYPOINT_COUNT_RANGE } from '../data/mockPathGenerator';
+import { MIN_CONFIRMABLE_WAYPOINTS } from '../state/usePlanStore';
 import { planStatusLabel } from '../utils/planStatus';
 
 interface ToolbarProps {
   status: PlanStatus;
   isPlaying: boolean;
+  canConfirm: boolean;
   waypointCount: number;
   onWaypointCountChange: (n: number) => void;
   onGenerateNew: () => void;
@@ -12,7 +14,7 @@ interface ToolbarProps {
   onResetToDraft: () => void;
 }
 
-export function Toolbar({ status, isPlaying, waypointCount, onWaypointCountChange, onGenerateNew, onConfirm, onResetToDraft }: ToolbarProps) {
+export function Toolbar({ status, isPlaying, canConfirm, waypointCount, onWaypointCountChange, onGenerateNew, onConfirm, onResetToDraft }: ToolbarProps) {
   const isConfirmed = status === 'confirmed';
 
   return (
@@ -40,7 +42,13 @@ export function Toolbar({ status, isPlaying, waypointCount, onWaypointCountChang
             Edit Again
           </button>
         ) : (
-          <button type="button" className="btn-primary" onClick={onConfirm}>
+          <button
+            type="button"
+            className="btn-primary"
+            disabled={!canConfirm}
+            title={canConfirm ? undefined : `Add at least ${MIN_CONFIRMABLE_WAYPOINTS} waypoints to confirm`}
+            onClick={onConfirm}
+          >
             Confirm
           </button>
         )}

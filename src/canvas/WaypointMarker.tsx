@@ -9,13 +9,16 @@ interface WaypointMarkerProps {
   draggable: boolean;
   onMove: (id: string, x: number, y: number) => void;
   onSelect: (id: string) => void;
+  onDelete: (id: string) => void;
   onInteractionStart?: () => void;
 }
 
-export function WaypointMarker({ waypoint, n, selected, draggable, onMove, onSelect, onInteractionStart }: WaypointMarkerProps) {
+export function WaypointMarker({ waypoint, n, selected, draggable, onMove, onSelect, onDelete, onInteractionStart }: WaypointMarkerProps) {
   const { handlePointerDown, handlePointerMove, handlePointerUp } = useDragWaypoint({
     disabled: !draggable,
     onMove: (x, y) => onMove(waypoint.id, x, y),
+    // A plain click (no drag) removes the point; dragging repositions it instead.
+    onClick: draggable ? () => onDelete(waypoint.id) : undefined,
   });
 
   const classes = ['waypoint-marker', draggable ? 'draggable' : '', selected ? 'selected' : ''].filter(Boolean).join(' ');
@@ -31,6 +34,7 @@ export function WaypointMarker({ waypoint, n, selected, draggable, onMove, onSel
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
+      {draggable && <title>Click to remove, drag to reposition</title>}
       <circle r={7} className={classes} />
       <text y={-12} textAnchor="middle" className="waypoint-label">
         {n}

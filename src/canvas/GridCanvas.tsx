@@ -14,6 +14,7 @@ interface GridCanvasProps {
   onMoveWaypoint: (id: string, x: number, y: number) => void;
   onAddWaypoint: (x: number, y: number) => void;
   onSelectWaypoint: (id: string | null) => void;
+  onDeleteWaypoint: (id: string) => void;
 }
 
 const OBSTACLE_CENTER_PX = { x: OBSTACLE.center.x * PIXELS_PER_UNIT, y: OBSTACLE.center.y * PIXELS_PER_UNIT };
@@ -25,6 +26,7 @@ export function GridCanvas({
   onMoveWaypoint,
   onAddWaypoint,
   onSelectWaypoint,
+  onDeleteWaypoint,
 }: GridCanvasProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const suppressNextClickRef = useRef(false);
@@ -56,6 +58,13 @@ export function GridCanvas({
     suppressNextClickRef.current = true;
   };
 
+  // Markers stop propagation on pointerdown, so this only runs for presses that start on empty
+  // canvas — clearing any flag left armed by a marker interaction that never produced a click
+  // (pointercancel, interrupted touch), which would otherwise swallow the next real canvas click.
+  const handleCanvasPointerDown = () => {
+    suppressNextClickRef.current = false;
+  };
+
   return (
     <svg
       ref={svgRef}
@@ -63,6 +72,7 @@ export function GridCanvas({
       className={`grid-canvas${isDraft ? ' addable' : ''}`}
       role="img"
       aria-label="Robot waypoint planning grid"
+      onPointerDown={handleCanvasPointerDown}
       onClick={handleClick}
     >
       <Grid />
@@ -78,6 +88,7 @@ export function GridCanvas({
           draggable={isDraft}
           onMove={onMoveWaypoint}
           onSelect={onSelectWaypoint}
+          onDelete={onDeleteWaypoint}
           onInteractionStart={handleMarkerInteractionStart}
         />
       ))}

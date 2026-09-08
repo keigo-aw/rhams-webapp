@@ -15,9 +15,6 @@
   --accent-bg: rgba(0, 240, 255, 0.12);
   --accent-border: rgba(0, 240, 255, 0.4);
 
-  --secondary: #d0bcff;
-  --secondary-bg: rgba(208, 188, 255, 0.12);
-
   --success: #65f2b5;
   --success-bg: rgba(101, 242, 181, 0.12);
 
@@ -57,9 +54,6 @@
   --accent: #006980;
   --accent-bg: rgba(0, 105, 128, 0.1);
   --accent-border: rgba(0, 105, 128, 0.35);
-
-  --secondary: #6b4fd1;
-  --secondary-bg: rgba(107, 79, 209, 0.1);
 
   --success: #0f8a4f;
   --success-bg: rgba(15, 138, 79, 0.1);
