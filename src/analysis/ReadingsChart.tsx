@@ -90,6 +90,9 @@ export function ReadingsChart({ data, unit, threshold, svgRef, onThresholdChange
       ref={svgRef}
       viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
       width="100%"
+      // Never scale past natural size (labels are in user units, so upscaling bloats them);
+      // narrower containers scale it down, still fully visible.
+      style={{ maxWidth: CHART_WIDTH, height: 'auto' }}
       className="readings-chart"
       role="img"
       aria-label={`Field readings chart in ${unitLabel(unit)}`}

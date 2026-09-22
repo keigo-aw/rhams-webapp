@@ -128,7 +128,7 @@
 
 .analysis-content { display: flex; flex-direction: column; gap: 20px; width: 100%; }
 .chart-scroll { overflow-x: auto; background: var(--surface-low); border: 1px solid var(--border); border-radius: 4px; }
-.readings-chart { display: block; }
+.readings-chart { display: block; margin: 0 auto; }
 .readings-table-wrap { overflow-x: auto; overflow-y: auto; max-height: 220px; background: var(--surface-low); border: 1px solid var(--border); border-radius: 4px; }
 .readings-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; color: var(--text-h); }
 .readings-table th, .readings-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }

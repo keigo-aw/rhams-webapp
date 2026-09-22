@@ -1,11 +1,15 @@
-export const CHART_WIDTH = 320;
-export const CHART_HEIGHT = 480;
+/* Landscape 2:1 box. The SVG takes its rendered height from this aspect ratio, so a portrait
+   viewBox made the chart taller than its container and clipped it. */
+export const CHART_WIDTH = 720;
+export const CHART_HEIGHT = 360;
 export const PLOT_LEFT = 56;
-export const PLOT_RIGHT = 296;
+export const PLOT_RIGHT = 688;
 export const PLOT_TOP = 28;
-export const PLOT_BOTTOM = 444;
+export const PLOT_BOTTOM = 306;
 
 const TICK_INTERVALS = 4;
+/** Keeps bars from ballooning into slabs when a survey only has a couple of measured points. */
+const MAX_BAR_WIDTH = 72;
 
 /** Rounds the axis max up to a clean increment with ~30% headroom above the highest reading, so the tallest bar never touches the top. */
 export function computeNiceMax(maxValue: number): number {
@@ -42,7 +46,7 @@ export interface ChartBarGeometry {
 
 export function computeBarGeometry(index: number, count: number): ChartBarGeometry {
   const slot = (PLOT_RIGHT - PLOT_LEFT) / count;
-  const width = slot * 0.5;
+  const width = Math.min(slot * 0.5, MAX_BAR_WIDTH);
   const x = PLOT_LEFT + slot * index + (slot - width) / 2;
   return { x, width };
 }
