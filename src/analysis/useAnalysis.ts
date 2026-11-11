@@ -2,18 +2,34 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { SurveyRecord } from '../types/domain';
 import { loadSurveyHistory } from '../persistence/surveyHistory';
 import { convertFromVPerM, vPerMToWPerM2, wPerM2ToVPerM, type ReadingUnit } from '../utils/units';
-import { findStandard, standardsForCategory, type HazardCategory } from './standards';
+import { generateId } from '../utils/id';
+import { HAZARD_CATEGORIES } from './standards';
+import { LIMIT_LINE_COLORS } from './chartScale';
 
-const DEFAULT_THRESHOLD_V_PER_M = 10;
+const DEFAULT_CUSTOM_V_PER_M = 10;
+
+export type ReadingStatus = 'pass' | 'exceed' | 'none';
+
+/** A horizontal limit on the chart — either a selected standard or a user-added custom line. */
+export interface LimitLine {
+  key: string; // 'standard:<id>' | 'custom:<id>'
+  kind: 'standard' | 'custom';
+  refId: string; // the standard id or the custom-line id
+  label: string;
+  valueVPerM: number;
+  valueInUnit: number;
+  color: string;
+}
+
+const ALL_STANDARDS = HAZARD_CATEGORIES.flatMap((c) => c.standards);
 
 export function useAnalysis() {
   const [records, setRecords] = useState<SurveyRecord[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [unit, setUnit] = useState<ReadingUnit>('V/m');
-  const [thresholdVPerM, setThresholdVPerM] = useState<number>(DEFAULT_THRESHOLD_V_PER_M);
-  const [hazardCategory, setHazardCategoryState] = useState<HazardCategory | null>(null);
-  const [standardId, setStandardIdState] = useState<string | null>(null);
+  const [selectedStandardIds, setSelectedStandardIds] = useState<string[]>([]);
+  const [customLines, setCustomLines] = useState<{ id: string; valueVPerM: number }[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -29,10 +45,7 @@ export function useAnalysis() {
     };
   }, []);
 
-  const selectedRecord = useMemo(
-    () => records.find((r) => r.id === selectedId) ?? null,
-    [records, selectedId],
-  );
+  const selectedRecord = useMemo(() => records.find((r) => r.id === selectedId) ?? null, [records, selectedId]);
 
   const sortedWaypoints = useMemo(
     () => (selectedRecord ? [...selectedRecord.waypoints].sort((a, b) => a.order - b.order) : []),
@@ -44,17 +57,47 @@ export function useAnalysis() {
     [selectedRecord],
   );
 
-  const thresholdInUnit = convertFromVPerM(thresholdVPerM, unit);
+  // Standards first (in HERP→HERO→HERF order), then custom lines in creation order; color by position.
+  const limitLines = useMemo<LimitLine[]>(() => {
+    const base = [
+      ...ALL_STANDARDS.filter((s) => selectedStandardIds.includes(s.id)).map((s) => ({
+        kind: 'standard' as const,
+        refId: s.id,
+        label: s.label,
+        valueVPerM: s.thresholdVPerM,
+      })),
+      ...customLines.map((c, i) => ({
+        kind: 'custom' as const,
+        refId: c.id,
+        label: `Custom ${i + 1}`,
+        valueVPerM: c.valueVPerM,
+      })),
+    ];
+    return base.map((line, idx) => ({
+      key: `${line.kind}:${line.refId}`,
+      ...line,
+      valueInUnit: convertFromVPerM(line.valueVPerM, unit),
+      color: LIMIT_LINE_COLORS[idx % LIMIT_LINE_COLORS.length],
+    }));
+  }, [selectedStandardIds, customLines, unit]);
+
+  // "Most restrictive wins": pass/fail is judged against the lowest active limit.
+  const activeThresholdVPerM = useMemo(
+    () => (limitLines.length ? Math.min(...limitLines.map((l) => l.valueVPerM)) : null),
+    [limitLines],
+  );
+  const activeThresholdInUnit = activeThresholdVPerM === null ? null : convertFromVPerM(activeThresholdVPerM, unit);
 
   const rows = useMemo(
     () =>
       sortedWaypoints.flatMap((waypoint) => {
         const reading = readingByWaypointId.get(waypoint.id);
         if (!reading) return [];
-        const valueInUnit = convertFromVPerM(reading.fieldStrengthVPerM, unit);
-        return [{ waypoint, reading, pass: valueInUnit < thresholdInUnit }];
+        const status: ReadingStatus =
+          activeThresholdVPerM === null ? 'none' : reading.fieldStrengthVPerM <= activeThresholdVPerM ? 'pass' : 'exceed';
+        return [{ waypoint, reading, status }];
       }),
-    [sortedWaypoints, readingByWaypointId, unit, thresholdInUnit],
+    [sortedWaypoints, readingByWaypointId, activeThresholdVPerM],
   );
 
   const chartData = useMemo(
@@ -62,27 +105,24 @@ export function useAnalysis() {
     [rows, unit],
   );
 
-  const setThresholdInUnit = useCallback(
-    (value: number) => {
-      setThresholdVPerM(unit === 'V/m' ? value : wPerM2ToVPerM(value));
-    },
-    [unit],
-  );
-
-  const setHazardCategory = useCallback((category: HazardCategory | null) => {
-    setHazardCategoryState(category);
-    const first = standardsForCategory(category)[0] ?? null;
-    setStandardIdState(first?.id ?? null);
-    if (first) setThresholdVPerM(first.thresholdVPerM);
+  const toggleStandard = useCallback((id: string) => {
+    setSelectedStandardIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   }, []);
 
-  const setStandard = useCallback(
-    (id: string | null) => {
-      setStandardIdState(id);
-      const standard = findStandard(hazardCategory, id);
-      if (standard) setThresholdVPerM(standard.thresholdVPerM);
+  const addCustomLine = useCallback(() => {
+    setCustomLines((prev) => [...prev, { id: generateId(), valueVPerM: DEFAULT_CUSTOM_V_PER_M }]);
+  }, []);
+
+  const removeCustomLine = useCallback((id: string) => {
+    setCustomLines((prev) => prev.filter((c) => c.id !== id));
+  }, []);
+
+  const setCustomLineInUnit = useCallback(
+    (id: string, valueInUnit: number) => {
+      const valueVPerM = unit === 'V/m' ? valueInUnit : wPerM2ToVPerM(valueInUnit);
+      setCustomLines((prev) => prev.map((c) => (c.id === id ? { ...c, valueVPerM: Math.max(valueVPerM, 0) } : c)));
     },
-    [hazardCategory],
+    [unit],
   );
 
   return {
@@ -92,12 +132,13 @@ export function useAnalysis() {
     selectRecord: setSelectedId,
     unit,
     setUnit,
-    thresholdInUnit,
-    setThresholdInUnit,
-    hazardCategory,
-    setHazardCategory,
-    standardId,
-    setStandard,
+    limitLines,
+    activeThresholdInUnit,
+    selectedStandardIds,
+    toggleStandard,
+    addCustomLine,
+    removeCustomLine,
+    setCustomLineInUnit,
     rows,
     chartData,
     vPerMToWPerM2,

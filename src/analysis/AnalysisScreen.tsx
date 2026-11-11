@@ -16,12 +16,13 @@ export function AnalysisScreen() {
     selectRecord,
     unit,
     setUnit,
-    thresholdInUnit,
-    setThresholdInUnit,
-    hazardCategory,
-    setHazardCategory,
-    standardId,
-    setStandard,
+    limitLines,
+    activeThresholdInUnit,
+    selectedStandardIds,
+    toggleStandard,
+    addCustomLine,
+    removeCustomLine,
+    setCustomLineInUnit,
     rows,
     chartData,
   } = useAnalysis();
@@ -67,9 +68,10 @@ export function AnalysisScreen() {
               <ReadingsChart
                 data={chartData}
                 unit={unit}
-                threshold={thresholdInUnit}
+                limits={limitLines}
+                activeThresholdInUnit={activeThresholdInUnit}
                 svgRef={svgRef}
-                onThresholdChange={setThresholdInUnit}
+                onCustomLimitChange={setCustomLineInUnit}
               />
             </div>
             <ReadingsTable rows={rows} />
@@ -86,14 +88,14 @@ export function AnalysisScreen() {
         records={records}
         selectedId={selectedRecord?.id ?? null}
         onSelectRecord={selectRecord}
-        hazardCategory={hazardCategory}
-        onHazardCategoryChange={setHazardCategory}
-        standardId={standardId}
-        onStandardChange={setStandard}
         unit={unit}
         onUnitChange={setUnit}
-        thresholdInUnit={thresholdInUnit}
-        onThresholdChange={setThresholdInUnit}
+        limitLines={limitLines}
+        selectedStandardIds={selectedStandardIds}
+        onToggleStandard={toggleStandard}
+        onAddCustomLine={addCustomLine}
+        onRemoveCustomLine={removeCustomLine}
+        onCustomLineChange={setCustomLineInUnit}
         onExportCsv={handleExportCsv}
         onCopyPng={handleCopyPng}
         copyStatus={copyStatus}

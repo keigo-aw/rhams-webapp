@@ -18,9 +18,9 @@ import {
 const BG = '#151c28';
 const GRID = '#3b494b';
 const AXIS_TEXT = '#b9cacb';
-const ACCENT = '#00f0ff';
 const PASS = '#65f2b5';
 const FAIL = '#ffb4ab';
+const NEUTRAL_BAR = '#6b8299'; // bars when no limit is selected (no pass/fail judgement)
 const BAR_RADIUS = 4;
 
 interface ReadingsChartDatum {
@@ -28,12 +28,23 @@ interface ReadingsChartDatum {
   value: number;
 }
 
+export interface ChartLimit {
+  key: string;
+  kind: 'standard' | 'custom';
+  refId: string;
+  label: string;
+  valueInUnit: number;
+  color: string;
+}
+
 interface ReadingsChartProps {
   data: ReadingsChartDatum[];
   unit: ReadingUnit;
-  threshold: number;
+  limits: ChartLimit[];
+  /** The most-restrictive limit in the current unit; null when no limit is selected. */
+  activeThresholdInUnit: number | null;
   svgRef: RefObject<SVGSVGElement | null>;
-  onThresholdChange: (value: number) => void;
+  onCustomLimitChange: (customRefId: string, valueInUnit: number) => void;
 }
 
 function barPath(x: number, width: number, yTop: number): string {
@@ -49,39 +60,39 @@ function barPath(x: number, width: number, yTop: number): string {
   ].join(' ');
 }
 
-export function ReadingsChart({ data, unit, threshold, svgRef, onThresholdChange }: ReadingsChartProps) {
-  const draggingRef = useRef(false);
-  const maxValue = Math.max(threshold, ...data.map((d) => d.value), 0);
+export function ReadingsChart({ data, unit, limits, activeThresholdInUnit, svgRef, onCustomLimitChange }: ReadingsChartProps) {
+  const draggingRefId = useRef<string | null>(null);
+  const maxValue = Math.max(...data.map((d) => d.value), ...limits.map((l) => l.valueInUnit), 0);
   const niceMax = computeNiceMax(maxValue);
   const ticks = computeTicks(niceMax);
-  const limitY = yFor(Math.min(threshold, niceMax), niceMax);
+  const u = unitLabel(unit);
 
-  const updateFromClientY = useCallback(
+  const valueFromClientY = useCallback(
     (clientY: number) => {
       const svg = svgRef.current;
-      if (!svg) return;
+      if (!svg) return null;
       const rect = svg.getBoundingClientRect();
-      const scaleY = CHART_HEIGHT / rect.height;
-      const localY = (clientY - rect.top) * scaleY;
-      const value = Math.min(Math.max(valueForY(localY, niceMax), 0), niceMax);
-      onThresholdChange(Math.round(value * 100) / 100);
+      const localY = (clientY - rect.top) * (CHART_HEIGHT / rect.height);
+      return Math.round(Math.min(Math.max(valueForY(localY, niceMax), 0), niceMax) * 100) / 100;
     },
-    [niceMax, onThresholdChange, svgRef],
+    [niceMax, svgRef],
   );
 
-  const handlePointerDown = (e: PointerEvent<SVGLineElement>) => {
-    draggingRef.current = true;
+  const handlePointerDown = (refId: string) => (e: PointerEvent<SVGLineElement>) => {
+    draggingRefId.current = refId;
     e.currentTarget.setPointerCapture(e.pointerId);
-    updateFromClientY(e.clientY);
+    const v = valueFromClientY(e.clientY);
+    if (v !== null) onCustomLimitChange(refId, v);
   };
 
   const handlePointerMove = (e: PointerEvent<SVGLineElement>) => {
-    if (!draggingRef.current) return;
-    updateFromClientY(e.clientY);
+    if (draggingRefId.current === null) return;
+    const v = valueFromClientY(e.clientY);
+    if (v !== null) onCustomLimitChange(draggingRefId.current, v);
   };
 
   const handlePointerUp = (e: PointerEvent<SVGLineElement>) => {
-    draggingRef.current = false;
+    draggingRefId.current = null;
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
@@ -95,7 +106,7 @@ export function ReadingsChart({ data, unit, threshold, svgRef, onThresholdChange
       style={{ maxWidth: CHART_WIDTH, height: 'auto' }}
       className="readings-chart"
       role="img"
-      aria-label={`Field readings chart in ${unitLabel(unit)}`}
+      aria-label={`Field readings chart in ${u}`}
     >
       <rect x={0} y={0} width={CHART_WIDTH} height={CHART_HEIGHT} fill={BG} />
 
@@ -112,12 +123,14 @@ export function ReadingsChart({ data, unit, threshold, svgRef, onThresholdChange
       {data.map((d, i) => {
         const { x, width } = computeBarGeometry(i, data.length);
         const yTop = yFor(d.value, niceMax);
-        const pass = d.value <= threshold;
+        const pass = activeThresholdInUnit === null ? null : d.value <= activeThresholdInUnit;
+        const fill = pass === null ? NEUTRAL_BAR : pass ? PASS : FAIL;
+        const statusText = pass === null ? 'no limit' : pass ? 'Pass' : 'Exceed';
         return (
           <g key={d.order}>
-            <path d={barPath(x, width, yTop)} fill={pass ? PASS : FAIL}>
+            <path d={barPath(x, width, yTop)} fill={fill}>
               <title>
-                Waypoint {d.order + 1}: {d.value.toFixed(2)} {unitLabel(unit)} ({pass ? 'Pass' : 'Fail'})
+                Waypoint {d.order + 1}: {d.value.toFixed(2)} {u} ({statusText})
               </title>
             </path>
             <text x={x + width / 2} y={PLOT_BOTTOM + 16} textAnchor="middle" fontSize={10} fill={AXIS_TEXT}>
@@ -127,35 +140,34 @@ export function ReadingsChart({ data, unit, threshold, svgRef, onThresholdChange
         );
       })}
 
-      <g>
-        <line
-          x1={PLOT_LEFT}
-          y1={limitY}
-          x2={PLOT_RIGHT}
-          y2={limitY}
-          stroke={ACCENT}
-          strokeWidth={2}
-          strokeDasharray="6 4"
-          pointerEvents="none"
-        />
-        <line
-          x1={PLOT_LEFT}
-          y1={limitY}
-          x2={PLOT_RIGHT}
-          y2={limitY}
-          stroke="transparent"
-          strokeWidth={16}
-          style={{ cursor: 'ns-resize' }}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-        >
-          <title>Drag to adjust the pass/fail limit</title>
-        </line>
-      </g>
-      <text x={PLOT_RIGHT} y={limitY - 6} textAnchor="end" fontSize={11} fill={ACCENT} fontWeight={600}>
-        Limit: {threshold.toFixed(2)} {unitLabel(unit)}
-      </text>
+      {limits.map((limit) => {
+        const y = yFor(Math.min(limit.valueInUnit, niceMax), niceMax);
+        return (
+          <g key={limit.key}>
+            <line x1={PLOT_LEFT} y1={y} x2={PLOT_RIGHT} y2={y} stroke={limit.color} strokeWidth={2} strokeDasharray="6 4" pointerEvents="none" />
+            {limit.kind === 'custom' && (
+              <line
+                x1={PLOT_LEFT}
+                y1={y}
+                x2={PLOT_RIGHT}
+                y2={y}
+                stroke="transparent"
+                strokeWidth={16}
+                style={{ cursor: 'ns-resize' }}
+                onPointerDown={handlePointerDown(limit.refId)}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+              >
+                <title>Drag to adjust this custom limit</title>
+              </line>
+            )}
+            <text x={PLOT_RIGHT} y={y - 5} textAnchor="end" fontSize={11} fontWeight={600} fill={limit.color}>
+              {limit.label}: {limit.valueInUnit.toFixed(2)} {u}
+            </text>
+          </g>
+        );
+      })}
+
       <text
         x={16}
         y={(PLOT_TOP + PLOT_BOTTOM) / 2}
@@ -164,7 +176,7 @@ export function ReadingsChart({ data, unit, threshold, svgRef, onThresholdChange
         fill={AXIS_TEXT}
         transform={`rotate(-90, 16, ${(PLOT_TOP + PLOT_BOTTOM) / 2})`}
       >
-        {unitLabel(unit)}
+        {u}
       </text>
     </svg>
   );

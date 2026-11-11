@@ -1,15 +1,18 @@
 import type { SignalReading, Waypoint } from '../types/domain';
 import { vPerMToWPerM2 } from '../utils/units';
+import type { ReadingStatus } from './useAnalysis';
 
 interface CsvRow {
   waypoint: Waypoint;
   reading: SignalReading;
-  pass: boolean;
+  status: ReadingStatus;
 }
+
+const STATUS_LABEL: Record<ReadingStatus, string> = { pass: 'Pass', exceed: 'Exceed', none: 'No limit' };
 
 export function buildSurveyCsv(rows: CsvRow[]): string {
   const header = ['Waypoint', 'X (m)', 'Y (m)', 'Field Strength (V/m)', 'Power Density (W/m2)', 'Status'];
-  const lines = rows.map(({ waypoint, reading, pass }) => {
+  const lines = rows.map(({ waypoint, reading, status }) => {
     const wPerM2 = vPerMToWPerM2(reading.fieldStrengthVPerM);
     return [
       waypoint.order + 1,
@@ -17,7 +20,7 @@ export function buildSurveyCsv(rows: CsvRow[]): string {
       waypoint.y.toFixed(2),
       reading.fieldStrengthVPerM.toFixed(2),
       wPerM2.toFixed(4),
-      pass ? 'Pass' : 'Fail',
+      STATUS_LABEL[status],
     ].join(',');
   });
   return [header.join(','), ...lines].join('\n');

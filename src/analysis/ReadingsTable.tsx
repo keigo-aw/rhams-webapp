@@ -1,14 +1,24 @@
 import type { SignalReading, Waypoint } from '../types/domain';
 import { vPerMToWPerM2 } from '../utils/units';
+import type { ReadingStatus } from './useAnalysis';
 
 interface ReadingsRow {
   waypoint: Waypoint;
   reading: SignalReading;
-  pass: boolean;
+  status: ReadingStatus;
 }
 
 interface ReadingsTableProps {
   rows: ReadingsRow[];
+}
+
+function StatusPill({ status }: { status: ReadingStatus }) {
+  if (status === 'none') return <span className="status-pill status-none">—</span>;
+  return (
+    <span className={`status-pill ${status === 'pass' ? 'status-pass' : 'status-fail'}`}>
+      {status === 'pass' ? 'Pass' : 'Exceed'}
+    </span>
+  );
 }
 
 export function ReadingsTable({ rows }: ReadingsTableProps) {
@@ -26,7 +36,7 @@ export function ReadingsTable({ rows }: ReadingsTableProps) {
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ waypoint, reading, pass }) => (
+          {rows.map(({ waypoint, reading, status }) => (
             <tr key={waypoint.id}>
               <td>{waypoint.order + 1}</td>
               <td>{waypoint.x.toFixed(2)}</td>
@@ -34,7 +44,7 @@ export function ReadingsTable({ rows }: ReadingsTableProps) {
               <td>{reading.fieldStrengthVPerM.toFixed(2)}</td>
               <td>{vPerMToWPerM2(reading.fieldStrengthVPerM).toFixed(4)}</td>
               <td>
-                <span className={`status-pill ${pass ? 'status-pass' : 'status-fail'}`}>{pass ? 'Pass' : 'Fail'}</span>
+                <StatusPill status={status} />
               </td>
             </tr>
           ))}

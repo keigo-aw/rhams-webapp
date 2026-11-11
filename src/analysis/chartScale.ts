@@ -11,6 +11,10 @@ const TICK_INTERVALS = 4;
 /** Keeps bars from ballooning into slabs when a survey only has a couple of measured points. */
 const MAX_BAR_WIDTH = 72;
 
+/** Distinct colors for limit lines, cycled in order — chosen to read on the dark chart ground
+ * and to stay clear of the pass (green) and exceed (red) bar colors. */
+export const LIMIT_LINE_COLORS = ['#00f0ff', '#ffcc33', '#ff6ec7', '#a78bfa', '#ff8c42', '#6ab7ff'];
+
 /** Rounds the axis max up to a clean increment with ~30% headroom above the highest reading, so the tallest bar never touches the top. */
 export function computeNiceMax(maxValue: number): number {
   if (maxValue <= 0) return 1;
