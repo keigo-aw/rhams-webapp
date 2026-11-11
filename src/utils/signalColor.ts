@@ -4,10 +4,13 @@ const COLOR_SCALE_MAX_V_PER_M = 20;
 const STRONG_THRESHOLD_V_PER_M = 10;
 const MEDIUM_THRESHOLD_V_PER_M = 3;
 
-/** The same hue at 45% lightness reads well on the dark canvas but fails contrast (as low as
+/** Low field strength is green (safe), high is red (hazardous) — a green→red heat scale.
+ * The same hue at 45% lightness reads well on the dark canvas but fails contrast (as low as
  * 1.8:1 for yellow/green hues) on the light one — pull it down to 28% for the light theme. */
 export function signalColor(fieldStrengthVPerM: number, theme: Theme = 'dark'): string {
-  const hue = Math.min(Math.max(fieldStrengthVPerM, 0), COLOR_SCALE_MAX_V_PER_M) * (120 / COLOR_SCALE_MAX_V_PER_M);
+  const clamped = Math.min(Math.max(fieldStrengthVPerM, 0), COLOR_SCALE_MAX_V_PER_M);
+  // hue 120 (green) at the low end down to hue 0 (red) at the high end
+  const hue = (COLOR_SCALE_MAX_V_PER_M - clamped) * (120 / COLOR_SCALE_MAX_V_PER_M);
   const lightness = theme === 'light' ? 28 : 45;
   return `hsl(${hue}, 70%, ${lightness}%)`;
 }
