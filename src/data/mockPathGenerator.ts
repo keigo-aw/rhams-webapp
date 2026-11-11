@@ -3,7 +3,7 @@ import type { GridBounds, Point, Waypoint } from '../types/domain';
 import { generateId } from '../utils/id';
 import { clampToBounds, VEHICLE_FOOTPRINT } from '../canvas/coordinates';
 
-export const WAYPOINT_COUNT_RANGE = { min: 8, max: 25, default: 8 };
+export const WAYPOINT_COUNT_RANGE = { min: 10, max: 25, default: 10 };
 
 /** How far the measurement ring sits outside the vehicle body, in meters. */
 const MEASUREMENT_CLEARANCE_METERS = 1;
