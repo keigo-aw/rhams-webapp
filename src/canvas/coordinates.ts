@@ -9,6 +9,9 @@ export const OBSTACLE: Obstacle = {
 /** Minimum clearance the robot must keep from the vehicle's radius, in meters (1 grid unit = 1 meter). */
 export const VEHICLE_CLEARANCE_METERS = 1;
 
+/** Vehicle body footprint in meters, mirroring the 150x80px body drawn in Obstacle.tsx. */
+export const VEHICLE_FOOTPRINT = { halfWidth: 3.75, halfHeight: 2 };
+
 export function gridToSvg(point: Point): Point {
   return { x: point.x * PIXELS_PER_UNIT, y: point.y * PIXELS_PER_UNIT };
 }
