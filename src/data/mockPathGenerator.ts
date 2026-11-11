@@ -6,7 +6,7 @@ import { clampToBounds, VEHICLE_FOOTPRINT } from '../canvas/coordinates';
 export const WAYPOINT_COUNT_RANGE = { min: 8, max: 25, default: 8 };
 
 /** How far the measurement ring sits outside the vehicle body, in meters. */
-const MEASUREMENT_CLEARANCE_METERS = 0.5;
+const MEASUREMENT_CLEARANCE_METERS = 1;
 
 function resolveWaypointCount(requested?: number): number {
   if (requested === undefined) return WAYPOINT_COUNT_RANGE.default;
