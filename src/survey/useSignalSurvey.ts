@@ -7,6 +7,10 @@ import { saveSurveyRecord } from '../persistence/surveyHistory';
 import { generateId } from '../utils/id';
 import { DEFAULT_HEIGHT, DEFAULT_PROBE_TYPE } from './surveyConfig';
 
+/** Video-paced playback: a slow glide between points with a long stop to read each one. */
+const SURVEY_TRAVEL_SPEED_M_PER_S = 2;
+const SURVEY_DWELL_SECONDS = 10;
+
 export function useSignalSurvey(plan: Plan) {
   const sortedWaypoints = useMemo(() => [...plan.waypoints].sort((a, b) => a.order - b.order), [plan.waypoints]);
   const [readings, setReadings] = useState<SignalReading[]>([]);
@@ -44,7 +48,7 @@ export function useSignalSurvey(plan: Plan) {
   const start = useCallback(() => {
     hasStartedRef.current = true;
     setRevealedIds(new Set(sortedWaypoints.length > 0 ? [sortedWaypoints[0].id] : []));
-    play(sortedWaypoints);
+    play(sortedWaypoints, { speedUnitsPerSecond: SURVEY_TRAVEL_SPEED_M_PER_S, dwellSeconds: SURVEY_DWELL_SECONDS });
   }, [play, sortedWaypoints]);
 
   const isComplete = hasStartedRef.current && !animationState.isPlaying && revealedIds.size === sortedWaypoints.length;
