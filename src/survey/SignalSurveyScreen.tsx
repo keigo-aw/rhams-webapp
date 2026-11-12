@@ -13,6 +13,9 @@ export function SignalSurveyScreen({ plan }: SignalSurveyScreenProps) {
     revealedIds,
     animationState,
     start,
+    pause,
+    resume,
+    isPaused,
     isPlaying,
     isComplete,
     height,
@@ -43,8 +46,11 @@ export function SignalSurveyScreen({ plan }: SignalSurveyScreenProps) {
         readings={readings}
         revealedIds={revealedIds}
         isPlaying={isPlaying}
+        isPaused={isPaused}
         isComplete={isComplete}
         onStart={start}
+        onPause={pause}
+        onResume={resume}
         height={height}
         onHeightChange={setHeight}
         probeType={probeType}

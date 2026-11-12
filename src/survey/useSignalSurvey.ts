@@ -17,11 +17,11 @@ export function useSignalSurvey(plan: Plan) {
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set());
   const [height, setHeight] = useState<SurveyHeight>(DEFAULT_HEIGHT);
   const [probeType, setProbeType] = useState<ProbeType>(DEFAULT_PROBE_TYPE);
-  const [frequencyStartMHz, setFrequencyStartMHz] = useState('');
+  const [frequencyStartMHz, setFrequencyStartMHz] = useState('900');
   const [frequencyEndMHz, setFrequencyEndMHz] = useState('');
   const hasStartedRef = useRef(false);
   const savedRef = useRef(false);
-  const { animationState, play, reset } = useAnimationController();
+  const { animationState, isPaused, play, pause, resume, reset } = useAnimationController();
 
   useEffect(() => {
     const measurementPoints = sortedWaypoints.filter((wp) => wp.isMeasurementPoint);
@@ -74,6 +74,9 @@ export function useSignalSurvey(plan: Plan) {
     revealedIds,
     animationState,
     start,
+    pause,
+    resume,
+    isPaused,
     isPlaying: animationState.isPlaying,
     isComplete,
     height,

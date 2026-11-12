@@ -8,8 +8,11 @@ interface SignalSidePanelProps {
   readings: SignalReading[];
   revealedIds: Set<string>;
   isPlaying: boolean;
+  isPaused: boolean;
   isComplete: boolean;
   onStart: () => void;
+  onPause: () => void;
+  onResume: () => void;
   height: SurveyHeight;
   onHeightChange: (height: SurveyHeight) => void;
   probeType: ProbeType;
@@ -26,8 +29,11 @@ export function SignalSidePanel({
   readings,
   revealedIds,
   isPlaying,
+  isPaused,
   isComplete,
   onStart,
+  onPause,
+  onResume,
   height,
   onHeightChange,
   probeType,
@@ -40,7 +46,6 @@ export function SignalSidePanel({
 }: SignalSidePanelProps) {
   const theme = useCurrentTheme();
   const readingByWaypointId = new Map(readings.map((r) => [r.waypointId, r]));
-  const buttonLabel = isPlaying ? 'Robot Moving…' : isComplete ? 'Replay Survey' : 'Start Survey';
 
   return (
     <aside className="side-panel">
@@ -94,9 +99,19 @@ export function SignalSidePanel({
           </div>
         </div>
         <div className="toolbar-actions">
-          <button type="button" className="btn-primary" disabled={isPlaying} onClick={onStart}>
-            {buttonLabel}
-          </button>
+          {isPlaying && !isPaused ? (
+            <button type="button" onClick={onPause}>
+              Pause
+            </button>
+          ) : isPaused ? (
+            <button type="button" className="btn-primary" onClick={onResume}>
+              Resume
+            </button>
+          ) : (
+            <button type="button" className="btn-primary" onClick={onStart}>
+              {isComplete ? 'Replay Survey' : 'Start Survey'}
+            </button>
+          )}
         </div>
       </div>
       <ul className="waypoint-list">
