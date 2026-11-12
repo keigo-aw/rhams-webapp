@@ -147,23 +147,18 @@ export function AnalysisSidePanel({
             <span className="standard-group-label">{category.label}</span>
             {category.standards.map((standard) => {
               const checked = selectedStandardIds.includes(standard.id);
-              const computed = standardLimitVPerM(standard.id, frequencyMHz, pmaxW);
-              const limit = computed ?? standard.thresholdVPerM;
-              const isFlat = computed === null;
+              const limit = standardLimitVPerM(standard.id, frequencyMHz, pmaxW) ?? standard.thresholdVPerM;
               return (
                 <label key={standard.id} className="standard-check-row">
                   <input type="checkbox" checked={checked} onChange={() => onToggleStandard(standard.id)} />
                   {checked ? <Swatch color={colorByRef.get(standard.id) ?? '#888'} /> : <span className="limit-swatch limit-swatch-empty" />}
                   <span className="standard-name">{standard.label}</span>
-                  <span className="standard-value num" title={isFlat ? 'Nominal — not frequency-dependent' : undefined}>
-                    {limit.toFixed(1)}{isFlat ? '*' : ''} V/m
-                  </span>
+                  <span className="standard-value num">{limit.toFixed(1)} V/m</span>
                 </label>
               );
             })}
           </div>
         ))}
-        <p className="limit-section-hint">* nominal value, not frequency-dependent.</p>
       </div>
 
       <div className="limit-section">

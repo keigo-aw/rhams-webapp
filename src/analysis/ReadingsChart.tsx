@@ -62,7 +62,12 @@ function barPath(x: number, width: number, yTop: number): string {
 
 export function ReadingsChart({ data, unit, limits, activeThresholdInUnit, svgRef, onCustomLimitChange }: ReadingsChartProps) {
   const draggingRefId = useRef<string | null>(null);
-  const maxValue = Math.max(...data.map((d) => d.value), ...limits.map((l) => l.valueInUnit), 0);
+  // Scale to the readings; let limit lines up to ~10x the data in, but keep a very high line (an
+  // ignition threshold like NAVSEA's 4342 V/m) from flattening the bars — it pins to the top edge.
+  const dataMax = Math.max(...data.map((d) => d.value), 0);
+  const limitVals = limits.map((l) => l.valueInUnit);
+  const maxValue =
+    dataMax > 0 ? Math.max(dataMax, ...limitVals.filter((v) => v <= dataMax * 10)) : Math.max(...limitVals, 0);
   const niceMax = computeNiceMax(maxValue);
   const ticks = computeTicks(niceMax);
   const u = unitLabel(unit);

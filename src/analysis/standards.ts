@@ -36,10 +36,11 @@ export const HAZARD_CATEGORIES: HazardCategoryOption[] = [
     value: 'HERF',
     label: 'HERF (Fuel)',
     standards: [
-      { id: 'navsea-op-3563', label: 'NAVSEA OP 3563', thresholdVPerM: 5 },
-      // BS 6656:2002 defines the limit by formula, not a fixed value:
-      // E = sqrt(Pmax * (f^2 + 3030) / 124), f in MHz, Pmax in W (≥ 30 MHz).
-      // This single value is a placeholder until a reference Pmax/frequency is set.
+      // NAVSEA OP 3565 gives two fixed field thresholds split at 225 MHz (power densities
+      // converted to E via E = sqrt(S·377)): 0.09 W/m² → 5.82 V/m below, 5 W/cm² → 4342 V/m above.
+      { id: 'navsea-op-3565-sub225', label: 'NAVSEA OP 3565 (<225 MHz)', thresholdVPerM: 5.82 },
+      { id: 'navsea-op-3565-main', label: 'NAVSEA OP 3565 (≥225 MHz)', thresholdVPerM: 4342 },
+      // BS 6656:2002 is frequency/Pmax dependent: E = sqrt(Pmax·(f²+3030)/124), f in MHz, Pmax in W.
       { id: 'bs-6656-2002', label: 'BS 6656:2002', thresholdVPerM: 5 },
     ],
   },

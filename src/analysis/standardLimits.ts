@@ -119,6 +119,11 @@ export function standardLimitVPerM(standardId: string, freqMHz: number, pmaxW: n
       return milStd464c(freqMHz);
     case 'bs-6656-2002':
       return bs6656(freqMHz, pmaxW);
+    // NAVSEA OP 3565 — fixed field thresholds by band (frequency-independent within each band).
+    case 'navsea-op-3565-sub225':
+      return 5.82;
+    case 'navsea-op-3565-main':
+      return 4342;
     default:
       return null;
   }
