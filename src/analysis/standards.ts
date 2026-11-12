@@ -18,7 +18,8 @@ export const HAZARD_CATEGORIES: HazardCategoryOption[] = [
     value: 'HERP',
     label: 'HERP (Personnel)',
     standards: [
-      { id: 'ieee-c95.1-2019', label: 'IEEE C95.1-2019', thresholdVPerM: 27.5 },
+      { id: 'ieee-c95.1-2019-restricted', label: 'IEEE C95.1-2019 (Restricted)', thresholdVPerM: 61.4 },
+      { id: 'ieee-c95.1-2019-unrestricted', label: 'IEEE C95.1-2019 (Unrestricted)', thresholdVPerM: 27.5 },
       { id: 'icnirp-2020', label: 'ICNIRP 2020', thresholdVPerM: 28 },
     ],
   },
