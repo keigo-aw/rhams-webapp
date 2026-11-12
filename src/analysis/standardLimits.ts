@@ -4,7 +4,7 @@ import { FREE_SPACE_IMPEDANCE_OHM } from '../utils/units';
 export const DEFAULT_FREQUENCY_MHZ = 900;
 
 /** Default max threshold power (watts) for the BS 6656:2002 formula. */
-export const DEFAULT_PMAX_W = 10;
+export const DEFAULT_PMAX_W = 5;
 
 /** Plane-wave equivalent E-field from a power density S (W/m²): E = sqrt(S · 377). */
 function eFromS(sWPerM2: number): number {
