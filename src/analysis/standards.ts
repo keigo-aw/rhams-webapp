@@ -34,7 +34,13 @@ export const HAZARD_CATEGORIES: HazardCategoryOption[] = [
   {
     value: 'HERF',
     label: 'HERF (Fuel)',
-    standards: [{ id: 'navsea-op-3563', label: 'NAVSEA OP 3563', thresholdVPerM: 5 }],
+    standards: [
+      { id: 'navsea-op-3563', label: 'NAVSEA OP 3563', thresholdVPerM: 5 },
+      // BS 6656:2002 defines the limit by formula, not a fixed value:
+      // E = sqrt(Pmax * (f^2 + 3030) / 124), f in MHz, Pmax in W (≥ 30 MHz).
+      // This single value is a placeholder until a reference Pmax/frequency is set.
+      { id: 'bs-6656-2002', label: 'BS 6656:2002', thresholdVPerM: 5 },
+    ],
   },
 ];
 
