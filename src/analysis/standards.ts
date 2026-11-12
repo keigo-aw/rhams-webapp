@@ -3,7 +3,8 @@ export type HazardCategory = 'HERP' | 'HERO' | 'HERF';
 export interface StandardOption {
   id: string;
   label: string;
-  /** Representative placeholder limit — confirm against the governing document before relying on it. */
+  /** Nominal fallback limit (V/m), used only when the standard has no frequency-dependent
+   * function in standardLimits.ts. The real limit is computed per-frequency there. */
   thresholdVPerM: number;
 }
 

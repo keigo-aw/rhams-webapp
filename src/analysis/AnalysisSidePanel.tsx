@@ -3,6 +3,7 @@ import type { ReadingUnit } from '../utils/units';
 import { unitLabel } from '../utils/units';
 import { probeTypeRangeLabel } from '../survey/surveyConfig';
 import { HAZARD_CATEGORIES } from './standards';
+import { standardLimitVPerM } from './standardLimits';
 import type { LimitLine } from './useAnalysis';
 
 interface AnalysisSidePanelProps {
@@ -12,6 +13,8 @@ interface AnalysisSidePanelProps {
   unit: ReadingUnit;
   onUnitChange: (unit: ReadingUnit) => void;
   limitLines: LimitLine[];
+  frequencyMHz: number;
+  frequencyIsDefault: boolean;
   selectedStandardIds: string[];
   onToggleStandard: (id: string) => void;
   onAddCustomLine: () => void;
@@ -38,6 +41,8 @@ export function AnalysisSidePanel({
   unit,
   onUnitChange,
   limitLines,
+  frequencyMHz,
+  frequencyIsDefault,
   selectedStandardIds,
   onToggleStandard,
   onAddCustomLine,
@@ -94,23 +99,31 @@ export function AnalysisSidePanel({
 
       <div className="limit-section">
         <span className="limit-section-title">Standards</span>
-        <p className="limit-section-hint">Each selected standard draws a limit line. Pass/fail uses the most restrictive one.</p>
+        <p className="limit-section-hint">
+          Limits computed at <strong>{frequencyMHz} MHz</strong>
+          {frequencyIsDefault ? ' (default — survey had no frequency)' : ' (from survey)'}. Pass/fail uses the most restrictive selected line.
+        </p>
         {HAZARD_CATEGORIES.map((category) => (
           <div key={category.value} className="standard-group">
             <span className="standard-group-label">{category.label}</span>
             {category.standards.map((standard) => {
               const checked = selectedStandardIds.includes(standard.id);
+              const limit = standardLimitVPerM(standard.id, frequencyMHz) ?? standard.thresholdVPerM;
+              const isFlat = standardLimitVPerM(standard.id, frequencyMHz) === null;
               return (
                 <label key={standard.id} className="standard-check-row">
                   <input type="checkbox" checked={checked} onChange={() => onToggleStandard(standard.id)} />
                   {checked ? <Swatch color={colorByRef.get(standard.id) ?? '#888'} /> : <span className="limit-swatch limit-swatch-empty" />}
                   <span className="standard-name">{standard.label}</span>
-                  <span className="standard-value num">{standard.thresholdVPerM} V/m</span>
+                  <span className="standard-value num" title={isFlat ? 'Nominal — not frequency-dependent' : undefined}>
+                    {limit.toFixed(1)}{isFlat ? '*' : ''} V/m
+                  </span>
                 </label>
               );
             })}
           </div>
         ))}
+        <p className="limit-section-hint">* nominal value, not frequency-dependent.</p>
       </div>
 
       <div className="limit-section">

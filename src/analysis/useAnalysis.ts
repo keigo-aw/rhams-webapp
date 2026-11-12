@@ -5,6 +5,7 @@ import { convertFromVPerM, vPerMToWPerM2, wPerM2ToVPerM, type ReadingUnit } from
 import { generateId } from '../utils/id';
 import { HAZARD_CATEGORIES } from './standards';
 import { LIMIT_LINE_COLORS } from './chartScale';
+import { DEFAULT_FREQUENCY_MHZ, standardLimitVPerM } from './standardLimits';
 
 const DEFAULT_CUSTOM_V_PER_M = 10;
 
@@ -47,6 +48,11 @@ export function useAnalysis() {
 
   const selectedRecord = useMemo(() => records.find((r) => r.id === selectedId) ?? null, [records, selectedId]);
 
+  // Standards are evaluated at the survey's frequency; fall back to a default when it's absent.
+  const hasFrequency = !!selectedRecord?.frequencyStartMHz && selectedRecord.frequencyStartMHz > 0;
+  const frequencyMHz = hasFrequency ? selectedRecord!.frequencyStartMHz : DEFAULT_FREQUENCY_MHZ;
+  const frequencyIsDefault = !hasFrequency;
+
   const sortedWaypoints = useMemo(
     () => (selectedRecord ? [...selectedRecord.waypoints].sort((a, b) => a.order - b.order) : []),
     [selectedRecord],
@@ -64,7 +70,7 @@ export function useAnalysis() {
         kind: 'standard' as const,
         refId: s.id,
         label: s.label,
-        valueVPerM: s.thresholdVPerM,
+        valueVPerM: standardLimitVPerM(s.id, frequencyMHz) ?? s.thresholdVPerM,
       })),
       ...customLines.map((c, i) => ({
         kind: 'custom' as const,
@@ -79,7 +85,7 @@ export function useAnalysis() {
       valueInUnit: convertFromVPerM(line.valueVPerM, unit),
       color: LIMIT_LINE_COLORS[idx % LIMIT_LINE_COLORS.length],
     }));
-  }, [selectedStandardIds, customLines, unit]);
+  }, [selectedStandardIds, customLines, unit, frequencyMHz]);
 
   // "Most restrictive wins": pass/fail is judged against the lowest active limit.
   const activeThresholdVPerM = useMemo(
@@ -134,6 +140,8 @@ export function useAnalysis() {
     setUnit,
     limitLines,
     activeThresholdInUnit,
+    frequencyMHz,
+    frequencyIsDefault,
     selectedStandardIds,
     toggleStandard,
     addCustomLine,

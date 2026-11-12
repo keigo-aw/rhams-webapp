@@ -18,6 +18,8 @@ export function AnalysisScreen() {
     setUnit,
     limitLines,
     activeThresholdInUnit,
+    frequencyMHz,
+    frequencyIsDefault,
     selectedStandardIds,
     toggleStandard,
     addCustomLine,
@@ -63,6 +65,10 @@ export function AnalysisScreen() {
               <span>
                 Probe <strong>{selectedRecord.probeType}</strong> ({probeTypeRangeLabel(selectedRecord.probeType)})
               </span>
+              <span>
+                Limits @ <strong>{frequencyMHz} MHz</strong>
+                {frequencyIsDefault ? ' (default)' : ''}
+              </span>
             </div>
             <div className="chart-scroll">
               <ReadingsChart
@@ -91,6 +97,8 @@ export function AnalysisScreen() {
         unit={unit}
         onUnitChange={setUnit}
         limitLines={limitLines}
+        frequencyMHz={frequencyMHz}
+        frequencyIsDefault={frequencyIsDefault}
         selectedStandardIds={selectedStandardIds}
         onToggleStandard={toggleStandard}
         onAddCustomLine={addCustomLine}
