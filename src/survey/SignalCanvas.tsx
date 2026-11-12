@@ -1,5 +1,4 @@
 import type { RobotAnimationState, SignalReading, Waypoint } from '../types/domain';
-import { Grid } from '../canvas/Grid';
 import { Obstacle } from '../canvas/Obstacle';
 import { PathLine } from '../canvas/PathLine';
 import { RobotMarker } from '../canvas/RobotMarker';
@@ -28,7 +27,6 @@ export function SignalCanvas({ waypoints, readings, revealedIds, animationState,
 
   return (
     <svg className="grid-canvas" viewBox="0 0 800 800" role="img" aria-label="Signal strength survey grid">
-      <Grid />
       <Obstacle center={OBSTACLE_CENTER_PX} />
       {showSignalSource && <SignalSourceMarker />}
       <PathLine points={pathPoints} />
