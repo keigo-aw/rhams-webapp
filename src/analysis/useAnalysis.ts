@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SurveyRecord } from '../types/domain';
 import { loadSurveyHistory } from '../persistence/surveyHistory';
 import { convertFromVPerM, vPerMToWPerM2, wPerM2ToVPerM, type ReadingUnit } from '../utils/units';
@@ -30,7 +30,8 @@ export function useAnalysis() {
   const [isLoading, setIsLoading] = useState(true);
   const [unit, setUnit] = useState<ReadingUnit>('V/m');
   const [selectedStandardIds, setSelectedStandardIds] = useState<string[]>([]);
-  const [customLines, setCustomLines] = useState<{ id: string; valueVPerM: number }[]>([]);
+  const [customLines, setCustomLines] = useState<{ id: string; name: string; valueVPerM: number }[]>([]);
+  const nextCustomNumber = useRef(1);
 
   useEffect(() => {
     let cancelled = false;
@@ -72,10 +73,10 @@ export function useAnalysis() {
         label: s.label,
         valueVPerM: standardLimitVPerM(s.id, frequencyMHz) ?? s.thresholdVPerM,
       })),
-      ...customLines.map((c, i) => ({
+      ...customLines.map((c) => ({
         kind: 'custom' as const,
         refId: c.id,
-        label: `Custom ${i + 1}`,
+        label: c.name,
         valueVPerM: c.valueVPerM,
       })),
     ];
@@ -116,11 +117,16 @@ export function useAnalysis() {
   }, []);
 
   const addCustomLine = useCallback(() => {
-    setCustomLines((prev) => [...prev, { id: generateId(), valueVPerM: DEFAULT_CUSTOM_V_PER_M }]);
+    const n = nextCustomNumber.current++;
+    setCustomLines((prev) => [...prev, { id: generateId(), name: `Custom ${n}`, valueVPerM: DEFAULT_CUSTOM_V_PER_M }]);
   }, []);
 
   const removeCustomLine = useCallback((id: string) => {
     setCustomLines((prev) => prev.filter((c) => c.id !== id));
+  }, []);
+
+  const renameCustomLine = useCallback((id: string, name: string) => {
+    setCustomLines((prev) => prev.map((c) => (c.id === id ? { ...c, name } : c)));
   }, []);
 
   const setCustomLineInUnit = useCallback(
@@ -146,6 +152,7 @@ export function useAnalysis() {
     toggleStandard,
     addCustomLine,
     removeCustomLine,
+    renameCustomLine,
     setCustomLineInUnit,
     rows,
     chartData,

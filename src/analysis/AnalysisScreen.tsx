@@ -24,6 +24,7 @@ export function AnalysisScreen() {
     toggleStandard,
     addCustomLine,
     removeCustomLine,
+    renameCustomLine,
     setCustomLineInUnit,
     rows,
     chartData,
@@ -103,6 +104,7 @@ export function AnalysisScreen() {
         onToggleStandard={toggleStandard}
         onAddCustomLine={addCustomLine}
         onRemoveCustomLine={removeCustomLine}
+        onRenameCustomLine={renameCustomLine}
         onCustomLineChange={setCustomLineInUnit}
         onExportCsv={handleExportCsv}
         onCopyPng={handleCopyPng}

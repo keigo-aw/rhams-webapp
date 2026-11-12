@@ -150,10 +150,12 @@
 .standard-value { font-size: 11px; color: var(--text); }
 .limit-swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
 .limit-swatch-empty { background: transparent; border: 1px solid var(--border); }
-.custom-line-row { display: flex; align-items: center; gap: 6px; padding: 4px 2px; }
-.custom-line-label { font-size: 12px; color: var(--text-h); flex-shrink: 0; }
+.custom-line-row { display: flex; flex-direction: column; gap: 4px; padding: 6px 2px; }
+.custom-line-top { display: flex; align-items: center; gap: 6px; }
+.custom-line-bottom { display: flex; align-items: center; gap: 6px; padding-left: 18px; }
+.custom-line-name { flex: 1; min-width: 0; padding: 4px 6px; font: inherit; font-size: 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text-h); }
 .custom-line-input { width: 68px; min-width: 0; padding: 4px 6px; font-size: 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text-h); }
-.custom-line-unit { font-family: var(--mono); font-size: 11px; color: var(--text); flex: 1; }
+.custom-line-unit { font-family: var(--mono); font-size: 11px; color: var(--text); }
 .custom-line-remove { width: 22px; height: 22px; padding: 0; flex-shrink: 0; border-radius: 3px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
 .custom-line-remove:hover { color: var(--danger); border-color: var(--danger); }
 .add-custom-line { align-self: flex-start; margin-top: 4px; padding: 5px 10px; font-family: var(--mono); font-size: 11px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--accent); cursor: pointer; }

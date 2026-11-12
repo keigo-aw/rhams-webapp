@@ -19,6 +19,7 @@ interface AnalysisSidePanelProps {
   onToggleStandard: (id: string) => void;
   onAddCustomLine: () => void;
   onRemoveCustomLine: (id: string) => void;
+  onRenameCustomLine: (id: string, name: string) => void;
   onCustomLineChange: (id: string, valueInUnit: number) => void;
   onExportCsv: () => void;
   onCopyPng: () => void;
@@ -47,6 +48,7 @@ export function AnalysisSidePanel({
   onToggleStandard,
   onAddCustomLine,
   onRemoveCustomLine,
+  onRenameCustomLine,
   onCustomLineChange,
   onExportCsv,
   onCopyPng,
@@ -131,23 +133,35 @@ export function AnalysisSidePanel({
         {customLines.length === 0 && <p className="limit-section-hint">None. Add a line to set your own limit.</p>}
         {customLines.map((line) => (
           <div key={line.refId} className="custom-line-row">
-            <Swatch color={line.color} />
-            <span className="custom-line-label">{line.label}</span>
-            <input
-              className="custom-line-input num"
-              type="number"
-              step="0.1"
-              min={0}
-              value={line.valueInUnit}
-              onChange={(e) => {
-                const next = Number(e.target.value);
-                if (!Number.isNaN(next)) onCustomLineChange(line.refId, next);
-              }}
-            />
-            <span className="custom-line-unit">{unitLabel(unit)}</span>
-            <button type="button" className="custom-line-remove" aria-label="Remove line" onClick={() => onRemoveCustomLine(line.refId)}>
-              ✕
-            </button>
+            <div className="custom-line-top">
+              <Swatch color={line.color} />
+              <input
+                className="custom-line-name"
+                type="text"
+                value={line.label}
+                aria-label="Line name"
+                placeholder="Line name"
+                onChange={(e) => onRenameCustomLine(line.refId, e.target.value)}
+              />
+              <button type="button" className="custom-line-remove" aria-label="Remove line" onClick={() => onRemoveCustomLine(line.refId)}>
+                ✕
+              </button>
+            </div>
+            <div className="custom-line-bottom">
+              <input
+                className="custom-line-input num"
+                type="number"
+                step="0.1"
+                min={0}
+                value={line.valueInUnit}
+                aria-label="Line value"
+                onChange={(e) => {
+                  const next = Number(e.target.value);
+                  if (!Number.isNaN(next)) onCustomLineChange(line.refId, next);
+                }}
+              />
+              <span className="custom-line-unit">{unitLabel(unit)}</span>
+            </div>
           </div>
         ))}
         <button type="button" className="add-custom-line" onClick={onAddCustomLine}>
