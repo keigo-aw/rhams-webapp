@@ -106,7 +106,7 @@ export function AnalysisSidePanel({
 
         <div className="survey-config-row">
           <label className="survey-config-field">
-            <span>Frequency (MHz)</span>
+            <span>Measured frequency (MHz)</span>
             <input
               type="number"
               step="1"
@@ -133,7 +133,7 @@ export function AnalysisSidePanel({
           </label>
         </div>
         <p className="analysis-record-meta">
-          Frequency {frequencyIsDefault ? 'defaulted (survey had none)' : 'from survey'}, editable. Pmax feeds BS 6656:2002.
+          Measured frequency {frequencyIsDefault ? 'defaulted to 900 MHz (survey had none)' : 'from the signal survey'}, editable to re-evaluate limits. Pmax feeds BS 6656:2002.
         </p>
       </div>
 
