@@ -22,10 +22,6 @@ export function SignalSurveyScreen({ plan }: SignalSurveyScreenProps) {
     setHeight,
     probeType,
     setProbeType,
-    frequencyStartMHz,
-    setFrequencyStartMHz,
-    frequencyEndMHz,
-    setFrequencyEndMHz,
     configLocked,
   } = useSignalSurvey(plan);
   const sortedWaypoints = [...plan.waypoints].sort((a, b) => a.order - b.order);
@@ -55,10 +51,6 @@ export function SignalSurveyScreen({ plan }: SignalSurveyScreenProps) {
         onHeightChange={setHeight}
         probeType={probeType}
         onProbeTypeChange={setProbeType}
-        frequencyStartMHz={frequencyStartMHz}
-        onFrequencyStartMHzChange={setFrequencyStartMHz}
-        frequencyEndMHz={frequencyEndMHz}
-        onFrequencyEndMHzChange={setFrequencyEndMHz}
         configLocked={configLocked}
       />
     </div>

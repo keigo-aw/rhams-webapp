@@ -49,18 +49,10 @@ export function useAnalysis() {
 
   const selectedRecord = useMemo(() => records.find((r) => r.id === selectedId) ?? null, [records, selectedId]);
 
-  // Standards are evaluated at this frequency (and Pmax for BS 6656). The frequency starts from
-  // the survey's start frequency (default when absent) but can be overridden on this page.
+  // Standards are evaluated at this frequency (and Pmax for BS 6656). Defaults to 900 MHz and can be
+  // overridden on this page.
   const [frequencyMHz, setFrequencyMHz] = useState<number>(DEFAULT_FREQUENCY_MHZ);
   const [pmaxW, setPmaxW] = useState<number>(DEFAULT_PMAX_W);
-
-  // Re-seed the frequency from the record whenever the selected survey changes.
-  useEffect(() => {
-    const recFreq = selectedRecord?.frequencyStartMHz ?? 0;
-    setFrequencyMHz(recFreq > 0 ? recFreq : DEFAULT_FREQUENCY_MHZ);
-  }, [selectedRecord]);
-
-  const frequencyIsDefault = !(selectedRecord?.frequencyStartMHz && selectedRecord.frequencyStartMHz > 0);
 
   const sortedWaypoints = useMemo(
     () => (selectedRecord ? [...selectedRecord.waypoints].sort((a, b) => a.order - b.order) : []),
@@ -156,7 +148,6 @@ export function useAnalysis() {
     activeThresholdInUnit,
     frequencyMHz,
     setFrequencyMHz,
-    frequencyIsDefault,
     pmaxW,
     setPmaxW,
     selectedStandardIds,

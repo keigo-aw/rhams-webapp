@@ -15,7 +15,6 @@ interface AnalysisSidePanelProps {
   limitLines: LimitLine[];
   frequencyMHz: number;
   onFrequencyChange: (mhz: number) => void;
-  frequencyIsDefault: boolean;
   pmaxW: number;
   onPmaxChange: (w: number) => void;
   selectedStandardIds: string[];
@@ -47,7 +46,6 @@ export function AnalysisSidePanel({
   limitLines,
   frequencyMHz,
   onFrequencyChange,
-  frequencyIsDefault,
   pmaxW,
   onPmaxChange,
   selectedStandardIds,
@@ -133,7 +131,7 @@ export function AnalysisSidePanel({
           </label>
         </div>
         <p className="analysis-record-meta">
-          Measured frequency {frequencyIsDefault ? 'defaulted to 900 MHz (survey had none)' : 'from the signal survey'}, editable to re-evaluate limits. Pmax feeds BS 6656:2002.
+          Measured frequency defaults to 900 MHz, editable to re-evaluate limits. Pmax feeds BS 6656:2002.
         </p>
       </div>
 

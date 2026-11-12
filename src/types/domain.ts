@@ -56,6 +56,7 @@ export interface SurveyRecord {
   completedAt: number;
   height: SurveyHeight;
   probeType: ProbeType;
-  frequencyStartMHz: number;
+  /** Legacy: older records stored a survey frequency; new records assess at the Analysis-page frequency. */
+  frequencyStartMHz?: number;
   frequencyEndMHz?: number;
 }

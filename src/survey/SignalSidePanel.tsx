@@ -17,10 +17,6 @@ interface SignalSidePanelProps {
   onHeightChange: (height: SurveyHeight) => void;
   probeType: ProbeType;
   onProbeTypeChange: (probeType: ProbeType) => void;
-  frequencyStartMHz: string;
-  onFrequencyStartMHzChange: (value: string) => void;
-  frequencyEndMHz: string;
-  onFrequencyEndMHzChange: (value: string) => void;
   configLocked: boolean;
 }
 
@@ -38,10 +34,6 @@ export function SignalSidePanel({
   onHeightChange,
   probeType,
   onProbeTypeChange,
-  frequencyStartMHz,
-  onFrequencyStartMHzChange,
-  frequencyEndMHz,
-  onFrequencyEndMHzChange,
   configLocked,
 }: SignalSidePanelProps) {
   const theme = useCurrentTheme();
@@ -76,27 +68,6 @@ export function SignalSidePanel({
               ))}
             </select>
           </label>
-          <div className="survey-config-row">
-            <label className="survey-config-field">
-              <span>Start (MHz)</span>
-              <input
-                type="number"
-                value={frequencyStartMHz}
-                disabled={configLocked}
-                onChange={(e) => onFrequencyStartMHzChange(e.target.value)}
-              />
-            </label>
-            <label className="survey-config-field">
-              <span>End (MHz)</span>
-              <input
-                type="number"
-                placeholder="optional"
-                value={frequencyEndMHz}
-                disabled={configLocked}
-                onChange={(e) => onFrequencyEndMHzChange(e.target.value)}
-              />
-            </label>
-          </div>
         </div>
         <div className="toolbar-actions">
           {isPlaying && !isPaused ? (

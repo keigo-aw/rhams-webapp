@@ -17,8 +17,6 @@ export function useSignalSurvey(plan: Plan) {
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set());
   const [height, setHeight] = useState<SurveyHeight>(DEFAULT_HEIGHT);
   const [probeType, setProbeType] = useState<ProbeType>(DEFAULT_PROBE_TYPE);
-  const [frequencyStartMHz, setFrequencyStartMHz] = useState('900');
-  const [frequencyEndMHz, setFrequencyEndMHz] = useState('');
   const hasStartedRef = useRef(false);
   const savedRef = useRef(false);
   const { animationState, isPaused, play, pause, resume, reset } = useAnimationController();
@@ -64,10 +62,8 @@ export function useSignalSurvey(plan: Plan) {
       completedAt: Date.now(),
       height,
       probeType,
-      frequencyStartMHz: Number(frequencyStartMHz) || 0,
-      ...(frequencyEndMHz !== '' ? { frequencyEndMHz: Number(frequencyEndMHz) } : {}),
     }).catch((err) => console.error('Failed to save survey record', err));
-  }, [isComplete, readings, plan.id, sortedWaypoints, height, probeType, frequencyStartMHz, frequencyEndMHz]);
+  }, [isComplete, readings, plan.id, sortedWaypoints, height, probeType]);
 
   return {
     readings,
@@ -83,10 +79,6 @@ export function useSignalSurvey(plan: Plan) {
     setHeight,
     probeType,
     setProbeType,
-    frequencyStartMHz,
-    setFrequencyStartMHz,
-    frequencyEndMHz,
-    setFrequencyEndMHz,
     configLocked: hasStartedRef.current,
   };
 }

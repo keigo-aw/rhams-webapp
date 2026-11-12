@@ -20,7 +20,6 @@ export function AnalysisScreen() {
     activeThresholdInUnit,
     frequencyMHz,
     setFrequencyMHz,
-    frequencyIsDefault,
     pmaxW,
     setPmaxW,
     selectedStandardIds,
@@ -102,7 +101,6 @@ export function AnalysisScreen() {
         limitLines={limitLines}
         frequencyMHz={frequencyMHz}
         onFrequencyChange={setFrequencyMHz}
-        frequencyIsDefault={frequencyIsDefault}
         pmaxW={pmaxW}
         onPmaxChange={setPmaxW}
         selectedStandardIds={selectedStandardIds}
