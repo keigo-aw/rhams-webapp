@@ -205,7 +205,7 @@ export function AnalysisSidePanel({
       <div className="toolbar">
         <div className="toolbar-actions">
           <button type="button" disabled={disabled} onClick={onExportCsv}>
-            Export CSV
+            Export Excel
           </button>
           <button type="button" disabled={disabled} onClick={onCopyPng}>
             Copy Chart as PNG

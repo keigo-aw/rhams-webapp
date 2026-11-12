@@ -3,7 +3,7 @@ import { AnalysisSidePanel } from './AnalysisSidePanel';
 import { ReadingsChart } from './ReadingsChart';
 import { ReadingsTable } from './ReadingsTable';
 import { useAnalysis } from './useAnalysis';
-import { buildSurveyCsv, downloadCsv } from './exportCsv';
+import { buildSurveyXlsx, downloadXlsx } from './exportXlsx';
 import { copySvgAsPng } from './exportPng';
 import { resolveCssVar } from '../utils/theme';
 import { probeTypeRangeLabel } from '../survey/surveyConfig';
@@ -35,11 +35,11 @@ export function AnalysisScreen() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [copyStatus, setCopyStatus] = useState<string | null>(null);
 
-  const handleExportCsv = () => {
+  const handleExportExcel = () => {
     if (!selectedRecord) return;
-    const csv = buildSurveyCsv(rows);
+    const bytes = buildSurveyXlsx(rows, { completedAt: selectedRecord.completedAt, frequencyMHz, pmaxW });
     const dateStamp = new Date(selectedRecord.completedAt).toISOString().slice(0, 19).replace(/[:T]/g, '-');
-    downloadCsv(`survey-${dateStamp}.csv`, csv);
+    downloadXlsx(`survey-${dateStamp}.xlsx`, bytes);
   };
 
   const handleCopyPng = async () => {
@@ -111,7 +111,7 @@ export function AnalysisScreen() {
         onRemoveCustomLine={removeCustomLine}
         onRenameCustomLine={renameCustomLine}
         onCustomLineChange={setCustomLineInUnit}
-        onExportCsv={handleExportCsv}
+        onExportCsv={handleExportExcel}
         onCopyPng={handleCopyPng}
         copyStatus={copyStatus}
         disabled={!selectedRecord}
