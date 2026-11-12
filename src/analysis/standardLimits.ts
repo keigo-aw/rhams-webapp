@@ -3,6 +3,9 @@ import { FREE_SPACE_IMPEDANCE_OHM } from '../utils/units';
 /** Frequency used when a survey record carries no frequency. */
 export const DEFAULT_FREQUENCY_MHZ = 900;
 
+/** Default max threshold power (watts) for the BS 6656:2002 formula. */
+export const DEFAULT_PMAX_W = 10;
+
 /** Plane-wave equivalent E-field from a power density S (W/m²): E = sqrt(S · 377). */
 function eFromS(sWPerM2: number): number {
   return Math.sqrt(FREE_SPACE_IMPEDANCE_OHM * sWPerM2);
@@ -92,13 +95,17 @@ function milStd464c(f: number): number {
   ]);
 }
 
+// BS 6656:2002 effective field strength (≥ 30 MHz): E = sqrt(Pmax·(f²+3030)/124), f in MHz, Pmax in W.
+function bs6656(f: number, pmaxW: number): number {
+  return Math.sqrt((pmaxW * (f * f + 3030)) / 124);
+}
+
 /**
- * E-field limit (V/m) for a standard at a frequency. Returns null for standards whose limit
- * isn't a simple field-vs-frequency function, so the caller can fall back to a nominal value:
- *  - NAVSEA OP 3563: fuel-area power-density/separation rules, not an MPE curve.
- *  - BS 6656:2002: a formula E = sqrt(Pmax·(f²+3030)/124) that needs the transmitter's Pmax.
+ * E-field limit (V/m) for a standard at a frequency (and Pmax, for BS 6656). Returns null for a
+ * standard whose limit isn't a field-vs-frequency function, so the caller can fall back to a
+ * nominal value — currently only NAVSEA OP 3563 (fuel-area power-density/separation rules).
  */
-export function standardLimitVPerM(standardId: string, freqMHz: number): number | null {
+export function standardLimitVPerM(standardId: string, freqMHz: number, pmaxW: number = DEFAULT_PMAX_W): number | null {
   switch (standardId) {
     case 'ieee-c95.1-2019-restricted':
       return ieeeRestricted(freqMHz);
@@ -110,12 +117,14 @@ export function standardLimitVPerM(standardId: string, freqMHz: number): number 
       return safeHeroCurve(freqMHz);
     case 'mil-std-464c':
       return milStd464c(freqMHz);
+    case 'bs-6656-2002':
+      return bs6656(freqMHz, pmaxW);
     default:
       return null;
   }
 }
 
-/** Whether a standard's limit actually varies with frequency (vs. a flat nominal fallback). */
-export function isFrequencyDependent(standardId: string): boolean {
-  return standardLimitVPerM(standardId, DEFAULT_FREQUENCY_MHZ) !== null;
+/** Whether a standard uses the Pmax input (only BS 6656:2002 does). */
+export function usesPmax(standardId: string): boolean {
+  return standardId === 'bs-6656-2002';
 }

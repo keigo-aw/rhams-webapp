@@ -19,7 +19,10 @@ export function AnalysisScreen() {
     limitLines,
     activeThresholdInUnit,
     frequencyMHz,
+    setFrequencyMHz,
     frequencyIsDefault,
+    pmaxW,
+    setPmaxW,
     selectedStandardIds,
     toggleStandard,
     addCustomLine,
@@ -68,7 +71,6 @@ export function AnalysisScreen() {
               </span>
               <span>
                 Limits @ <strong>{frequencyMHz} MHz</strong>
-                {frequencyIsDefault ? ' (default)' : ''}
               </span>
             </div>
             <div className="chart-scroll">
@@ -99,7 +101,10 @@ export function AnalysisScreen() {
         onUnitChange={setUnit}
         limitLines={limitLines}
         frequencyMHz={frequencyMHz}
+        onFrequencyChange={setFrequencyMHz}
         frequencyIsDefault={frequencyIsDefault}
+        pmaxW={pmaxW}
+        onPmaxChange={setPmaxW}
         selectedStandardIds={selectedStandardIds}
         onToggleStandard={toggleStandard}
         onAddCustomLine={addCustomLine}

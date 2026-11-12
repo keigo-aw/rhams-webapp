@@ -14,7 +14,10 @@ interface AnalysisSidePanelProps {
   onUnitChange: (unit: ReadingUnit) => void;
   limitLines: LimitLine[];
   frequencyMHz: number;
+  onFrequencyChange: (mhz: number) => void;
   frequencyIsDefault: boolean;
+  pmaxW: number;
+  onPmaxChange: (w: number) => void;
   selectedStandardIds: string[];
   onToggleStandard: (id: string) => void;
   onAddCustomLine: () => void;
@@ -43,7 +46,10 @@ export function AnalysisSidePanel({
   onUnitChange,
   limitLines,
   frequencyMHz,
+  onFrequencyChange,
   frequencyIsDefault,
+  pmaxW,
+  onPmaxChange,
   selectedStandardIds,
   onToggleStandard,
   onAddCustomLine,
@@ -97,21 +103,53 @@ export function AnalysisSidePanel({
             <option value="W/m2">Power density (W/m²)</option>
           </select>
         </label>
+
+        <div className="survey-config-row">
+          <label className="survey-config-field">
+            <span>Frequency (MHz)</span>
+            <input
+              type="number"
+              step="1"
+              min={0}
+              value={frequencyMHz}
+              onChange={(e) => {
+                const next = Number(e.target.value);
+                if (!Number.isNaN(next) && next > 0) onFrequencyChange(next);
+              }}
+            />
+          </label>
+          <label className="survey-config-field">
+            <span>Pmax (W)</span>
+            <input
+              type="number"
+              step="1"
+              min={0}
+              value={pmaxW}
+              onChange={(e) => {
+                const next = Number(e.target.value);
+                if (!Number.isNaN(next) && next >= 0) onPmaxChange(next);
+              }}
+            />
+          </label>
+        </div>
+        <p className="analysis-record-meta">
+          Frequency {frequencyIsDefault ? 'defaulted (survey had none)' : 'from survey'}, editable. Pmax feeds BS 6656:2002.
+        </p>
       </div>
 
       <div className="limit-section">
         <span className="limit-section-title">Standards</span>
         <p className="limit-section-hint">
-          Limits computed at <strong>{frequencyMHz} MHz</strong>
-          {frequencyIsDefault ? ' (default — survey had no frequency)' : ' (from survey)'}. Pass/fail uses the most restrictive selected line.
+          Limits computed at <strong>{frequencyMHz} MHz</strong>. Pass/fail uses the most restrictive selected line.
         </p>
         {HAZARD_CATEGORIES.map((category) => (
           <div key={category.value} className="standard-group">
             <span className="standard-group-label">{category.label}</span>
             {category.standards.map((standard) => {
               const checked = selectedStandardIds.includes(standard.id);
-              const limit = standardLimitVPerM(standard.id, frequencyMHz) ?? standard.thresholdVPerM;
-              const isFlat = standardLimitVPerM(standard.id, frequencyMHz) === null;
+              const computed = standardLimitVPerM(standard.id, frequencyMHz, pmaxW);
+              const limit = computed ?? standard.thresholdVPerM;
+              const isFlat = computed === null;
               return (
                 <label key={standard.id} className="standard-check-row">
                   <input type="checkbox" checked={checked} onChange={() => onToggleStandard(standard.id)} />
