@@ -12,8 +12,7 @@ interface SurveyHistoryListProps {
 export function SurveyHistoryList({ records, selectedId, onSelect, onClearAll }: SurveyHistoryListProps) {
   const theme = useCurrentTheme();
   return (
-    <aside className="side-panel">
-      <h1>Survey History</h1>
+    <>
       <div className="toolbar">
         <div className="toolbar-actions">
           <button type="button" className="btn-danger" disabled={records.length === 0} onClick={onClearAll}>
@@ -21,6 +20,7 @@ export function SurveyHistoryList({ records, selectedId, onSelect, onClearAll }:
           </button>
         </div>
       </div>
+      {records.length === 0 && <p className="empty-state">No completed surveys yet.</p>}
       <ul className="waypoint-list">
         {records.map((record) => {
           const { avg, max } = summarizeSignalStrength(record.readings.map((r) => r.fieldStrengthVPerM));
@@ -48,6 +48,6 @@ export function SurveyHistoryList({ records, selectedId, onSelect, onClearAll }:
           );
         })}
       </ul>
-    </aside>
+    </>
   );
 }

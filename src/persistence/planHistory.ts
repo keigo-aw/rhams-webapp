@@ -1,5 +1,5 @@
 import type { Plan } from '../types/domain';
-import { deleteRecord, getAll, putRecord, replaceAll, STORE_NAMES } from './db';
+import { clearStore, deleteRecord, getAll, putRecord, replaceAll, STORE_NAMES } from './db';
 
 const MAX_HISTORY = 20;
 
@@ -18,4 +18,12 @@ export async function savePlanToHistory(plan: Plan): Promise<void> {
 
 export async function replacePlanHistory(plans: Plan[]): Promise<void> {
   await replaceAll(STORE_NAMES.planHistory, plans);
+}
+
+export async function deletePlanFromHistory(id: string): Promise<void> {
+  await deleteRecord(STORE_NAMES.planHistory, id);
+}
+
+export async function clearPlanHistory(): Promise<void> {
+  await clearStore(STORE_NAMES.planHistory);
 }
