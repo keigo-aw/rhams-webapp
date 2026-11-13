@@ -38,9 +38,7 @@ export function MeasurementSidePanel({ waypoints, onToggle, onSelectAll, onClear
               <input type="checkbox" checked={wp.isMeasurementPoint} onChange={() => onToggle(wp.id)} />
               <span className="waypoint-row-index">{i + 1}</span>
             </label>
-            <span className="waypoint-row-coords">
-              x: {wp.x.toFixed(1)}, y: {wp.y.toFixed(1)}
-            </span>
+            <span className="waypoint-row-spacer" />
             <span className={`status-pill ${wp.isMeasurementPoint ? 'measurement-badge-selected' : 'measurement-badge-unselected'}`}>
               {wp.isMeasurementPoint ? 'Measured' : 'Skipped'}
             </span>

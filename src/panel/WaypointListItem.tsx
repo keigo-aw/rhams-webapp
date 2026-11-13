@@ -26,9 +26,7 @@ export function WaypointListItem({
   return (
     <li className={`waypoint-row${selected ? ' selected' : ''}`} onClick={() => onSelect(waypoint.id)}>
       <span className="waypoint-row-index">{n}</span>
-      <span className="waypoint-row-coords">
-        x: {waypoint.x.toFixed(1)}, y: {waypoint.y.toFixed(1)}
-      </span>
+      <span className="waypoint-row-spacer" />
       <span className="waypoint-row-actions">
         <button
           type="button"

@@ -93,9 +93,7 @@ export function SignalSidePanel({
             return (
               <li key={wp.id} className={`waypoint-row${reading ? '' : ' waypoint-row-muted'}`}>
                 <span className="waypoint-row-index">{i + 1}</span>
-                <span className="waypoint-row-coords">
-                  x: {wp.x.toFixed(1)}, y: {wp.y.toFixed(1)}
-                </span>
+                <span className="waypoint-row-spacer" />
                 {reading ? (
                   <span className="signal-reading" style={{ color: signalColor(reading.fieldStrengthVPerM, theme) }}>
                     {reading.fieldStrengthVPerM.toFixed(1)} V/m
