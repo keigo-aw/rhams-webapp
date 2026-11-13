@@ -90,21 +90,24 @@ export function GridCanvas({
       ) : (
         <Obstacle center={OBSTACLE_CENTER_PX} />
       )}
-      <PathLine points={pathPoints} />
+      {/* During a scan the planned waypoints and route are hidden — only the robot drives and the
+          LIDAR point cloud appears. */}
+      {!scanActive && <PathLine points={pathPoints} />}
       {animationState.isPlaying && tracedPixelPoints.length > 1 && <PathLine points={tracedPixelPoints} traced />}
-      {sorted.map((wp, i) => (
-        <WaypointMarker
-          key={wp.id}
-          waypoint={wp}
-          n={i + 1}
-          selected={wp.id === selectedWaypointId}
-          draggable={isDraft}
-          onMove={onMoveWaypoint}
-          onSelect={onSelectWaypoint}
-          onDelete={onDeleteWaypoint}
-          onInteractionStart={handleMarkerInteractionStart}
-        />
-      ))}
+      {!scanActive &&
+        sorted.map((wp, i) => (
+          <WaypointMarker
+            key={wp.id}
+            waypoint={wp}
+            n={i + 1}
+            selected={wp.id === selectedWaypointId}
+            draggable={isDraft}
+            onMove={onMoveWaypoint}
+            onSelect={onSelectWaypoint}
+            onDelete={onDeleteWaypoint}
+            onInteractionStart={handleMarkerInteractionStart}
+          />
+        ))}
       {animationState.isPlaying && <RobotMarker position={robotPixelPosition} />}
     </svg>
   );
