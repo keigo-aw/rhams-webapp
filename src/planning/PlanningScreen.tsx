@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Plan } from '../types/domain';
+import type { Plan, Waypoint } from '../types/domain';
 import { GridCanvas } from '../canvas/GridCanvas';
 import { SidePanel } from '../panel/SidePanel';
 import { useAnimationController } from '../state/useAnimationController';
@@ -20,6 +20,8 @@ interface PlanningScreenProps {
   confirmPlan: () => void;
   resetToDraft: () => void;
   markVehicleScanned: () => void;
+  setPath: (waypoints: Waypoint[]) => void;
+  buildDefaultPath: () => Waypoint[];
 }
 
 export function PlanningScreen({
@@ -31,6 +33,8 @@ export function PlanningScreen({
   confirmPlan,
   resetToDraft,
   markVehicleScanned,
+  setPath,
+  buildDefaultPath,
 }: PlanningScreenProps) {
   const { animationState, play, reset } = useAnimationController();
   const [selectedWaypointId, setSelectedWaypointId] = useState<string | null>(null);
@@ -92,14 +96,17 @@ export function PlanningScreen({
   };
 
   const handleScan = () => {
-    if (sortedWaypoints.length < 2) return;
+    // Discovery always starts from a fresh default loop at the minimum waypoint count, regardless
+    // of any manual edits to the current path.
+    const freshPath = buildDefaultPath();
+    setPath(freshPath);
     reset();
     lidar.clear();
     setScanActive(true);
     markVehicleScanned(); // from now on the plan shows the discovered outline instead of the car
     // Drive a full lap (incl. the closing leg) so every side of the body gets scanned, with a
     // slight wander so the driven path isn't perfectly straight like a real platform tracking a route.
-    const drivenPath = wobblePath([...sortedWaypoints, sortedWaypoints[0]]);
+    const drivenPath = wobblePath([...freshPath, freshPath[0]]);
     scanTotalSegmentsRef.current = Math.max(1, drivenPath.length - 1);
     play(drivenPath, { speedUnitsPerSecond: SCAN_SPEED_UNITS_PER_SECOND, dwellSeconds: 0 });
   };

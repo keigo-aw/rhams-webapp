@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import type { Plan, Waypoint } from '../types/domain';
 import { GRID_BOUNDS, OBSTACLE, clampToBounds } from '../canvas/coordinates';
-import { mockPathGenerator } from '../data/mockPathGenerator';
+import { WAYPOINT_COUNT_RANGE, mockPathGenerator } from '../data/mockPathGenerator';
 import { generateId } from '../utils/id';
 import { loadCurrentPlan, saveCurrentPlan } from '../persistence/storage';
 import { savePlanToHistory } from '../persistence/planHistory';
@@ -34,6 +34,7 @@ type Action =
   | { type: 'CONFIRM' }
   | { type: 'RESET_TO_DRAFT' }
   | { type: 'GENERATE_NEW'; waypointCount?: number }
+  | { type: 'SET_PATH'; waypoints: Waypoint[] }
   | { type: 'MARK_SCANNED' }
   | { type: 'HYDRATE'; plan: Plan };
 
@@ -96,6 +97,10 @@ function reducer(plan: Plan, action: Action): Plan {
     }
     case 'GENERATE_NEW': {
       return createDraftPlan(action.waypointCount);
+    }
+    case 'SET_PATH': {
+      // Replace the route in place (same plan id), back to draft. vehicleScanned is preserved.
+      return { ...plan, status: 'draft', confirmedAt: undefined, waypoints: action.waypoints };
     }
     case 'HYDRATE': {
       return action.plan;
@@ -174,6 +179,16 @@ export function usePlanStore() {
     dispatch({ type: 'MARK_SCANNED' });
   }, []);
 
+  const setPath = useCallback((waypoints: Waypoint[]) => {
+    dispatch({ type: 'SET_PATH', waypoints });
+  }, []);
+
+  /** A fresh default path at the minimum waypoint count, for restarting discovery from a clean loop. */
+  const buildDefaultPath = useCallback(
+    () => mockPathGenerator.generateTravelledPath({ obstacle: OBSTACLE, bounds: GRID_BOUNDS, waypointCount: WAYPOINT_COUNT_RANGE.min }),
+    [],
+  );
+
   return {
     plan,
     isLoading,
@@ -186,5 +201,7 @@ export function usePlanStore() {
     resetToDraft,
     generateNewMockPath,
     markVehicleScanned,
+    setPath,
+    buildDefaultPath,
   };
 }
