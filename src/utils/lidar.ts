@@ -63,3 +63,50 @@ export function castScan(origin: Point, polygon: Point[], options: ScanOptions =
 export function binKey(p: Point, size: number = LIDAR_BIN_SIZE_M): string {
   return `${Math.round(p.x / size)}:${Math.round(p.y / size)}`;
 }
+
+export interface WobbleOptions {
+  /** Spacing (metres) the path is resampled to before wandering is applied. */
+  stepM?: number;
+  /** Maximum lateral drift (metres) off the straight line. */
+  amplitudeM?: number;
+}
+
+const DEFAULT_WOBBLE_STEP_M = 0.5;
+const DEFAULT_WOBBLE_AMPLITUDE_M = 0.18;
+
+/**
+ * Resamples a polyline and adds a smooth, mean-reverting lateral drift so the
+ * robot's driven path wanders instead of tracing perfectly straight segments —
+ * closer to how a real platform tracks a route. The returned path has many more
+ * vertices than the input; waypoint positions are not preserved exactly.
+ */
+export function wobblePath(points: Point[], options: WobbleOptions = {}): Point[] {
+  if (points.length < 2) return points.slice();
+  const step = options.stepM ?? DEFAULT_WOBBLE_STEP_M;
+  const amplitude = options.amplitudeM ?? DEFAULT_WOBBLE_AMPLITUDE_M;
+
+  // Resample into evenly spaced samples, each carrying its segment's heading.
+  const samples: { p: Point; dir: Point }[] = [];
+  for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i];
+    const b = points[i + 1];
+    const len = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+    const dir = { x: (b.x - a.x) / len, y: (b.y - a.y) / len };
+    const n = Math.max(1, Math.round(len / step));
+    for (let j = 0; j < n; j++) {
+      const t = j / n;
+      samples.push({ p: { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t }, dir });
+    }
+  }
+  const lastDir = samples[samples.length - 1]?.dir ?? { x: 1, y: 0 };
+  samples.push({ p: points[points.length - 1], dir: lastDir });
+
+  // Mean-reverting random walk on the perpendicular offset keeps the drift smooth and bounded.
+  let offset = 0;
+  return samples.map(({ p, dir }) => {
+    offset = offset * 0.85 + (Math.random() * 2 - 1) * amplitude * 0.3;
+    offset = Math.max(-amplitude, Math.min(amplitude, offset));
+    const perp = { x: -dir.y, y: dir.x };
+    return { x: p.x + perp.x * offset, y: p.y + perp.y * offset };
+  });
+}

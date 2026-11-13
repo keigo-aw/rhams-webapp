@@ -4,6 +4,7 @@ import { GridCanvas } from '../canvas/GridCanvas';
 import { SidePanel } from '../panel/SidePanel';
 import { useAnimationController } from '../state/useAnimationController';
 import { useLidarScan } from '../state/useLidarScan';
+import { wobblePath } from '../utils/lidar';
 
 /** Travel speed for the LIDAR scan lap, in metres/second — a slow crawl so the sweep reads as a real scan. */
 const SCAN_SPEED_UNITS_PER_SECOND = 3;
@@ -47,8 +48,10 @@ export function PlanningScreen({
     reset();
     lidar.clear();
     setScanActive(true);
-    // Drive a full lap (incl. the closing leg) so every side of the body gets scanned.
-    play([...sorted, sorted[0]], { speedUnitsPerSecond: SCAN_SPEED_UNITS_PER_SECOND, dwellSeconds: 0 });
+    // Drive a full lap (incl. the closing leg) so every side of the body gets scanned, with a
+    // slight wander so the driven path isn't perfectly straight like a real platform tracking a route.
+    const drivenPath = wobblePath([...sorted, sorted[0]]);
+    play(drivenPath, { speedUnitsPerSecond: SCAN_SPEED_UNITS_PER_SECOND, dwellSeconds: 0 });
   };
 
   const handleResetToDraft = () => {
