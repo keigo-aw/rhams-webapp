@@ -117,6 +117,7 @@ export function ReadingsChart({ data, unit, limits, activeThresholdInUnit, svgRe
 
       {ticks.map((t) => (
         <g key={t.value}>
+          <line x1={PLOT_LEFT} y1={t.y} x2={PLOT_RIGHT} y2={t.y} stroke={GRID} strokeWidth={1} />
           <text x={PLOT_LEFT - 8} y={t.y + 4} textAnchor="end" fontSize={11} fill={AXIS_TEXT}>
             {t.value.toFixed(2).replace(/\.?0+$/, '') || '0'}
           </text>

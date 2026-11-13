@@ -1,5 +1,6 @@
 import { useRef, type MouseEvent } from 'react';
 import type { Plan, RobotAnimationState } from '../types/domain';
+import { Grid } from './Grid';
 import { Obstacle } from './Obstacle';
 import { PathLine } from './PathLine';
 import { RobotMarker } from './RobotMarker';
@@ -74,6 +75,7 @@ export function GridCanvas({
       onPointerDown={handleCanvasPointerDown}
       onClick={handleClick}
     >
+      <Grid />
       <Obstacle center={OBSTACLE_CENTER_PX} />
       <PathLine points={pathPoints} />
       {animationState.isPlaying && tracedPixelPoints.length > 1 && <PathLine points={tracedPixelPoints} traced />}
