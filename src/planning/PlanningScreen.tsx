@@ -68,10 +68,13 @@ export function PlanningScreen({
   }, [scanActive, animationState.isPlaying, robotLapFraction, sortedWaypoints, waypointFractions]);
 
   const handleConfirm = () => {
-    setScanActive(false);
-    lidar.clear();
     confirmPlan();
-    // Animate the closing leg too, from the last waypoint back to the first.
+    if (scanActive) {
+      // Discovery flow: keep the scanned silhouette and plotted points on screen; the car image
+      // (and its planned route) stay hidden — the outline is what was found.
+      return;
+    }
+    // Plain flow: animate the confirmed route around the vehicle (incl. the closing leg).
     play(sortedWaypoints.length > 1 ? [...sortedWaypoints, sortedWaypoints[0]] : sortedWaypoints);
   };
 
