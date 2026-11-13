@@ -18,6 +18,8 @@ export interface Plan {
   waypoints: Waypoint[];
   createdAt: number;
   confirmedAt?: number;
+  /** Once the vehicle has been LIDAR-scanned, the plan shows the discovered outline instead of the car image. */
+  vehicleScanned?: boolean;
 }
 
 export interface Obstacle {

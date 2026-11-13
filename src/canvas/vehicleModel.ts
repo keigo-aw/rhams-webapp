@@ -43,3 +43,27 @@ export function vehicleBodyPolygon(): Point[] {
   }
   return points;
 }
+
+/**
+ * A dense, slightly noisy point cloud tracing the body outline — a static stand-in for a completed
+ * LIDAR scan, shown in place of the car image once the vehicle has been scanned (e.g. after a reload
+ * where the live scan points are gone).
+ */
+export function vehicleOutlineCloud(spacingM = 0.07, noiseM = 0.03): Point[] {
+  const poly = vehicleBodyPolygon();
+  const cloud: Point[] = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i];
+    const b = poly[(i + 1) % poly.length];
+    const len = Math.hypot(b.x - a.x, b.y - a.y);
+    const steps = Math.max(1, Math.round(len / spacingM));
+    for (let j = 0; j < steps; j++) {
+      const t = j / steps;
+      // triangular (approx-gaussian) noise so the outline reads as measured, not drawn
+      const nx = (Math.random() + Math.random() - 1) * noiseM;
+      const ny = (Math.random() + Math.random() - 1) * noiseM;
+      cloud.push({ x: a.x + (b.x - a.x) * t + nx, y: a.y + (b.y - a.y) * t + ny });
+    }
+  }
+  return cloud;
+}

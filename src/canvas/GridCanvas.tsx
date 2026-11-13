@@ -23,6 +23,8 @@ interface GridCanvasProps {
   lastScan?: LidarSweep | null;
   /** While scanning, only these waypoints are plotted (discovered as the robot reaches them). */
   revealedWaypointIds?: Set<string> | null;
+  /** When set (and not actively scanning), the car image is replaced by this stored outline cloud. */
+  staticOutline?: Point[] | null;
 }
 
 const OBSTACLE_CENTER_PX = { x: OBSTACLE.center.x * PIXELS_PER_UNIT, y: OBSTACLE.center.y * PIXELS_PER_UNIT };
@@ -39,6 +41,7 @@ export function GridCanvas({
   lidarPoints,
   lastScan,
   revealedWaypointIds,
+  staticOutline,
 }: GridCanvasProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const suppressNextClickRef = useRef(false);
@@ -90,6 +93,8 @@ export function GridCanvas({
       <Grid />
       {scanActive ? (
         <LidarCloud points={lidarPoints ?? []} lastScan={lastScan ?? null} />
+      ) : staticOutline && staticOutline.length > 0 ? (
+        <LidarCloud points={staticOutline} lastScan={null} />
       ) : (
         <Obstacle center={OBSTACLE_CENTER_PX} />
       )}

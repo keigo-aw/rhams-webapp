@@ -34,6 +34,7 @@ type Action =
   | { type: 'CONFIRM' }
   | { type: 'RESET_TO_DRAFT' }
   | { type: 'GENERATE_NEW'; waypointCount?: number }
+  | { type: 'MARK_SCANNED' }
   | { type: 'HYDRATE'; plan: Plan };
 
 function reducer(plan: Plan, action: Action): Plan {
@@ -87,7 +88,11 @@ function reducer(plan: Plan, action: Action): Plan {
       return { ...plan, status: 'confirmed', confirmedAt: Date.now() };
     }
     case 'RESET_TO_DRAFT': {
+      // Keep vehicleScanned — once discovered, the outline stays shown even while editing.
       return { ...plan, status: 'draft', confirmedAt: undefined };
+    }
+    case 'MARK_SCANNED': {
+      return plan.vehicleScanned ? plan : { ...plan, vehicleScanned: true };
     }
     case 'GENERATE_NEW': {
       return createDraftPlan(action.waypointCount);
@@ -165,6 +170,10 @@ export function usePlanStore() {
     dispatch({ type: 'GENERATE_NEW', waypointCount });
   }, []);
 
+  const markVehicleScanned = useCallback(() => {
+    dispatch({ type: 'MARK_SCANNED' });
+  }, []);
+
   return {
     plan,
     isLoading,
@@ -176,5 +185,6 @@ export function usePlanStore() {
     confirmPlan,
     resetToDraft,
     generateNewMockPath,
+    markVehicleScanned,
   };
 }

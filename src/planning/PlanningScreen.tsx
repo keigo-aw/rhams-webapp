@@ -1,10 +1,11 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Plan } from '../types/domain';
 import { GridCanvas } from '../canvas/GridCanvas';
 import { SidePanel } from '../panel/SidePanel';
 import { useAnimationController } from '../state/useAnimationController';
 import { useLidarScan } from '../state/useLidarScan';
 import { wobblePath } from '../utils/lidar';
+import { vehicleOutlineCloud } from '../canvas/vehicleModel';
 import { distance } from '../utils/geometry';
 
 /** Travel speed for the LIDAR scan lap, in metres/second — a slow crawl so the sweep reads as a real scan. */
@@ -18,6 +19,7 @@ interface PlanningScreenProps {
   deleteWaypoint: (id: string) => void;
   confirmPlan: () => void;
   resetToDraft: () => void;
+  markVehicleScanned: () => void;
 }
 
 export function PlanningScreen({
@@ -28,6 +30,7 @@ export function PlanningScreen({
   deleteWaypoint,
   confirmPlan,
   resetToDraft,
+  markVehicleScanned,
 }: PlanningScreenProps) {
   const { animationState, play, reset } = useAnimationController();
   const [selectedWaypointId, setSelectedWaypointId] = useState<string | null>(null);
@@ -35,6 +38,19 @@ export function PlanningScreen({
   const lidar = useLidarScan(animationState, scanActive);
   // Number of segments in the driven (wobbled) scan path, for mapping animation progress to a lap fraction.
   const scanTotalSegmentsRef = useRef(1);
+  const wasPlayingRef = useRef(false);
+
+  // A static outline cloud stands in for the car image once the vehicle has been scanned — including
+  // after a reload, when the live scan points are gone. Generated once.
+  const outlineCloud = useMemo(() => vehicleOutlineCloud(), []);
+
+  // When the live scan lap finishes, drop out of active-scan mode; the persisted outline takes over.
+  useEffect(() => {
+    if (scanActive && wasPlayingRef.current && !animationState.isPlaying) {
+      setScanActive(false);
+    }
+    wasPlayingRef.current = animationState.isPlaying;
+  }, [animationState.isPlaying, scanActive]);
 
   const sortedWaypoints = useMemo(() => [...plan.waypoints].sort((a, b) => a.order - b.order), [plan.waypoints]);
 
@@ -69,12 +85,9 @@ export function PlanningScreen({
 
   const handleConfirm = () => {
     confirmPlan();
-    if (scanActive) {
-      // Discovery flow: keep the scanned silhouette and plotted points on screen; the car image
-      // (and its planned route) stay hidden — the outline is what was found.
-      return;
-    }
-    // Plain flow: animate the confirmed route around the vehicle (incl. the closing leg).
+    // Once scanned, the outline persists and the car image never returns — no replay.
+    if (plan.vehicleScanned || scanActive) return;
+    // Plain flow (never scanned): animate the confirmed route around the vehicle (incl. the closing leg).
     play(sortedWaypoints.length > 1 ? [...sortedWaypoints, sortedWaypoints[0]] : sortedWaypoints);
   };
 
@@ -83,6 +96,7 @@ export function PlanningScreen({
     reset();
     lidar.clear();
     setScanActive(true);
+    markVehicleScanned(); // from now on the plan shows the discovered outline instead of the car
     // Drive a full lap (incl. the closing leg) so every side of the body gets scanned, with a
     // slight wander so the driven path isn't perfectly straight like a real platform tracking a route.
     const drivenPath = wobblePath([...sortedWaypoints, sortedWaypoints[0]]);
@@ -94,7 +108,7 @@ export function PlanningScreen({
     reset();
     setScanActive(false);
     lidar.clear();
-    resetToDraft();
+    resetToDraft(); // keeps vehicleScanned, so the outline stays shown while editing
   };
 
   return (
@@ -112,6 +126,7 @@ export function PlanningScreen({
           lidarPoints={lidar.points}
           lastScan={lidar.lastScan}
           revealedWaypointIds={revealedWaypointIds}
+          staticOutline={plan.vehicleScanned ? outlineCloud : null}
         />
       </main>
       <SidePanel
