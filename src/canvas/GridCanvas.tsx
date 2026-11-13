@@ -21,6 +21,8 @@ interface GridCanvasProps {
   scanActive?: boolean;
   lidarPoints?: Point[];
   lastScan?: LidarSweep | null;
+  /** While scanning, only these waypoints are plotted (discovered as the robot reaches them). */
+  revealedWaypointIds?: Set<string> | null;
 }
 
 const OBSTACLE_CENTER_PX = { x: OBSTACLE.center.x * PIXELS_PER_UNIT, y: OBSTACLE.center.y * PIXELS_PER_UNIT };
@@ -36,6 +38,7 @@ export function GridCanvas({
   scanActive = false,
   lidarPoints,
   lastScan,
+  revealedWaypointIds,
 }: GridCanvasProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const suppressNextClickRef = useRef(false);
@@ -90,12 +93,13 @@ export function GridCanvas({
       ) : (
         <Obstacle center={OBSTACLE_CENTER_PX} />
       )}
-      {/* During a scan the planned waypoints and route are hidden — only the robot drives and the
-          LIDAR point cloud appears. */}
+      {/* Path discovery: during a scan the planned route is hidden, the vehicle silhouette emerges
+          from the LIDAR cloud, and waypoints are plotted one by one as the robot reaches them. */}
       {!scanActive && <PathLine points={pathPoints} />}
       {animationState.isPlaying && tracedPixelPoints.length > 1 && <PathLine points={tracedPixelPoints} traced />}
-      {!scanActive &&
-        sorted.map((wp, i) => (
+      {sorted.map((wp, i) => {
+        if (scanActive && !revealedWaypointIds?.has(wp.id)) return null;
+        return (
           <WaypointMarker
             key={wp.id}
             waypoint={wp}
@@ -107,7 +111,8 @@ export function GridCanvas({
             onDelete={onDeleteWaypoint}
             onInteractionStart={handleMarkerInteractionStart}
           />
-        ))}
+        );
+      })}
       {animationState.isPlaying && <RobotMarker position={robotPixelPosition} />}
     </svg>
   );
