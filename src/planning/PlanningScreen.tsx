@@ -4,10 +4,9 @@ import { GridCanvas } from '../canvas/GridCanvas';
 import { SidePanel } from '../panel/SidePanel';
 import { useAnimationController } from '../state/useAnimationController';
 import { useLidarScan } from '../state/useLidarScan';
-import { WAYPOINT_COUNT_RANGE } from '../data/mockPathGenerator';
 
-/** Travel speed for the LIDAR scan lap, in metres/second — slower than the plain loop so the sweep reads. */
-const SCAN_SPEED_UNITS_PER_SECOND = 6;
+/** Travel speed for the LIDAR scan lap, in metres/second — a slow crawl so the sweep reads as a real scan. */
+const SCAN_SPEED_UNITS_PER_SECOND = 3;
 
 interface PlanningScreenProps {
   plan: Plan;
@@ -17,7 +16,6 @@ interface PlanningScreenProps {
   deleteWaypoint: (id: string) => void;
   confirmPlan: () => void;
   resetToDraft: () => void;
-  generateNewMockPath: (waypointCount?: number) => void;
 }
 
 export function PlanningScreen({
@@ -28,11 +26,9 @@ export function PlanningScreen({
   deleteWaypoint,
   confirmPlan,
   resetToDraft,
-  generateNewMockPath,
 }: PlanningScreenProps) {
   const { animationState, play, reset } = useAnimationController();
   const [selectedWaypointId, setSelectedWaypointId] = useState<string | null>(null);
-  const [waypointCount, setWaypointCount] = useState(WAYPOINT_COUNT_RANGE.default);
   const [scanActive, setScanActive] = useState(false);
   const lidar = useLidarScan(animationState, scanActive);
 
@@ -62,14 +58,6 @@ export function PlanningScreen({
     resetToDraft();
   };
 
-  const handleGenerateNew = () => {
-    reset();
-    setScanActive(false);
-    lidar.clear();
-    generateNewMockPath(waypointCount);
-    setSelectedWaypointId(null);
-  };
-
   return (
     <div className="app-layout">
       <main className="canvas-area">
@@ -93,12 +81,9 @@ export function PlanningScreen({
         onSelect={setSelectedWaypointId}
         onReorder={reorderWaypoint}
         onDelete={deleteWaypoint}
-        onGenerateNew={handleGenerateNew}
         onConfirm={handleConfirm}
         onResetToDraft={handleResetToDraft}
         onScan={handleScan}
-        waypointCount={waypointCount}
-        onWaypointCountChange={setWaypointCount}
       />
     </div>
   );

@@ -25,7 +25,6 @@ function App() {
     deleteWaypoint,
     confirmPlan,
     resetToDraft,
-    generateNewMockPath,
   } = usePlanStore();
   const [screen, setScreen] = useState<Screen>('plan');
   const { theme, toggleTheme } = useTheme();
@@ -78,7 +77,6 @@ function App() {
                 deleteWaypoint={deleteWaypoint}
                 confirmPlan={confirmPlan}
                 resetToDraft={resetToDraft}
-                generateNewMockPath={generateNewMockPath}
               />
             )}
             {activeScreen === 'measurement' && (

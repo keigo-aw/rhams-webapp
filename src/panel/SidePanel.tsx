@@ -10,12 +10,9 @@ interface SidePanelProps {
   onSelect: (id: string) => void;
   onReorder: (id: string, direction: 'up' | 'down') => void;
   onDelete: (id: string) => void;
-  onGenerateNew: () => void;
   onConfirm: () => void;
   onResetToDraft: () => void;
   onScan: () => void;
-  waypointCount: number;
-  onWaypointCountChange: (n: number) => void;
 }
 
 export function SidePanel({
@@ -25,12 +22,9 @@ export function SidePanel({
   onSelect,
   onReorder,
   onDelete,
-  onGenerateNew,
   onConfirm,
   onResetToDraft,
   onScan,
-  waypointCount,
-  onWaypointCountChange,
 }: SidePanelProps) {
   return (
     <aside className="side-panel">
@@ -40,9 +34,6 @@ export function SidePanel({
         isPlaying={isPlaying}
         canConfirm={plan.waypoints.length >= MIN_CONFIRMABLE_WAYPOINTS}
         canScan={plan.waypoints.length >= 2}
-        waypointCount={waypointCount}
-        onWaypointCountChange={onWaypointCountChange}
-        onGenerateNew={onGenerateNew}
         onConfirm={onConfirm}
         onResetToDraft={onResetToDraft}
         onScan={onScan}

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Point, RobotAnimationState } from '../types/domain';
 import { vehicleBodyPolygon } from '../canvas/vehicleModel';
-import { binKey, castScan } from '../utils/lidar';
+import { REALISTIC_SCAN_OPTIONS, binKey, castScan } from '../utils/lidar';
 
 export interface LidarSweep {
   origin: Point;
@@ -35,7 +35,7 @@ export function useLidarScan(animationState: RobotAnimationState, active: boolea
       setLastScan(null); // drop the beams once the run stops (no-op if already null)
       return;
     }
-    const hits = castScan(pos, polygonRef.current);
+    const hits = castScan(pos, polygonRef.current, REALISTIC_SCAN_OPTIONS);
     setLastScan({ origin: pos, hits });
 
     const fresh: Point[] = [];

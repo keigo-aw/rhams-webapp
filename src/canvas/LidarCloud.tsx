@@ -30,7 +30,7 @@ export function LidarCloud({ points, lastScan }: LidarCloudProps) {
           key={`${p.x.toFixed(2)},${p.y.toFixed(2)}`}
           cx={p.x * PIXELS_PER_UNIT}
           cy={p.y * PIXELS_PER_UNIT}
-          r={1.5}
+          r={1}
           className="lidar-point"
         />
       ))}
