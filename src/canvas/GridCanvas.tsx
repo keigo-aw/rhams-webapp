@@ -1,7 +1,9 @@
 import { useRef, type MouseEvent } from 'react';
-import type { Plan, RobotAnimationState } from '../types/domain';
+import type { Plan, Point, RobotAnimationState } from '../types/domain';
+import type { LidarSweep } from '../state/useLidarScan';
 import { Grid } from './Grid';
 import { Obstacle } from './Obstacle';
+import { LidarCloud } from './LidarCloud';
 import { PathLine } from './PathLine';
 import { RobotMarker } from './RobotMarker';
 import { WaypointMarker } from './WaypointMarker';
@@ -15,6 +17,10 @@ interface GridCanvasProps {
   onAddWaypoint: (x: number, y: number) => void;
   onSelectWaypoint: (id: string | null) => void;
   onDeleteWaypoint: (id: string) => void;
+  /** When scanning, the vehicle body is hidden and the LIDAR point cloud is drawn in its place. */
+  scanActive?: boolean;
+  lidarPoints?: Point[];
+  lastScan?: LidarSweep | null;
 }
 
 const OBSTACLE_CENTER_PX = { x: OBSTACLE.center.x * PIXELS_PER_UNIT, y: OBSTACLE.center.y * PIXELS_PER_UNIT };
@@ -27,6 +33,9 @@ export function GridCanvas({
   onAddWaypoint,
   onSelectWaypoint,
   onDeleteWaypoint,
+  scanActive = false,
+  lidarPoints,
+  lastScan,
 }: GridCanvasProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const suppressNextClickRef = useRef(false);
@@ -76,7 +85,11 @@ export function GridCanvas({
       onClick={handleClick}
     >
       <Grid />
-      <Obstacle center={OBSTACLE_CENTER_PX} />
+      {scanActive ? (
+        <LidarCloud points={lidarPoints ?? []} lastScan={lastScan ?? null} />
+      ) : (
+        <Obstacle center={OBSTACLE_CENTER_PX} />
+      )}
       <PathLine points={pathPoints} />
       {animationState.isPlaying && tracedPixelPoints.length > 1 && <PathLine points={tracedPixelPoints} traced />}
       {sorted.map((wp, i) => (

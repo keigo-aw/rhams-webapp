@@ -26,3 +26,23 @@ export function distanceToSegment(p: Point, a: Point, b: Point): number {
 export function segmentIntersectsCircle(a: Point, b: Point, center: Point, radius: number): boolean {
   return distanceToSegment(center, a, b) <= radius;
 }
+
+/**
+ * Distance along a ray (from `origin` in unit direction `dir`) to where it first
+ * crosses the segment a-b, or null if it never does. `dir` is assumed to be a unit
+ * vector, so the returned value is in the same units as the points.
+ */
+export function raySegmentIntersectionT(origin: Point, dir: Point, a: Point, b: Point): number | null {
+  const v1x = origin.x - a.x;
+  const v1y = origin.y - a.y;
+  const v2x = b.x - a.x;
+  const v2y = b.y - a.y;
+  const v3x = -dir.y;
+  const v3y = dir.x;
+  const denom = v2x * v3x + v2y * v3y;
+  if (Math.abs(denom) < 1e-9) return null; // ray parallel to the segment
+  const t = (v2x * v1y - v2y * v1x) / denom; // distance along the ray
+  const u = (v1x * v3x + v1y * v3y) / denom; // position along the segment (0..1)
+  if (t >= 0 && u >= 0 && u <= 1) return t;
+  return null;
+}

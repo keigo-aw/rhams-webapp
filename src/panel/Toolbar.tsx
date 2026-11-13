@@ -7,14 +7,16 @@ interface ToolbarProps {
   status: PlanStatus;
   isPlaying: boolean;
   canConfirm: boolean;
+  canScan: boolean;
   waypointCount: number;
   onWaypointCountChange: (n: number) => void;
   onGenerateNew: () => void;
   onConfirm: () => void;
   onResetToDraft: () => void;
+  onScan: () => void;
 }
 
-export function Toolbar({ status, isPlaying, canConfirm, waypointCount, onWaypointCountChange, onGenerateNew, onConfirm, onResetToDraft }: ToolbarProps) {
+export function Toolbar({ status, isPlaying, canConfirm, canScan, waypointCount, onWaypointCountChange, onGenerateNew, onConfirm, onResetToDraft, onScan }: ToolbarProps) {
   const isConfirmed = status === 'confirmed';
 
   return (
@@ -36,6 +38,15 @@ export function Toolbar({ status, isPlaying, canConfirm, waypointCount, onWaypoi
       <div className="toolbar-actions">
         <button type="button" onClick={onGenerateNew}>
           Generate New Mock Path
+        </button>
+        <button
+          type="button"
+          className="btn-scan"
+          disabled={!canScan || isPlaying}
+          title={canScan ? 'Drive the loop and map the vehicle with LIDAR' : 'Add at least 2 waypoints to scan'}
+          onClick={onScan}
+        >
+          LIDAR Scan
         </button>
         {isConfirmed ? (
           <button type="button" className="btn-primary" disabled={isPlaying} onClick={onResetToDraft}>

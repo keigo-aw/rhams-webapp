@@ -3,7 +3,11 @@ import type { Plan } from '../types/domain';
 import { GridCanvas } from '../canvas/GridCanvas';
 import { SidePanel } from '../panel/SidePanel';
 import { useAnimationController } from '../state/useAnimationController';
+import { useLidarScan } from '../state/useLidarScan';
 import { WAYPOINT_COUNT_RANGE } from '../data/mockPathGenerator';
+
+/** Travel speed for the LIDAR scan lap, in metres/second — slower than the plain loop so the sweep reads. */
+const SCAN_SPEED_UNITS_PER_SECOND = 6;
 
 interface PlanningScreenProps {
   plan: Plan;
@@ -29,21 +33,39 @@ export function PlanningScreen({
   const { animationState, play, reset } = useAnimationController();
   const [selectedWaypointId, setSelectedWaypointId] = useState<string | null>(null);
   const [waypointCount, setWaypointCount] = useState(WAYPOINT_COUNT_RANGE.default);
+  const [scanActive, setScanActive] = useState(false);
+  const lidar = useLidarScan(animationState, scanActive);
 
   const handleConfirm = () => {
     const sorted = [...plan.waypoints].sort((a, b) => a.order - b.order);
+    setScanActive(false);
+    lidar.clear();
     confirmPlan();
     // Animate the closing leg too, from the last waypoint back to the first.
     play(sorted.length > 1 ? [...sorted, sorted[0]] : sorted);
   };
 
+  const handleScan = () => {
+    const sorted = [...plan.waypoints].sort((a, b) => a.order - b.order);
+    if (sorted.length < 2) return;
+    reset();
+    lidar.clear();
+    setScanActive(true);
+    // Drive a full lap (incl. the closing leg) so every side of the body gets scanned.
+    play([...sorted, sorted[0]], { speedUnitsPerSecond: SCAN_SPEED_UNITS_PER_SECOND, dwellSeconds: 0 });
+  };
+
   const handleResetToDraft = () => {
     reset();
+    setScanActive(false);
+    lidar.clear();
     resetToDraft();
   };
 
   const handleGenerateNew = () => {
     reset();
+    setScanActive(false);
+    lidar.clear();
     generateNewMockPath(waypointCount);
     setSelectedWaypointId(null);
   };
@@ -59,6 +81,9 @@ export function PlanningScreen({
           onAddWaypoint={addWaypoint}
           onSelectWaypoint={setSelectedWaypointId}
           onDeleteWaypoint={deleteWaypoint}
+          scanActive={scanActive}
+          lidarPoints={lidar.points}
+          lastScan={lidar.lastScan}
         />
       </main>
       <SidePanel
@@ -71,6 +96,7 @@ export function PlanningScreen({
         onGenerateNew={handleGenerateNew}
         onConfirm={handleConfirm}
         onResetToDraft={handleResetToDraft}
+        onScan={handleScan}
         waypointCount={waypointCount}
         onWaypointCountChange={setWaypointCount}
       />

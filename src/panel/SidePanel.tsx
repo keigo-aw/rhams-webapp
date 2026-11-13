@@ -13,6 +13,7 @@ interface SidePanelProps {
   onGenerateNew: () => void;
   onConfirm: () => void;
   onResetToDraft: () => void;
+  onScan: () => void;
   waypointCount: number;
   onWaypointCountChange: (n: number) => void;
 }
@@ -27,6 +28,7 @@ export function SidePanel({
   onGenerateNew,
   onConfirm,
   onResetToDraft,
+  onScan,
   waypointCount,
   onWaypointCountChange,
 }: SidePanelProps) {
@@ -37,11 +39,13 @@ export function SidePanel({
         status={plan.status}
         isPlaying={isPlaying}
         canConfirm={plan.waypoints.length >= MIN_CONFIRMABLE_WAYPOINTS}
+        canScan={plan.waypoints.length >= 2}
         waypointCount={waypointCount}
         onWaypointCountChange={onWaypointCountChange}
         onGenerateNew={onGenerateNew}
         onConfirm={onConfirm}
         onResetToDraft={onResetToDraft}
+        onScan={onScan}
       />
       <WaypointList plan={plan} selectedId={selectedId} onSelect={onSelect} onReorder={onReorder} onDelete={onDelete} />
     </aside>

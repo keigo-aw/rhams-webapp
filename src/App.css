@@ -67,6 +67,10 @@
 .robot-body { fill: var(--outline); stroke: var(--success); stroke-width: 2; }
 .robot-core { fill: var(--success); }
 
+/* LIDAR scan: the point cloud reconstructs the vehicle body as the robot orbits. */
+.lidar-point { fill: var(--accent); filter: drop-shadow(0 0 2px var(--accent)); }
+.lidar-beam { stroke: var(--accent); stroke-width: 0.75; opacity: 0.12; }
+
 .measurement-marker { fill: var(--outline); stroke: var(--text); stroke-width: 2; cursor: pointer; }
 .measurement-marker.selected { fill: var(--success); stroke: var(--success); }
 
@@ -81,6 +85,7 @@
 .toolbar-actions button:disabled { opacity: 0.4; cursor: not-allowed; }
 .toolbar-actions button.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--surface-lowest); }
 .toolbar-actions button.btn-danger { color: var(--danger); }
+.toolbar-actions button.btn-scan { border-color: var(--accent); color: var(--accent); }
 
 .waypoint-count-field { display: flex; flex-direction: column; gap: 4px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text); }
 .waypoint-count-field input { font: inherit; font-family: var(--mono); width: 72px; padding: 6px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text-h); }
