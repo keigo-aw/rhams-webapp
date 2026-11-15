@@ -4,7 +4,7 @@ interface ObstacleProps {
   center: Point;
 }
 
-/** The parked "vehicle under test" that the travelled path routes around. */
+/** The parked "Unit Under Test" that the travelled path routes around. */
 export function Obstacle({ center }: ObstacleProps) {
   return (
     <g transform={`translate(${center.x}, ${center.y})`}>
@@ -17,7 +17,7 @@ export function Obstacle({ center }: ObstacleProps) {
       <circle cx={37.5} cy={-44} r={3} className="obstacle-mirror" />
       <circle cx={37.5} cy={44} r={3} className="obstacle-mirror" />
       <text y={-52} textAnchor="middle" className="obstacle-label">
-        vehicle under test
+        Unit Under Test
       </text>
     </g>
   );
