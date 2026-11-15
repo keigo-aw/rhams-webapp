@@ -40,6 +40,7 @@ export function HistoryScreen() {
                 readings={survey.selectedRecord.readings}
                 revealedIds={new Set(survey.selectedRecord.waypoints.map((wp) => wp.id))}
                 animationState={IDLE_ANIMATION_STATE}
+                vehicleScanned
               />
               <SurveyStats
                 readings={survey.selectedRecord.readings.map((r) => r.fieldStrengthVPerM)}
