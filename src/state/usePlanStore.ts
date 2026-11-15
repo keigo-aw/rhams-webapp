@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import type { Plan, Waypoint } from '../types/domain';
+import type { Plan, Point, Waypoint } from '../types/domain';
 import { GRID_BOUNDS, OBSTACLE, clampToBounds } from '../canvas/coordinates';
 import { WAYPOINT_COUNT_RANGE, mockPathGenerator } from '../data/mockPathGenerator';
 import { generateId } from '../utils/id';
@@ -35,6 +35,7 @@ type Action =
   | { type: 'RESET_TO_DRAFT' }
   | { type: 'GENERATE_NEW'; waypointCount?: number }
   | { type: 'SET_PATH'; waypoints: Waypoint[] }
+  | { type: 'SET_SCAN_PATH'; path: Point[] }
   | { type: 'MARK_SCANNED' }
   | { type: 'CLEAR_ALL' }
   | { type: 'HYDRATE'; plan: Plan };
@@ -44,8 +45,10 @@ function reducer(plan: Plan, action: Action): Plan {
     case 'MOVE_WAYPOINT': {
       if (plan.status !== 'draft') return plan;
       const clamped = clampToBounds({ x: action.x, y: action.y });
+      // Adjusting a point makes the scanned curvy route stale — fall back to straight segments.
       return {
         ...plan,
+        scanPath: undefined,
         waypoints: plan.waypoints.map((wp) =>
           wp.id === action.id ? { ...wp, ...clamped } : wp,
         ),
@@ -60,7 +63,7 @@ function reducer(plan: Plan, action: Action): Plan {
         isMeasurementPoint: true,
         ...clamped,
       };
-      return { ...plan, waypoints: [...plan.waypoints, waypoint] };
+      return { ...plan, scanPath: undefined, waypoints: [...plan.waypoints, waypoint] };
     }
     case 'TOGGLE_MEASUREMENT_POINT': {
       // Allowed on a confirmed plan too — marking measurement points happens after the route is locked in.
@@ -79,11 +82,11 @@ function reducer(plan: Plan, action: Action): Plan {
       if (swapWith < 0 || swapWith >= plan.waypoints.length) return plan;
       const next = [...plan.waypoints];
       [next[index], next[swapWith]] = [next[swapWith], next[index]];
-      return { ...plan, waypoints: renumber(next) };
+      return { ...plan, scanPath: undefined, waypoints: renumber(next) };
     }
     case 'DELETE_WAYPOINT': {
       if (plan.status !== 'draft') return plan;
-      return { ...plan, waypoints: renumber(plan.waypoints.filter((wp) => wp.id !== action.id)) };
+      return { ...plan, scanPath: undefined, waypoints: renumber(plan.waypoints.filter((wp) => wp.id !== action.id)) };
     }
     case 'CONFIRM': {
       if (plan.waypoints.length < MIN_CONFIRMABLE_WAYPOINTS) return plan;
@@ -97,8 +100,8 @@ function reducer(plan: Plan, action: Action): Plan {
       return plan.vehicleScanned ? plan : { ...plan, vehicleScanned: true };
     }
     case 'CLEAR_ALL': {
-      // Wipe all waypoints and the scanned outline — back to a clean, empty draft (car shown again).
-      return { ...plan, status: 'draft', confirmedAt: undefined, waypoints: [], vehicleScanned: false };
+      // Wipe all waypoints and the scanned outline/path — back to a clean, empty draft (car shown again).
+      return { ...plan, status: 'draft', confirmedAt: undefined, waypoints: [], vehicleScanned: false, scanPath: undefined };
     }
     case 'GENERATE_NEW': {
       return createDraftPlan(action.waypointCount);
@@ -106,6 +109,9 @@ function reducer(plan: Plan, action: Action): Plan {
     case 'SET_PATH': {
       // Replace the route in place (same plan id), back to draft. vehicleScanned is preserved.
       return { ...plan, status: 'draft', confirmedAt: undefined, waypoints: action.waypoints };
+    }
+    case 'SET_SCAN_PATH': {
+      return { ...plan, scanPath: action.path };
     }
     case 'HYDRATE': {
       return action.plan;
@@ -192,6 +198,10 @@ export function usePlanStore() {
     dispatch({ type: 'CLEAR_ALL' });
   }, []);
 
+  const setScanPath = useCallback((path: Point[]) => {
+    dispatch({ type: 'SET_SCAN_PATH', path });
+  }, []);
+
   /** A fresh default path at the minimum waypoint count, for restarting discovery from a clean loop. */
   const buildDefaultPath = useCallback(
     () => mockPathGenerator.generateTravelledPath({ obstacle: OBSTACLE, bounds: GRID_BOUNDS, waypointCount: WAYPOINT_COUNT_RANGE.min }),
@@ -213,5 +223,6 @@ export function usePlanStore() {
     setPath,
     buildDefaultPath,
     clearAll,
+    setScanPath,
   };
 }

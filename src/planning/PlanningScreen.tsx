@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Plan, Waypoint } from '../types/domain';
+import type { Plan, Point, Waypoint } from '../types/domain';
 import { GridCanvas } from '../canvas/GridCanvas';
 import { SidePanel } from '../panel/SidePanel';
 import { useAnimationController } from '../state/useAnimationController';
@@ -23,6 +23,7 @@ interface PlanningScreenProps {
   setPath: (waypoints: Waypoint[]) => void;
   buildDefaultPath: () => Waypoint[];
   clearAll: () => void;
+  setScanPath: (path: Point[]) => void;
 }
 
 export function PlanningScreen({
@@ -37,6 +38,7 @@ export function PlanningScreen({
   setPath,
   buildDefaultPath,
   clearAll,
+  setScanPath,
 }: PlanningScreenProps) {
   const { animationState, play, reset } = useAnimationController();
   const [selectedWaypointId, setSelectedWaypointId] = useState<string | null>(null);
@@ -109,6 +111,7 @@ export function PlanningScreen({
     // Drive a full lap (incl. the closing leg) so every side of the body gets scanned, with a
     // slight wander so the driven path isn't perfectly straight like a real platform tracking a route.
     const drivenPath = wobblePath([...freshPath, freshPath[0]]);
+    setScanPath(drivenPath); // the dotted route follows this wandering path after the scan
     scanTotalSegmentsRef.current = Math.max(1, drivenPath.length - 1);
     play(drivenPath, { speedUnitsPerSecond: SCAN_SPEED_UNITS_PER_SECOND, dwellSeconds: 0 });
   };
@@ -144,6 +147,7 @@ export function PlanningScreen({
           lastScan={lidar.lastScan}
           revealedWaypointIds={revealedWaypointIds}
           staticOutline={plan.vehicleScanned ? outlineCloud : null}
+          dottedPath={plan.scanPath ?? null}
         />
       </main>
       <SidePanel

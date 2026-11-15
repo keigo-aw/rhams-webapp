@@ -29,6 +29,7 @@ function App() {
     setPath,
     buildDefaultPath,
     clearAll,
+    setScanPath,
   } = usePlanStore();
   const [screen, setScreen] = useState<Screen>('plan');
   const { theme, toggleTheme } = useTheme();
@@ -85,6 +86,7 @@ function App() {
                 setPath={setPath}
                 buildDefaultPath={buildDefaultPath}
                 clearAll={clearAll}
+                setScanPath={setScanPath}
               />
             )}
             {activeScreen === 'measurement' && (

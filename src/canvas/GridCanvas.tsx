@@ -25,6 +25,8 @@ interface GridCanvasProps {
   revealedWaypointIds?: Set<string> | null;
   /** When set (and not actively scanning), the car image is replaced by this stored outline cloud. */
   staticOutline?: Point[] | null;
+  /** When set, the dotted planned route follows this path (the wandering route the robot drove). */
+  dottedPath?: Point[] | null;
 }
 
 const OBSTACLE_CENTER_PX = { x: OBSTACLE.center.x * PIXELS_PER_UNIT, y: OBSTACLE.center.y * PIXELS_PER_UNIT };
@@ -42,16 +44,21 @@ export function GridCanvas({
   lastScan,
   revealedWaypointIds,
   staticOutline,
+  dottedPath,
 }: GridCanvasProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const suppressNextClickRef = useRef(false);
   const sorted = [...plan.waypoints].sort((a, b) => a.order - b.order);
   const isDraft = plan.status === 'draft';
 
+  // After a scan the dotted route follows the wandering path the robot drove; otherwise it connects
+  // the waypoints in straight segments.
   const pathPoints =
-    sorted.length > 0
-      ? [...sorted, sorted[0]].map((wp) => ({ x: wp.x * PIXELS_PER_UNIT, y: wp.y * PIXELS_PER_UNIT }))
-      : [];
+    dottedPath && dottedPath.length > 1
+      ? dottedPath.map((p) => ({ x: p.x * PIXELS_PER_UNIT, y: p.y * PIXELS_PER_UNIT }))
+      : sorted.length > 0
+        ? [...sorted, sorted[0]].map((wp) => ({ x: wp.x * PIXELS_PER_UNIT, y: wp.y * PIXELS_PER_UNIT }))
+        : [];
   const tracedPixelPoints = animationState.tracedPoints.map((p) => ({ x: p.x * PIXELS_PER_UNIT, y: p.y * PIXELS_PER_UNIT }));
   const robotPixelPosition = { x: animationState.position.x * PIXELS_PER_UNIT, y: animationState.position.y * PIXELS_PER_UNIT };
 

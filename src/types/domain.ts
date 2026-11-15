@@ -20,6 +20,8 @@ export interface Plan {
   confirmedAt?: number;
   /** Once the vehicle has been LIDAR-scanned, the plan shows the discovered outline instead of the car image. */
   vehicleScanned?: boolean;
+  /** The wandering path the robot actually drove during the scan; the dotted route follows it after a scan. */
+  scanPath?: Point[];
 }
 
 export interface Obstacle {
