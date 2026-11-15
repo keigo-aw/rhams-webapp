@@ -7,12 +7,14 @@ interface ToolbarProps {
   isPlaying: boolean;
   canConfirm: boolean;
   canScan: boolean;
+  canClear: boolean;
   onConfirm: () => void;
   onResetToDraft: () => void;
   onScan: () => void;
+  onClear: () => void;
 }
 
-export function Toolbar({ status, isPlaying, canConfirm, canScan, onConfirm, onResetToDraft, onScan }: ToolbarProps) {
+export function Toolbar({ status, isPlaying, canConfirm, canScan, canClear, onConfirm, onResetToDraft, onScan, onClear }: ToolbarProps) {
   const isConfirmed = status === 'confirmed';
 
   return (
@@ -22,8 +24,8 @@ export function Toolbar({ status, isPlaying, canConfirm, canScan, onConfirm, onR
         <button
           type="button"
           className="btn-scan"
-          disabled={!canScan || isPlaying}
-          title={canScan ? 'Drive the loop and map the vehicle with LIDAR' : 'Add at least 2 waypoints to scan'}
+          disabled={!canScan}
+          title="Drive the default loop and map the vehicle with LIDAR"
           onClick={onScan}
         >
           LIDAR Scan
@@ -43,6 +45,17 @@ export function Toolbar({ status, isPlaying, canConfirm, canScan, onConfirm, onR
             Confirm
           </button>
         )}
+      </div>
+      <div className="toolbar-actions">
+        <button
+          type="button"
+          className="btn-danger"
+          disabled={!canClear}
+          title="Remove all waypoints and clear the scanned LIDAR outline"
+          onClick={onClear}
+        >
+          Clear All
+        </button>
       </div>
     </div>
   );

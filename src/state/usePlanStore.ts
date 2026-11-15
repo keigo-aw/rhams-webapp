@@ -36,6 +36,7 @@ type Action =
   | { type: 'GENERATE_NEW'; waypointCount?: number }
   | { type: 'SET_PATH'; waypoints: Waypoint[] }
   | { type: 'MARK_SCANNED' }
+  | { type: 'CLEAR_ALL' }
   | { type: 'HYDRATE'; plan: Plan };
 
 function reducer(plan: Plan, action: Action): Plan {
@@ -94,6 +95,10 @@ function reducer(plan: Plan, action: Action): Plan {
     }
     case 'MARK_SCANNED': {
       return plan.vehicleScanned ? plan : { ...plan, vehicleScanned: true };
+    }
+    case 'CLEAR_ALL': {
+      // Wipe all waypoints and the scanned outline — back to a clean, empty draft (car shown again).
+      return { ...plan, status: 'draft', confirmedAt: undefined, waypoints: [], vehicleScanned: false };
     }
     case 'GENERATE_NEW': {
       return createDraftPlan(action.waypointCount);
@@ -183,6 +188,10 @@ export function usePlanStore() {
     dispatch({ type: 'SET_PATH', waypoints });
   }, []);
 
+  const clearAll = useCallback(() => {
+    dispatch({ type: 'CLEAR_ALL' });
+  }, []);
+
   /** A fresh default path at the minimum waypoint count, for restarting discovery from a clean loop. */
   const buildDefaultPath = useCallback(
     () => mockPathGenerator.generateTravelledPath({ obstacle: OBSTACLE, bounds: GRID_BOUNDS, waypointCount: WAYPOINT_COUNT_RANGE.min }),
@@ -203,5 +212,6 @@ export function usePlanStore() {
     markVehicleScanned,
     setPath,
     buildDefaultPath,
+    clearAll,
   };
 }

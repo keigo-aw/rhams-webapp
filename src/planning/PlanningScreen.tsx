@@ -22,6 +22,7 @@ interface PlanningScreenProps {
   markVehicleScanned: () => void;
   setPath: (waypoints: Waypoint[]) => void;
   buildDefaultPath: () => Waypoint[];
+  clearAll: () => void;
 }
 
 export function PlanningScreen({
@@ -35,6 +36,7 @@ export function PlanningScreen({
   markVehicleScanned,
   setPath,
   buildDefaultPath,
+  clearAll,
 }: PlanningScreenProps) {
   const { animationState, play, reset } = useAnimationController();
   const [selectedWaypointId, setSelectedWaypointId] = useState<string | null>(null);
@@ -118,6 +120,14 @@ export function PlanningScreen({
     resetToDraft(); // keeps vehicleScanned, so the outline stays shown while editing
   };
 
+  const handleClear = () => {
+    reset();
+    setScanActive(false);
+    lidar.clear();
+    setSelectedWaypointId(null);
+    clearAll(); // wipes waypoints and the scanned outline — back to a clean canvas with the car shown
+  };
+
   return (
     <div className="app-layout">
       <main className="canvas-area">
@@ -146,6 +156,7 @@ export function PlanningScreen({
         onConfirm={handleConfirm}
         onResetToDraft={handleResetToDraft}
         onScan={handleScan}
+        onClear={handleClear}
       />
     </div>
   );

@@ -28,6 +28,7 @@ function App() {
     markVehicleScanned,
     setPath,
     buildDefaultPath,
+    clearAll,
   } = usePlanStore();
   const [screen, setScreen] = useState<Screen>('plan');
   const { theme, toggleTheme } = useTheme();
@@ -83,6 +84,7 @@ function App() {
                 markVehicleScanned={markVehicleScanned}
                 setPath={setPath}
                 buildDefaultPath={buildDefaultPath}
+                clearAll={clearAll}
               />
             )}
             {activeScreen === 'measurement' && (

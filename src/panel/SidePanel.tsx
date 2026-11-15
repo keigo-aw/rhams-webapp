@@ -13,6 +13,7 @@ interface SidePanelProps {
   onConfirm: () => void;
   onResetToDraft: () => void;
   onScan: () => void;
+  onClear: () => void;
 }
 
 export function SidePanel({
@@ -25,6 +26,7 @@ export function SidePanel({
   onConfirm,
   onResetToDraft,
   onScan,
+  onClear,
 }: SidePanelProps) {
   return (
     <aside className="side-panel">
@@ -33,10 +35,12 @@ export function SidePanel({
         status={plan.status}
         isPlaying={isPlaying}
         canConfirm={plan.waypoints.length >= MIN_CONFIRMABLE_WAYPOINTS}
-        canScan={plan.waypoints.length >= 2}
+        canScan={!isPlaying}
+        canClear={plan.waypoints.length > 0 || Boolean(plan.vehicleScanned)}
         onConfirm={onConfirm}
         onResetToDraft={onResetToDraft}
         onScan={onScan}
+        onClear={onClear}
       />
       <WaypointList plan={plan} selectedId={selectedId} onSelect={onSelect} onReorder={onReorder} onDelete={onDelete} />
     </aside>
