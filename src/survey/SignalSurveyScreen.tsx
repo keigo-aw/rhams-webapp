@@ -35,6 +35,7 @@ export function SignalSurveyScreen({ plan }: SignalSurveyScreenProps) {
           revealedIds={revealedIds}
           animationState={animationState}
           showSignalSource={false}
+          vehicleScanned={plan.vehicleScanned}
         />
       </main>
       <SignalSidePanel

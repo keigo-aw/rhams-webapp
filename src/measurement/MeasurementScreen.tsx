@@ -23,7 +23,7 @@ export function MeasurementScreen({ plan, toggleMeasurementPoint }: MeasurementS
   return (
     <div className="app-layout">
       <main className="canvas-area">
-        <MeasurementCanvas waypoints={plan.waypoints} onToggle={toggleMeasurementPoint} />
+        <MeasurementCanvas waypoints={plan.waypoints} onToggle={toggleMeasurementPoint} vehicleScanned={plan.vehicleScanned} />
       </main>
       <MeasurementSidePanel
         waypoints={plan.waypoints}

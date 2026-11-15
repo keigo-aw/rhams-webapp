@@ -1,9 +1,9 @@
 import type { RobotAnimationState, SignalReading, Waypoint } from '../types/domain';
 import { Grid } from '../canvas/Grid';
-import { Obstacle } from '../canvas/Obstacle';
+import { VehicleBody } from '../canvas/VehicleBody';
 import { PathLine } from '../canvas/PathLine';
 import { RobotMarker } from '../canvas/RobotMarker';
-import { OBSTACLE, PIXELS_PER_UNIT } from '../canvas/coordinates';
+import { PIXELS_PER_UNIT } from '../canvas/coordinates';
 import { SignalMarker } from './SignalMarker';
 import { SignalSourceMarker } from './SignalSourceMarker';
 
@@ -13,11 +13,10 @@ interface SignalCanvasProps {
   revealedIds: Set<string>;
   animationState: RobotAnimationState;
   showSignalSource?: boolean;
+  vehicleScanned?: boolean;
 }
 
-const OBSTACLE_CENTER_PX = { x: OBSTACLE.center.x * PIXELS_PER_UNIT, y: OBSTACLE.center.y * PIXELS_PER_UNIT };
-
-export function SignalCanvas({ waypoints, readings, revealedIds, animationState, showSignalSource = true }: SignalCanvasProps) {
+export function SignalCanvas({ waypoints, readings, revealedIds, animationState, showSignalSource = true, vehicleScanned }: SignalCanvasProps) {
   const sorted = [...waypoints].sort((a, b) => a.order - b.order);
   const readingByWaypointId = new Map(readings.map((r) => [r.waypointId, r]));
   const pathPoints =
@@ -29,7 +28,7 @@ export function SignalCanvas({ waypoints, readings, revealedIds, animationState,
   return (
     <svg className="grid-canvas" viewBox="0 0 800 800" role="img" aria-label="Signal strength survey grid">
       <Grid />
-      <Obstacle center={OBSTACLE_CENTER_PX} />
+      <VehicleBody scanned={vehicleScanned} />
       {showSignalSource && <SignalSourceMarker />}
       <PathLine points={pathPoints} />
       {sorted.map((wp) => {
