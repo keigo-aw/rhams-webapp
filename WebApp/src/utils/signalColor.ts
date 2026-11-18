@@ -1,6 +1,6 @@
 import type { Theme } from '../state/useTheme';
 
-const COLOR_SCALE_MAX_V_PER_M = 90;
+const COLOR_SCALE_MAX_V_PER_M = 220;
 const STRONG_THRESHOLD_V_PER_M = 10;
 const MEDIUM_THRESHOLD_V_PER_M = 3;
 
