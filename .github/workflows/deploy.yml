@@ -21,14 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: webapp
+        working-directory: WebApp
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: webapp/package-lock.json
+          cache-dependency-path: WebApp/package-lock.json
       - run: npm ci
       - name: Build
         run: npm run build
@@ -38,7 +38,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: webapp/dist
+          path: WebApp/dist
 
   deploy:
     needs: build

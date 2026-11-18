@@ -4,7 +4,7 @@
     {
       "name": "rhams-dev",
       "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
-      "runtimeArgs": ["webapp/node_modules/vite/bin/vite.js", "webapp"],
+      "runtimeArgs": ["WebApp/node_modules/vite/bin/vite.js", "WebApp"],
       "port": 5173
     }
   ]
