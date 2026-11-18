@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Plan, ProbeType, SignalReading, SurveyHeight } from '../types/domain';
-import { OBSTACLE } from '../canvas/coordinates';
 import { generateSignalReadings } from '../data/mockSignalGenerator';
 import { useAnimationController } from '../state/useAnimationController';
 import { saveSurveyRecord } from '../persistence/surveyHistory';
@@ -23,7 +22,7 @@ export function useSignalSurvey(plan: Plan) {
 
   useEffect(() => {
     const measurementPoints = sortedWaypoints.filter((wp) => wp.isMeasurementPoint);
-    setReadings(generateSignalReadings(measurementPoints, OBSTACLE));
+    setReadings(generateSignalReadings(measurementPoints));
     setRevealedIds(new Set());
     hasStartedRef.current = false;
     savedRef.current = false;
