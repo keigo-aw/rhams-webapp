@@ -63,7 +63,10 @@ function generateTravelledPath({ obstacle, bounds, waypointCount }: GenerateTrav
   const halfHeight = VEHICLE_FOOTPRINT.halfHeight + MEASUREMENT_CLEARANCE_METERS;
   const totalPoints = resolveWaypointCount(waypointCount);
 
-  const points = rectanglePerimeter(obstacle.center, halfWidth, halfHeight, totalPoints);
+  const perimeter = rectanglePerimeter(obstacle.center, halfWidth, halfHeight, totalPoints);
+  // Begin the lap one step clockwise from the top-left corner, so point 1 (and the robot's
+  // start) sits at what would otherwise be point 2.
+  const points = perimeter.length > 1 ? [...perimeter.slice(1), perimeter[0]] : perimeter;
   const safeBounds: GridBounds = bounds;
 
   return points.map((point, index) => {
